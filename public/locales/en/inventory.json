@@ -1,0 +1,91 @@
+{
+  "title": "Inventory",
+  "description": "Track your crop inventory",
+  "addItem": "Add Item",
+  "stockLevel": "Stock Level",
+  "lowStock": "Low Stock",
+  "outOfStock": "Out of Stock",
+  "available": "Available",
+  "quantity": "Quantity",
+  "price": "Price",
+  "category": "Category",
+  "form": {
+    "addCrop": "Add Crop",
+    "addNewCrop": "Add New Crop",
+    "addCropDescription": "Add a new crop to your inventory with details",
+    "cropType": "Crop Type",
+    "selectCrop": "Select a crop",
+    "numberOfGuntas": "Number of Guntas",
+    "enterNumberOfGuntas": "Enter no of guntas sowed",
+    "startDate": "Start Date",
+    "pickDate": "Pick a date",
+    "cancel": "Cancel",
+    "adding": "Adding...",
+    "crops": {
+      "spinach": "Spinach",
+      "mint": "Mint",
+      "coriander": "Coriander",
+      "springonion": "Spring Onion",
+      "lettuce": "Lettuce",
+      "fenugreek": "Fenugreek",
+      "dill": "Dill",
+      "parsley": "Parsley",
+      "cilantro": "Cilantro",
+      "greenonion": "Green Onion"
+    },
+    "validation": {
+      "selectCrop": "Please select a crop",
+      "guntas": "Number of Guntas must be greater than 0",
+      "sowedDate": "Please select a sowed date"
+    },
+    "toast": {
+      "success": "Crop added successfully.",
+      "successDescription": "Your crop has been added to the inventory.",
+      "error": "Failed to add crop",
+      "errorDescription": "Failed to add crop. There was an error adding your crop. Please try again.",
+      "unexpectedError": "An unexpected error occurred. Please try again."
+    }
+  },
+  "stats": {
+    "totalBatches": "Total Batches",
+    "readyToHarvest": "Ready to Harvest",
+    "numberOfCrops": "Number of crops",
+    "totalStock": "Total Stock (kg)"
+  },
+  "empty": {
+    "title": "Start Tracking Your Inventory",
+    "description": "Please add your first crop to track your farming inventory.",
+    "noHarvest": "No crops are ready for harvest yet."
+  },
+  "current": {
+    "title": "Available Inventory",
+    "crop": "crop",
+    "crops": "crops"
+  },
+  "card": {
+    "spinach": "Spinach",
+    "mint": "Mint",
+    "coriander": "Coriander",
+    "readyToHarvest": "Ready to Harvest",
+    "growing": "Growing",
+    "pending": "Pending",
+    "expectedHarvest": "Expected Harvest",
+    "timeline": "Timeline",
+    "planted": "Planted",
+    "harvest": "Harvest",
+    "qualityRating": "Quality Rating",
+    "gunta": "Gunta",
+    "guntas": "Guntas",
+    "kg": "kg"
+  },
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "update": "Update",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success"
+  }
+}

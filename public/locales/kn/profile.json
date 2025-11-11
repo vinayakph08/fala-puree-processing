@@ -1,0 +1,32 @@
+{
+  "title": "ಪ್ರೊಫೈಲ್",
+  "description": "ನಿಮ್ಮ ಖಾತೆ ಮತ್ತು ಆದ್ಯತೆಗಳನ್ನು ನಿರ್ವಹಿಸಿ",
+  "farmerInfo": "ವೈಯಕ್ತಿಕ ಮಾಹಿತಿ",
+  "farmerDescription": "ನಿಮ್ಮ ರೈತ ಪ್ರೊಫೈಲ್ ವಿವರಗಳು",
+  "displayName": "ಪೂರ್ಣ ಹೆಸರು",
+  "firstName": "ಮೊದಲ ಹೆಸರು",
+  "lastName": "ಕೊನೆಯ ಹೆಸರು",
+  "titleField": "ಬಿರುದು",
+  "personalInfo": "ವೈಯಕ್ತಿಕ ಮಾಹಿತಿ",
+  "contactInfo": "ಸಂಪರ್ಕ ಮಾಹಿತಿ",
+  "farmInfo": "ಹೊಲದ ಮಾಹಿತಿ",
+  "farmDescription": "ನಿಮ್ಮ ಹೊಲದ ವಿವರಗಳು",
+  "farmerAccount": "ರೈತ ಖಾತೆ",
+  "mobileNumber": "ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",
+  "sections": {
+    "account": "ಖಾತೆ ಸೆಟ್ಟಿಂಗ್‌ಗಳು",
+    "preferences": "ಆದ್ಯತೆಗಳು"
+  },
+  "farm": {
+    "farmName": "ಹೊಲದ ಹೆಸರು",
+    "farmId": "ಹೊಲದ ID"
+  },
+  "buttons": {
+    "logout": "ಲಾಗ್ ಔಟ್",
+    "loggingOut": "ಲಾಗ್ ಔಟ್ ಆಗುತ್ತಿದೆ..."
+  },
+  "messages": {
+    "logoutSuccess": "ಯಶಸ್ವಿಯಾಗಿ ಲಾಗ್ ಔಟ್ ಆಗಿದೆ",
+    "logoutError": "ಲಾಗ್ ಔಟ್ ಆಗುವಲ್ಲಿ ದೋಷ ಸಂಭವಿಸಿದೆ"
+  }
+}

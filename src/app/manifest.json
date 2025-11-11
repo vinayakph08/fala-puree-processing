@@ -1,0 +1,86 @@
+{
+  "id": "fala_001",
+  "name": "Fala",
+  "short_name": "Fala",
+  "description": "Growing your crop and earn consistent income with Fala.",
+  "theme_color": "#09ad8d",
+  "background_color": "#ffffff",
+  "start_url": "/",
+  "icons": [
+    {
+      "purpose": "maskable",
+      "sizes": "512x512",
+      "src": "/fala-images/fala-512.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "any",
+      "sizes": "192x192",
+      "src": "/fala-images/fala-192.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "maskable",
+      "sizes": "192x192",
+      "src": "/fala-images/fala-192.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "any",
+      "sizes": "144x144",
+      "src": "/fala-images/fala-144.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "any",
+      "sizes": "96x96",
+      "src": "/fala-images/fala-96.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "any",
+      "sizes": "72x72",
+      "src": "/fala-images/fala-72.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "any",
+      "sizes": "48x48",
+      "src": "/fala-images/fala-48.png",
+      "type": "image/png"
+    }
+  ],
+  "categories": ["productivity", "business", "food"],
+  "screenshots": [
+    {
+      "src": "screenshots/fala-home.jpg",
+      "sizes": "320x640",
+      "type": "image/jpg",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "screenshots/fala-inventory.jpg",
+      "sizes": "320x640",
+      "type": "image/jpg"
+    },
+    {
+      "src": "screenshots/fala-orders.jpg",
+      "sizes": "320x640",
+      "type": "image/jpg"
+    },
+    {
+      "src": "screenshots/fala-earning.jpg",
+      "sizes": "320x640",
+      "type": "image/jpg"
+    }
+  ],
+  "orientation": "portrait-primary",
+  "display": "standalone",
+  "dir": "auto",
+  "lang": "kn-IN",
+  "scope": "/",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "launch_handler": {
+    "client_mode": "navigate-existing"
+  }
+}

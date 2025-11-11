@@ -1,0 +1,12 @@
+{
+  "title": "Orders",
+  "newOrder": "New Order",
+  "pending": "Pending",
+  "completed": "Completed",
+  "cancelled": "Cancelled",
+  "orderDetails": "Order Details",
+  "customer": "Customer",
+  "amount": "Amount",
+  "status": "Status",
+  "deliveryDate": "Delivery Date"
+}

@@ -1,0 +1,162 @@
+{
+  "navigation": {
+    "dashboard": "Dashboard",
+    "home": "Home",
+    "orders": "Orders",
+    "inventory": "Inventory",
+    "tasks": "Tasks",
+    "profile": "Profile",
+    "user": "User",
+    "notifications": "Notifications",
+    "settings": "Settings"
+  },
+  "buttons": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "add": "Add",
+    "edit": "Edit",
+    "delete": "Delete",
+    "submit": "Submit",
+    "update": "Update",
+    "view": "View",
+    "retry": "Retry",
+    "editProfile": "Edit Profile"
+  },
+  "messages": {
+    "welcome": "Welcome!",
+    "welcomeBack": "Welcome back, {{name}}",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "noData": "No data available",
+    "noNotifications": "No notifications yet",
+    "notificationsDescription": "You'll see notifications about orders, tasks, and other important updates here.",
+    "authRequired": "Please login first",
+    "redirecting": "Redirecting...",
+    "profileUpdated": "Profile updated successfully",
+    "saving": "Saving..."
+  },
+
+  "currency": {
+    "rupee": "₹",
+    "weekly": "Weekly",
+    "total": "Total",
+    "earnings": "Earnings"
+  },
+  "units": {
+    "kg": "kg",
+    "tons": "tons",
+    "bundles": "bundles",
+    "capacity": "Capacity",
+    "perYear": "per year"
+  },
+  "roles": {
+    "farmer": "Farmer",
+    "customer": "Customer",
+    "admin": "Admin",
+    "user": "User"
+  },
+  "auth": {
+    "signup": {
+      "title": "Join Fala",
+      "description": "Create your account",
+      "submit": "Create Account",
+      "footerText1": "Already have an account?",
+      "footerText2": "Sign In",
+      "joinfala": "Join Fala"
+    },
+    "signin": {
+      "title": "Welcome back!",
+      "description": "Sign in to your account",
+      "submit": "Sign In",
+      "footerText1": "Don't have an account?",
+      "footerText2": " Create Account"
+    },
+    "fields": {
+      "phoneNumber": "Phone Number",
+      "password": "Password",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "location": "Location",
+      "state": "State",
+      "district": "District",
+      "village": "Village",
+      "language": "Language",
+      "role": "Role"
+    },
+    "placeholders": {
+      "phoneNumber": "Enter your 10-digit mobile number",
+      "password": "Enter your password",
+      "firstName": "Enter your first name",
+      "lastName": "Enter your last name (optional)",
+      "location": "Enter your village/city",
+      "selectState": "Select your state",
+      "selectDistrict": "Select your district",
+      "selectVillage": "Select your village"
+    }
+  },
+
+  "errors": {
+    "signupFailed": "Sign up failed. Please try again.",
+    "signinFailed": "Sign in failed. Please check your credentials.",
+    "unknown": "An unexpected error occurred",
+    "network": "Network error. Please check your connection.",
+    "loadProfileFailed": "Failed to load profile",
+    "profileUpdateFailed": "Failed to update profile",
+    "tryAgainLater": "Please try again later",
+    "validation": "Please check your input"
+  },
+  "common": {
+    "loading": "Loading..."
+  },
+  "pwa": {
+    "banner": {
+      "title": "Use easily on mobile",
+      "description": "Quick access from home screen and work without internet",
+      "install": "Install",
+      "installing": "Installing...",
+      "dismiss": "Close"
+    },
+    "settings": {
+      "title": "Install App",
+      "description": "For easy access and faster performance",
+      "install": "Install",
+      "status": {
+        "installed": "Installed",
+        "available": "Available",
+        "dismissed": "Dismissed",
+        "installing": "Installing...",
+        "notAvailable": "Not Available"
+      },
+      "button": {
+        "install": "Install",
+        "enableInstall": "Enable Install",
+        "installed": "Installed",
+        "installing": "Installing...",
+        "notAvailable": "Not Available"
+      },
+      "help": {
+        "dismissed": "You previously dismissed the app installation. Click the button above to install now.",
+        "ios": "On iOS: Open in Safari browser → Share → 'Add to Home Screen'"
+      }
+    },
+    "floating": {
+      "title": "Install Fala App",
+      "message": "Access quickly from your home screen",
+      "install": "Install",
+      "later": "Later"
+    },
+    "menu": {
+      "title": "Install App",
+      "description": "Access quickly from home screen"
+    },
+    "ios": {
+      "instructions": "To install this app: 1. Tap the Share button 2. Select 'Add to Home Screen'"
+    },
+    "features": {
+      "offline": "Work without internet",
+      "quickAccess": "Quick access from home screen",
+      "notifications": "Important update notifications"
+    }
+  }
+}

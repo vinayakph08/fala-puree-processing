@@ -1,0 +1,151 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-poppins: var(--font-poppins);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+}
+
+:root {
+  /* Border radius for agricultural-friendly rounded corners */
+  --radius: 0.625rem;
+
+  /* Base colors - Clean, high contrast for outdoor visibility */
+  --background: #ffffff;
+  --foreground: #1f2937;
+  --card: #ffffff;
+  --card-foreground: #1f2937;
+  --popover: #ffffff;
+  --popover-foreground: #1f2937;
+
+  /* Primary - Fala brand green (agricultural growth) */
+  --primary: #09ad8d;
+  --primary-foreground: #ffffff;
+
+  /* Secondary - Subtle gray for secondary actions */
+  --secondary: #c6e9e2;
+  --secondary-foreground: #009275;
+
+  /* Muted - Supporting elements */
+  --muted: #f3f4f6;
+  --muted-foreground: #6b7280;
+
+  /* Accent - Success green for positive actions */
+  --accent: #dcfce7;
+  --accent-foreground: #0a9a74;
+
+  /* Destructive - Error red for warnings */
+  --destructive: #ef4444;
+  --destructive-foreground: #ffffff;
+
+  /* Interactive elements */
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --ring: #09ad8d;
+
+  /* Chart colors - Agricultural themed palette */
+  --chart-1: #09ad8d;
+  --chart-2: #009f80;
+  --chart-3: #14b8a6;
+  --chart-4: #f59e0b;
+  --chart-5: #8b5cf6;
+
+  /* Sidebar colors (if needed for admin/desktop view) */
+  --sidebar: #f9fafb;
+  --sidebar-foreground: #1f2937;
+  --sidebar-primary: #09ad8d;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f3f4f6;
+  --sidebar-accent-foreground: #374151;
+  --sidebar-border: #e5e7eb;
+  --sidebar-ring: #09ad8d;
+
+  /* Information Numbers */
+  --info-blue: #3b82f6;
+  --info-orange: #f97316;
+  --info-yellow: #efb700;
+  --info-rose: #e92556;
+}
+
+/* Dark mode (optional - for future consideration) */
+.dark {
+  --background: #0f172a;
+  --foreground: #f1f5f9;
+  --card: #1e293b;
+  --card-foreground: #f1f5f9;
+  --popover: #1e293b;
+  --popover-foreground: #f1f5f9;
+
+  --primary: #09ad8d;
+  --primary-foreground: #0f172a;
+
+  --secondary: #334155;
+  --secondary-foreground: #f1f5f9;
+
+  --muted: #334155;
+  --muted-foreground: #94a3b8;
+
+  --accent: #009879;
+  --accent-foreground: #dcfce7;
+
+  --destructive: #dc2626;
+  --destructive-foreground: #fecaca;
+
+  --border: #334155;
+  --input: #334155;
+  --ring: #09ad8d;
+
+  /* Dark mode charts */
+  --chart-1: #09ad8d;
+  --chart-2: #00cfa5;
+  --chart-3: #009879;
+  --chart-4: #fbbf24;
+  --chart-5: #a78bfa;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}

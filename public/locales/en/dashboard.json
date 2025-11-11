@@ -1,0 +1,23 @@
+{
+  "title": "Dashboard",
+  "earnings": {
+    "title": "Earnings",
+    "weekly": "Weekly",
+    "total": "Total"
+  },
+  "orders": {
+    "title": "Current Orders",
+    "orderNumber": "Order #{{number}}",
+    "due": "Due: {{date}}",
+    "tomorrow": "Tomorrow",
+    "inDays": "In {{count}} days"
+  },
+  "crops": {
+    "title": "Growing Crops",
+    "capacityPerYear": "Capacity per Year",
+    "spinach": "Spinach",
+    "mint": "Mint",
+    "tomatoes": "Tomatoes",
+    "coriander": "Coriander"
+  }
+}

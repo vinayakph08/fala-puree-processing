@@ -1,0 +1,32 @@
+{
+  "title": "Profile",
+  "description": "Manage your account and preferences",
+  "farmerInfo": "Personal Information",
+  "farmerDescription": "Your farmer profile details",
+  "displayName": "Full Name",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "titleField": "Title",
+  "personalInfo": "Personal Information",
+  "contactInfo": "Contact Information",
+  "farmInfo": "Farm Information",
+  "farmDescription": "Your farm details",
+  "farmerAccount": "Farmer Account",
+  "mobileNumber": "Mobile Number",
+  "sections": {
+    "account": "Account Settings",
+    "preferences": "Preferences"
+  },
+  "farm": {
+    "farmName": "Farm Name",
+    "farmId": "Farm ID"
+  },
+  "buttons": {
+    "logout": "Logout",
+    "loggingOut": "Logging out..."
+  },
+  "messages": {
+    "logoutSuccess": "Successfully logged out",
+    "logoutError": "Error occurred while logging out"
+  }
+}

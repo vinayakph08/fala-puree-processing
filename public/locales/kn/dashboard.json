@@ -1,0 +1,23 @@
+{
+  "title": "ಡ್ಯಾಶ್‌ಬೋರ್ಡ್",
+  "earnings": {
+    "title": "ಗಳಿಕೆ",
+    "weekly": "ವಾರಾಂತ್ಯ",
+    "total": "ಒಟ್ಟು"
+  },
+  "orders": {
+    "title": "ಪ್ರಸ್ತುತ ಆರ್ಡರ್‌ಗಳು",
+    "orderNumber": "ಆರ್ಡರ್ #{{number}}",
+    "due": "ಅವಧಿ: {{date}}",
+    "tomorrow": "ನಾಳೆ",
+    "inDays": "{{count}} ದಿನಗಳಲ್ಲಿ"
+  },
+  "crops": {
+    "title": "ಬೆಳೆಯುತ್ತಿರುವ ಬೆಳೆಗಳು",
+    "capacityPerYear": "ವರ್ಷಕ್ಕೆ ಸಾಮರ್ಥ್ಯ",
+    "spinach": "ಪಾಲಕ್",
+    "mint": "ಪುದೀನ",
+    "tomatoes": "ಟೊಮೇಟೊ",
+    "coriander": "ಕೊತ್ತಂಬರಿ"
+  }
+}

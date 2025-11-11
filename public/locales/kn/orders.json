@@ -1,0 +1,12 @@
+{
+  "title": "ಆರ್ಡರ್‌ಗಳು",
+  "newOrder": "ಹೊಸ ಆರ್ಡರ್",
+  "pending": "ಬಾಕಿಯಿದೆ",
+  "completed": "ಪೂರ್ಣಗೊಂಡಿದೆ",
+  "cancelled": "ರದ್ದುಗೊಳಿಸಲಾಗಿದೆ",
+  "orderDetails": "ಆರ್ಡರ್ ವಿವರಗಳು",
+  "customer": "ಗ್ರಾಹಕ",
+  "amount": "ಮೊತ್ತ",
+  "status": "ಸ್ಥಿತಿ",
+  "deliveryDate": "ತಲುಪಿಸುವ ದಿನಾಂಕ"
+}

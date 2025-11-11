@@ -1,0 +1,48 @@
+{
+  "title": "Settings",
+  "description": "Manage your app preferences",
+  "sections": {
+    "app": {
+      "title": "App Installation"
+    },
+    "language": {
+      "title": "Language & Region",
+      "subtitle": "Display Language",
+      "description": "Choose your preferred language",
+      "current": "Current Language"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "subtitle": "Notification Preferences",
+      "description": "Manage which notifications you want to receive",
+      "orders": "New Orders",
+      "ordersDesc": "Notifications about new orders",
+      "tasks": "Task Alerts",
+      "tasksDesc": "Reminders about pending tasks",
+      "earnings": "Earnings Updates",
+      "earningsDesc": "Notifications about new payments and earnings"
+    },
+    "privacy": {
+      "title": "Account & Privacy",
+      "profile": "Profile Information",
+      "data": "Data Security"
+    },
+    "help": {
+      "title": "Help & Support",
+      "faq": "Frequently Asked Questions",
+      "contact": "Contact Us",
+      "feedback": "Send Feedback"
+    }
+  },
+  "common": {
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "private": "Private",
+    "secure": "Secure",
+    "available": "Available"
+  },
+  "app": {
+    "name": "Fala Farmer App",
+    "description": "Platform providing best value for farmers"
+  }
+}
