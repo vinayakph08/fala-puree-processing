@@ -1,15 +1,14 @@
 "use client";
 
-import { Home, ClipboardList, Archive, Calendar, Bell } from "lucide-react";
+import { Home, Archive, Calendar, Bell, Sprout } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
 
 const navItems = [
   { icon: Home, labelKey: "Dashboard", href: "/dashboard" },
   // { icon: ClipboardList, labelKey: "navigation.orders", href: "/orders" },
-  { icon: Archive, labelKey: "Farmers", href: "/farmers" },
+  { icon: Sprout, labelKey: "Processing", href: "/puree-processing" },
   { icon: Calendar, labelKey: "Tasks", href: "/tasks" },
   { icon: Bell, labelKey: "Notifications", href: "/notifications" },
 ];

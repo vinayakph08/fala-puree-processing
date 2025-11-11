@@ -4,12 +4,13 @@ import { Home, User, Calendar, LanguagesIcon, Archive } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ProfileDropdown } from "@/components/farmer/profile-dropdown";
+import { ProfileDropdown } from "@/components/user/profile-dropdown";
 import { LanguageToggle } from "../ui/language-toggle";
 
 const navItems = [
   { icon: Home, label: "Dashboard", href: "/dashboard" },
-  { icon: User, label: "Farmers", href: "/farmers" },
+  { icon: Home, label: "Puree Processing", href: "/processing" },
+  // { icon: User, label: "Farmers", href: "/farmers" },
   // { icon: Archive, label: "Inventory", href: "/inventory" },
 ];
 

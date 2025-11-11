@@ -41,12 +41,12 @@ const signUpSchema = z.object({
 });
 
 type SignUpFormData = z.input<typeof signUpSchema>;
-interface FarmerRegistrationFormProps {
+interface UserRegistrationFormProps {
   onSuccess?: () => void;
   onError?: (error: string) => void;
 }
 
-export const FarmerRegistrationForm: React.FC<FarmerRegistrationFormProps> = ({
+export const FarmerRegistrationForm: React.FC<UserRegistrationFormProps> = ({
   onSuccess,
   onError,
 }) => {

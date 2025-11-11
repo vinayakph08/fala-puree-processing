@@ -1,7 +1,7 @@
 import { DesktopSidebar } from "./desktop-sidebar";
 import { MobileBottomNav } from "./mobile-bottom-nav";
 import { MobileHeader } from "./mobile-header";
-import { PWAInstallBanner } from "@/components/farmer/pwa/pwa-install-banner";
+import { PWAInstallBanner } from "@/components/user/pwa/pwa-install-banner";
 
 interface AppLayoutProps {
   children: React.ReactNode;

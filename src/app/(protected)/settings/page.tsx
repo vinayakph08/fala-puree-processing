@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { LanguageToggle } from "@/components/ui/language-toggle";
-import { PWASettingsOption } from "@/components/farmer/pwa/pwa-settings-option";
+import { PWASettingsOption } from "@/components/user/pwa/pwa-settings-option";
 import {
   Settings as SettingsIcon,
   Globe,

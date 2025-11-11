@@ -2,16 +2,16 @@
 
 import { LanguageToggle } from "@/components/ui/language-toggle";
 import { useFarmer } from "@/providers/farmer-provider";
-import { ProfileDropdown } from "@/components/farmer/profile-dropdown";
+import { ProfileDropdown } from "@/components/user/profile-dropdown";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { useLocaleContext } from "@/providers/locale-provider";
 
 const navItems = [
   { icon: "🏠", label: "Dashboard", href: "/dashboard" },
-  { icon: "📋", label: "Orders", href: "/orders" },
-  { icon: "📦", label: "Inventory", href: "/inventory" },
-  { icon: "📅", label: "Tasks", href: "/tasks" },
+  // { icon: "📋", label: "Orders", href: "/orders" },
+  // { icon: "📦", label: "Inventory", href: "/inventory" },
+  // { icon: "📅", label: "Tasks", href: "/tasks" },
   { icon: "👤", label: "Profile", href: "/profile" },
 ];
 

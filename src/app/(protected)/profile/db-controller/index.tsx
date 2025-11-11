@@ -16,16 +16,7 @@ class ProfileDBController {
       // Fetch user profile from database
       const { data: profile, error: profileError } = await supabase
         .from("user_profile")
-        .select(
-          `*, 
-          farm:farm (
-          farm_id,
-          farm_name,
-          created_at,
-          updated_at
-        )
-          `
-        )
+        .select(`*`)
         .eq("id", userId)
         .single();
 
@@ -33,26 +24,12 @@ class ProfileDBController {
         id: profile.id,
         firstName: profile.first_name || "",
         lastName: profile.last_name || "",
-        firstNameKn: profile.first_name_kn || undefined,
-        lastNameKn: profile.last_name_kn || undefined,
-        firstNameEn: profile.first_name_en || undefined,
-        lastNameEn: profile.last_name_en || undefined,
-        primaryNameLanguage: profile.primary_name_language || "kn",
         title: profile.title || "sri",
-        language: profile.language_preference || "kn",
         mobileNumber: profile.mobile_number,
         email: profile.email,
         isVerified: profile.is_verified,
         isActive: profile.is_active,
         role: profile.role,
-        farm: profile.farm
-          ? {
-              farm_id: profile.farm?.[0]?.farm_id,
-              farmName: profile.farm?.[0]?.farm_name,
-              createdAt: profile.farm?.[0]?.created_at,
-              updatedAt: profile.farm?.[0]?.updated_at,
-            }
-          : null,
       };
 
       if (profileError) throw profileError;
