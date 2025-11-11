@@ -51,8 +51,6 @@
     "perYear": "per year"
   },
   "roles": {
-    "farmer": "Farmer",
-    "customer": "Customer",
     "admin": "Admin",
     "user": "User"
   },

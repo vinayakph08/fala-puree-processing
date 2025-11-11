@@ -5,15 +5,10 @@ import { User } from "@supabase/supabase-js";
 export interface UserSignUpData {
   first_name: string;
   last_name: string;
-  role: "FARMER" | "CUSTOMER" | "ADMIN" | "USER";
+  role: "ADMIN" | "USER";
   phone_number: string;
   password: string;
   email?: string;
-  language_preference?: "kn" | "en" | "ta" | "ml" | "te" | "hi";
-  state: string;
-  district: string;
-  village: string;
-  farm_id?: string;
 }
 
 export interface UserProfile {

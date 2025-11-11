@@ -27,19 +27,6 @@ export const signUpWithMobile = async (
     const email = signUpData.email || `${signUpData.phone_number}@fala.com`;
     const supabase = await createClient();
 
-    const { data: generated_farm_id, error: farmIdError } = await supabase.rpc(
-      "generate_farm_id",
-      {
-        p_farm_prefix: signUpData.farm_id,
-      }
-    );
-
-    if (farmIdError) {
-      console.error("Error generating farm_id:", farmIdError);
-      toast.error("Error generating farm ID. Please try again.");
-      throw new Error(farmIdError.message);
-    }
-
     const { data, error } = await supabase.auth.signUp({
       email,
       password: signUpData.password,
@@ -48,12 +35,7 @@ export const signUpWithMobile = async (
           phone_number: signUpData.phone_number,
           first_name: signUpData.first_name,
           last_name: signUpData.last_name,
-          state: signUpData.state,
-          district: signUpData.district,
-          village: signUpData.village,
-          farm_id: generated_farm_id || null,
-          language_preference: signUpData.language_preference || "kn",
-          role: signUpData.role || "FARMER",
+          role: signUpData.role || "ADMIN",
         },
       },
     });

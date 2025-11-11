@@ -8,14 +8,27 @@ CREATE TABLE user_profile (
   email TEXT,
   is_verified BOOLEAN DEFAULT FALSE,
   is_active BOOLEAN DEFAULT TRUE,
-  language_preference TEXT DEFAULT 'kn' CHECK (language_preference IN ('kn', 'en', 'ta', 'ml', 'te', 'hi')),
-  role TEXT NOT NULL DEFAULT 'FARMER' CHECK (role IN ('FARMER', 'CUSTOMER', 'ADMIN', 'USER')),  -- Changed to NOT NULL
+  role TEXT NOT NULL DEFAULT 'ADMIN' CHECK (role IN ( 'ADMIN', 'USER')),  -- Changed to NOT NULL
   created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL,
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
 
+-- Check if user is admin
+create or replace function is_admin()
+returns boolean AS $$
+select exists(
+    select 1
+    from user_profile
+    where id = auth.uid() and role = 'ADMIN'
+)
+$$ language sql security definer stable;
+
 -- Enable RLS (Row Level Security)
 ALTER TABLE user_profile ENABLE ROW LEVEL SECURITY;
+
+-- add row level security policies for admin
+create policy "admins can update/insert/delete any profile" on user_profile
+  for all using (is_admin());
 
 -- Create policy for users to only access their own profile
 CREATE POLICY "Users can view own profile" ON user_profile
@@ -55,22 +68,22 @@ BEGIN
     user_phone := NEW.raw_user_meta_data->>'phone_number';
     user_first_name := NEW.raw_user_meta_data->>'first_name';
     user_last_name := NEW.raw_user_meta_data->>'last_name';
-    user_role := COALESCE(NEW.raw_user_meta_data->>'role', 'FARMER');
+    user_role := COALESCE(NEW.raw_user_meta_data->>'role', 'ADMIN');
 
-    -- Validate all required fields for farmer registration
+    -- Validate all required fields for admin registration
     IF user_phone IS NULL THEN
-        RAISE EXCEPTION 'Phone number is required for farmer registration';
+        RAISE EXCEPTION 'Phone number is required for admin registration';
     END IF;
     
     IF user_first_name IS NULL OR TRIM(user_first_name) = '' THEN
-        RAISE EXCEPTION 'First name is required for farmer registration';
+        RAISE EXCEPTION 'First name is required for admin registration';
     END IF;
     
     IF user_last_name IS NULL OR TRIM(user_last_name) = '' THEN
-        RAISE EXCEPTION 'Last name is required for farmer registration';
+        RAISE EXCEPTION 'Last name is required for admin registration';
     END IF;
     
-    IF user_role IS NULL OR user_role NOT IN ('FARMER', 'CUSTOMER', 'ADMIN', 'USER') THEN
+    IF user_role IS NULL OR user_role NOT IN ('ADMIN', 'USER') THEN
         RAISE EXCEPTION 'Valid role is required for registration';
     END IF;
 
@@ -80,7 +93,6 @@ BEGIN
         first_name,
         last_name,
         mobile_number,
-        language_preference,
         role,
         is_verified,
         is_active
@@ -89,7 +101,6 @@ BEGIN
         TRIM(user_first_name),
         TRIM(user_last_name),
         user_phone,
-        COALESCE(NEW.raw_user_meta_data->>'language_preference', 'kn'),
         user_role,
         FALSE,
         TRUE
@@ -102,6 +113,16 @@ EXCEPTION
         RAISE EXCEPTION 'Failed to create farmer profile: %', SQLERRM;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- ============================================================================
+-- 4. TRIGGERS
+-- ============================================================================
+
+-- Create the trigger
+CREATE TRIGGER on_auth_user_created
+    AFTER INSERT ON auth.users
+    FOR EACH ROW
+    EXECUTE FUNCTION public.handle_new_user();
 
 
 -- -- Grant necessary permissions for farmer operations
