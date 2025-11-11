@@ -9,7 +9,7 @@ import { LanguageToggle } from "../ui/language-toggle";
 
 const navItems = [
   { icon: Home, label: "Dashboard", href: "/dashboard" },
-  { icon: Home, label: "Puree Processing", href: "/processing" },
+  { icon: Home, label: "Purée Processing", href: "/processing" },
   // { icon: User, label: "Farmers", href: "/farmers" },
   // { icon: Archive, label: "Inventory", href: "/inventory" },
 ];
@@ -18,7 +18,7 @@ export function DesktopSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className='hidden md:flex flex-col w-64 bg-card border-r h-screen sticky top-0'>
+    <aside className='hidden md:flex flex-col w-xs bg-card border-r h-screen sticky top-0'>
       {/* Logo/Brand */}
       <div className='p-6 border-b'>
         <div className='flex items-end gap-2'>
@@ -27,9 +27,13 @@ export function DesktopSidebar() {
             alt='Fala'
             className='w-10 h-10 object-contain'
           />
-          <h2 className='text-xl font-bold text-zinc-600'>Admin Panel</h2>
+          <div className='text-2xl font-bold text-primary'>
+            Purée Intelligence
+          </div>
         </div>
-        <p className='text-sm text-primary'>Farmer Management Tool</p>
+        <p className='text-sm text-zinc-500'>
+          Data tracking and intelligence tool
+        </p>
       </div>
 
       {/* Navigation Items */}

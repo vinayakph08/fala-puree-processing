@@ -1,13 +1,4 @@
 import React from "react";
-import {
-  getAllDashboardData,
-  getDashboardMetrics,
-  getFarmerGrowthData,
-  getInventoryUsageData,
-  getInventoryGrowthData,
-  getAvailableCrops,
-  getFarmerWithHarvestableInventory,
-} from "@/lib/dashboard";
 import { getUserFromServerSide } from "@/lib/auth/get-user";
 import { getQueryClient } from "@/lib/query-client";
 import { redirect } from "next/navigation";

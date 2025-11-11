@@ -21,7 +21,7 @@ const poppins = Poppins({
 
 export const metadata: Metadata = {
   title: "Admin App",
-  description: "Admin dashboard for managing puree processing.",
+  description: "Admin dashboard for managing Purée processing.",
 };
 
 export default async function RootLayout({
