@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useLocale, useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -51,7 +50,6 @@ export const FarmerRegistrationForm: React.FC<UserRegistrationFormProps> = ({
   onError,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
-  console.log({ isLoading });
 
   const {
     register,
@@ -70,7 +68,6 @@ export const FarmerRegistrationForm: React.FC<UserRegistrationFormProps> = ({
 
   const onSubmit = async (data: SignUpFormData) => {
     setIsLoading(true);
-    console.log({ data });
 
     if (adminNumber.includes(data.phone_number)) {
       data.role = "ADMIN";
