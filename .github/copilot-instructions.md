@@ -57,66 +57,6 @@ This is a **NextJS PWA** for farmers to manage their agricultural operations in 
 
 ---
 
-## 🌐 Internationalization (Kannada/English)
-
-### Language Requirements
-
-- **Default language**: Kannada (kn)
-- **Secondary language**: English (en)
-- **All user-facing text must be externalized** to translation files
-- **Never hardcode text strings** in components
-- Kannada user experience takes priority over English
-
-### Translation Patterns
-
-```typescript
-// ✅ Correct approach
-const t = useTranslations('inventory');
-<button>{t('actions.add')}</button>
-
-// ❌ Wrong approach
-<button>Add Item</button>
-```
-
-### Translation Key Structure
-
-- Use semantic keys: `t('inventory.addCrop')` not `t('Add Crop')`
-- Include context: `buttons.save`, `messages.success`, `errors.network`
-- Nested structure: `inventory.actions.add`, `orders.status.pending`
-- Feature-based grouping: `tasks.irrigation.title`
-
-### File Structure
-
-```
-/public/locales/
-  /kn/
-    common.json
-    inventory.json
-    orders.json
-    earnings.json
-    tasks.json
-  /en/
-    [same structure]
-```
-
-### Kannada-Specific Considerations
-
-- Design components to handle **20-40% longer text** in Kannada
-- use **English Numbders** in Kannada context (e.g., 1, 2, 3)
-- Handle **mixed content** (Kannada + English technical terms)
-- Support **Kannada Unicode** properly
-- Consider **currency formatting**: ₹ symbol placement
-- **Date formats**: DD/MM/YYYY with localized month names
-
-### Form Validation & Messages
-
-- All validation messages must be translated
-- Use Zod with custom error messages in both languages
-- Handle number and currency formatting differences
-- Include context comments for translators
-
----
-
 ## 📱 Mobile & PWA Rules
 
 ### Mobile-First Development
@@ -143,34 +83,6 @@ const t = useTranslations('inventory');
 <!-- - Ensure **keyboard navigation** works
 - Test with **screen readers** -->
 - Maintain **focus management**
-
----
-
-## 👨‍🌾 Farmer UX Patterns
-
-### User Experience Principles
-
-- Use **simple, clear language** in UI text
-- **Minimize text input** - prefer Icons, dropdowns, buttons, image uploads
-- Show **clear feedback** for all user actions
-- Implement **error recovery** patterns
-- Use **familiar agricultural terminology**
-
-### Data Input Patterns
-
-- **Image uploads** for crop photos and task validation
-- **Dropdown selections** over free text input
-- **Date pickers** for harvest dates and schedules
-- **Quantity inputs** with clear units (kg, tons, etc.)
-- **Touch-friendly** form controls
-
-### Information Display
-
-- **Visual indicators** for order status, task completion
-- **Clear earnings summaries** with rupee formatting
-- **Simple charts** for earnings tracking
-- **Photo galleries** for crop documentation
-- **Step-by-step** task instructions
 
 ---
 
@@ -203,32 +115,6 @@ const t = useTranslations('inventory');
 ---
 
 ## 🏗 Component Patterns
-
-### Directory Structure
-
-```
-/components
-  /farmer
-    /inventory
-      InventoryCard.tsx
-      InventoryForm.tsx
-      InventoryList.tsx
-    /orders
-      OrderCard.tsx
-      OrderStatus.tsx
-      OrderDetails.tsx
-    /earnings
-      EarningsChart.tsx
-      EarningSummary.tsx
-    /tasks
-      TaskCard.tsx
-      TaskForm.tsx
-      TaskValidation.tsx
-  /ui
-    Button.tsx
-    Input.tsx
-    Modal.tsx
-```
 
 ### Naming Conventions
 
@@ -291,26 +177,6 @@ export const ComponentName: FC<ComponentProps> = ({ prop1, prop2 }) => {
 
 ## 📝 Quick Reference
 
-### Translation Pattern
-
-```typescript
-// ✅ Correct
-{
-  t("inventory.addCrop");
-}
-{
-  t("buttons.save");
-}
-{
-  t("messages.success");
-}
-
-// ❌ Wrong
-("Add Crop");
-("Save");
-("Success!");
-```
-
 ### Touch Targets
 
 ```css
@@ -334,17 +200,6 @@ const formatCurrency = (amount: number) =>
 // ❌ Wrong
 `₹${amount}`;
 ```
-
-### Loading States
-
-```typescript
-// ✅ Always include loading states
-{
-  isLoading ? <div>{t("common.loading")}</div> : <DataComponent data={data} />;
-}
-```
-
----
 
 ## 🚨 Common Mistakes to Avoid
 
@@ -375,26 +230,3 @@ const formatCurrency = (amount: number) =>
 - Test with actual Kannada agricultural terminology
 
 ---
-
-## 🌱 Agricultural Context
-
-### Common Terminology
-
-- **Crops**: Spinach (ಪಾಲಕ್), Coriander (ಕೊತ್ತಂಬರಿ), Mint (ಪುದೀನ)
-- **Units**: Kilograms (ಕಿಲೋಗ್ರಾಂ), Tons (ಟನ್), Bundles (ಕಟ್ಟುಗಳು)
-- **Seasons**: Kharif, Rabi, Summer (refer to local seasonal patterns)
-- **Quality Terms**: Fresh (ತಾಜಾ), Premium (ಪ್ರೀಮಿಯಂ), Grade A (ಗ್ರೇಡ್ ಎ)
-
-### Business Flow Context
-
-- Farmers → FPOs → Fala → Premium Customers
-- Focus on quality over quantity
-- Transparency in pricing and processes
-- Direct farmer empowerment model
-
-Remember: This app should feel natural to Karnataka farmers while being technically robust for scaling.
-
-### Code Response Rules.
-
-1. Generated code and explaination should be Consice and Straight Forward without verbose this. Just give me what I asked for.
-2. Don't generate kannada text in code snippets, only use English for code. Generate kannada text only in translation files.
