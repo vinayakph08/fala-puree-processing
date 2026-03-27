@@ -1,6 +1,6 @@
 import { MainLayout } from "@/components/layout/main-layout";
 
-export default function DashboardLayout({
+export default function NotificationsLayout({
   children,
 }: {
   children: React.ReactNode;

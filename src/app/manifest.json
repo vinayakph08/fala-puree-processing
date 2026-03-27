@@ -1,8 +1,8 @@
 {
   "id": "fala_001",
-  "name": "Fala",
-  "short_name": "Fala",
-  "description": "Growing your crop and earn consistent income with Fala.",
+  "name": "Fala Processing",
+  "short_name": "Fala Processing",
+  "description": "Processing and Quality Control for Fala Puree",
   "theme_color": "#09ad8d",
   "background_color": "#ffffff",
   "start_url": "/",

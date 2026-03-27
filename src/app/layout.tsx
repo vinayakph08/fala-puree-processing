@@ -20,8 +20,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Admin App",
-  description: "Admin dashboard for managing Purée processing.",
+  title: "Fala Processing",
+  description: "Processing and Quality Control for Fala Puree",
 };
 
 export default async function RootLayout({

@@ -9,12 +9,6 @@ interface ProfileUpdateData {
   title?: "sri" | "srimati";
   firstName?: string;
   lastName?: string;
-  firstNameKn?: string;
-  lastNameKn?: string;
-  firstNameEn?: string;
-  lastNameEn?: string;
-  primaryNameLanguage?: "kn" | "en";
-  languagePreference?: "kn" | "en";
 }
 
 // Fetch user profile from server
@@ -36,7 +30,7 @@ const fetchProfile = async (): Promise<FarmerProfile> => {
 
 // Update user profile on server
 const updateProfile = async (
-  updateData: ProfileUpdateData
+  updateData: ProfileUpdateData,
 ): Promise<FarmerProfile> => {
   const response = await fetch("/api/profile", {
     method: "PUT",

@@ -1,6 +1,6 @@
 import { MainLayout } from "@/components/layout/main-layout";
 
-export default function DashboardLayout({
+export default function OrdersLayout({
   children,
 }: {
   children: React.ReactNode;
