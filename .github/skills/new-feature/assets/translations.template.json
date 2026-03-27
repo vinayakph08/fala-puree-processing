@@ -1,0 +1,53 @@
+{
+  "title": "Feature Title",
+  "description": "Feature description",
+  "page": {
+    "empty": "No items found",
+    "loading": "Loading..."
+  },
+  "form": {
+    "title": "Add Item",
+    "editTitle": "Edit Item",
+    "fields": {
+      "name": "Name",
+      "status": "Status"
+    },
+    "placeholders": {
+      "name": "Enter name"
+    },
+    "validation": {
+      "required": "This field is required",
+      "positiveNumber": "Must be greater than 0"
+    },
+    "buttons": {
+      "submit": "Save",
+      "cancel": "Cancel",
+      "submitting": "Saving..."
+    },
+    "toast": {
+      "success": "Saved successfully",
+      "error": "Failed to save",
+      "unexpectedError": "An unexpected error occurred. Please try again."
+    }
+  },
+  "messages": {
+    "deleteSuccess": "Deleted successfully",
+    "updateSuccess": "Updated successfully"
+  },
+  "errors": {
+    "loadFailed": "Failed to load data",
+    "deleteFailed": "Failed to delete",
+    "saveFailed": "Failed to save"
+  },
+  "buttons": {
+    "add": "Add",
+    "delete": "Delete",
+    "edit": "Edit",
+    "view": "View"
+  },
+  "status": {
+    "active": "Active",
+    "completed": "Completed",
+    "cancelled": "Cancelled"
+  }
+}
