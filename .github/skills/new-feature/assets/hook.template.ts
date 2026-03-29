@@ -6,7 +6,6 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useTranslations } from "next-intl";
 import { apiGetFeatureList, apiDeleteFeature, apiUpdateFeature } from "../utils/query-functions"; // import any additional query functions you create
 import { IFeatureItem } from "@/types/feature";
 import {FEATURE_KEYS} from "./query-keys.ts"; // adjust path as needed
@@ -18,7 +17,6 @@ import {FEATURE_KEYS} from "./query-keys.ts"; // adjust path as needed
 
 export const useFeature = () => {
   const queryClient = useQueryClient();
-  const t = useTranslations("feature");
 
   // ─── Query ──────────────────────────────────────────────────────────────────
 
@@ -35,12 +33,12 @@ export const useFeature = () => {
   const deleteMutation = useMutation({
     mutationFn: apiDeleteFeature,
     onSuccess: () => {
-      toast.success(t("success.delete"));
+      toast.success("Feature deleted successfully");
       queryClient.invalidateQueries(FEATURE_KEYS.all);
     },
     onError: (error) => {
       console.error("[apiDeleteFeature mutation]", error);
-      toast.error(t("errors.deleteFailed"));
+      toast.error("Error deleting feature");
     },
   });
 
@@ -48,12 +46,12 @@ export const useFeature = () => {
   const updateMutation = useMutation({
     mutationFn: apiUpdateFeature,
     onSuccess: () => {
-      toast.success(t("success.update"));
+      toast.success("Feature updated successfully");
       queryClient.invalidateQueries(FEATURE_KEYS.all);
     },
     onError: (error) => {
       console.error("[apiUpdateFeature mutation]", error);
-      toast.error(t("errors.updateFailed"));
+      toast.error("Error updating feature");
     },
   });  
 

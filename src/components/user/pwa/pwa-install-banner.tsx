@@ -1,12 +1,10 @@
 "use client";
 
 import { X, Download, Smartphone } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { usePWA } from "@/providers/pwa-provider";
 
 export function PWAInstallBanner() {
-  const t = useTranslations("common.pwa");
   const { installStatus, isIOS, showInstallPrompt, dismissInstallPrompt } =
     usePWA();
 
@@ -19,7 +17,7 @@ export function PWAInstallBanner() {
     if (isIOS) {
       // For iOS, we'll show instructions in a modal
       // For now, just show alert - we can enhance this later
-      alert(t("ios.instructions"));
+      alert("iOS installation instructions");
     } else {
       await showInstallPrompt();
     }
@@ -35,10 +33,10 @@ export function PWAInstallBanner() {
 
           <div className='flex-1 min-w-0'>
             <h3 className='font-semibold text-sm leading-tight'>
-              {t("banner.title")}
+              Install Fala
             </h3>
             {/* <p className='text-xs text-green-100 mt-1 leading-tight'>
-              {t("banner.description")}
+              Install Fala on your device for a better experience.
             </p> */}
           </div>
         </div>
@@ -52,7 +50,7 @@ export function PWAInstallBanner() {
             disabled={installStatus === "installing"}
           >
             <Download className='h-4 w-4 mr-1' />
-            {installStatus === "installing" ? "installing" : "install"}
+            {installStatus === "installing" ? "Installing..." : "Install"}
           </Button>
 
           <Button
@@ -62,7 +60,7 @@ export function PWAInstallBanner() {
             className='text-white hover:bg-white/30 p-2 min-h-[42px] min-w-[42px]'
           >
             <X className='h-5 w-5' />
-            <span className='sr-only'>{t("banner.dismiss")}</span>
+            <span className='sr-only'>Dismiss</span>
           </Button>
         </div>
       </div>

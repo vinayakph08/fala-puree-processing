@@ -123,7 +123,6 @@ See [translation template](./assets/translations.template.json)
 - [ ] Page uses `Promise.allSettled` + `get*` from `server-functions` for prefetch
 - [ ] Page wraps children in `HydrationBoundary`
 - [ ] Components handle all 3 async states (loading skeleton / error / empty)
-- [ ] All strings use `useTranslations` — zero hardcoded text
 - [ ] All interactive elements have `min-h-[44px]` touch targets
 - [ ] Both `en` and `kn` translation files created
 - [ ] Forms use `useForm` + `zodResolver` + Shadcn `<Form>` components — no raw `<input>` + manual errors

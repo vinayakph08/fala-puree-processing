@@ -23,17 +23,16 @@ Define columns **outside the component** so the array reference is stable across
 
 ```tsx
 const getColumns = (
-  t: ReturnType<typeof useTranslations>,
   onDelete: (id: string) => void,
 ): ColumnDef<IFeatureItem>[] => [
   {
     accessorKey: "name",
-    header: () => t("table.columns.name"),
+    header: () => "Name",
     cell: ({ row }) => <span>{row.getValue("name")}</span>,
   },
   {
     id: "actions",                   // non-data column — use `id`, no `accessorKey`
-    header: () => t("table.columns.actions"),
+    header: () => "",
     cell: ({ row }) => (
       <Button
         variant="destructive"
@@ -41,7 +40,7 @@ const getColumns = (
         className="min-h-[44px] min-w-[44px]"
         onClick={() => onDelete(row.original.id)}
       >
-        {t("table.actions.delete")}
+        Delete
       </Button>
     ),
     enableSorting: false,
@@ -52,7 +51,6 @@ const getColumns = (
 Rules:
 - Data columns use `accessorKey` (matches the property key on the row object)
 - Action/computed columns use `id` only
-- Pass `t` and callbacks as arguments — never read them from closure inside the array literal
 - `cell` receives the full row via `row.original` — use for IDs and non-displayed fields
 
 ## Table Instance
@@ -110,7 +108,7 @@ Only import the row model functions you actually use — unused ones add bundle 
     ) : (
       <TableRow>
         <TableCell colSpan={columns.length} className="h-24 text-center">
-          {t("table.empty")}
+          No items are available
         </TableCell>
       </TableRow>
     )}
@@ -130,7 +128,7 @@ Always display empty state inside `<TableBody>` (not outside the table) so colum
   onClick={() => table.previousPage()}
   disabled={!table.getCanPreviousPage()}
 >
-  {t("table.pagination.prev")}
+ Prev
 </Button>
 <Button
   variant="outline"
@@ -139,7 +137,7 @@ Always display empty state inside `<TableBody>` (not outside the table) so colum
   onClick={() => table.nextPage()}
   disabled={!table.getCanNextPage()}
 >
-  {t("table.pagination.next")}
+  Next
 </Button>
 ```
 
@@ -147,7 +145,7 @@ Always display empty state inside `<TableBody>` (not outside the table) so colum
 
 ```tsx
 <Input
-  placeholder={t("table.searchPlaceholder")}
+  placeholder="Enter item name"
   value={globalFilter}
   onChange={(e) => setGlobalFilter(e.target.value)}
   className="max-w-sm"

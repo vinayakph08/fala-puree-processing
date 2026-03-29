@@ -1,7 +1,6 @@
 "use client";
 
 import { Download, Smartphone } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { usePWA } from "@/providers/pwa-provider";
 
 interface PWAMenuItemProps {
@@ -9,7 +8,6 @@ interface PWAMenuItemProps {
 }
 
 export function PWAMenuItem({ onClick }: PWAMenuItemProps) {
-  const t = useTranslations("common.pwa");
   const { installStatus, isIOS, showInstallPrompt, resetDismissedStatus } =
     usePWA();
 
@@ -24,7 +22,7 @@ export function PWAMenuItem({ onClick }: PWAMenuItemProps) {
     }
 
     if (isIOS) {
-      alert(t("ios.instructions"));
+      alert("iOS installation instructions");
     } else {
       await showInstallPrompt();
     }
@@ -43,8 +41,8 @@ export function PWAMenuItem({ onClick }: PWAMenuItemProps) {
       </div>
 
       <div className='flex-1'>
-        <div className='font-medium text-gray-900'>{t("menu.title")}</div>
-        <div className='text-sm text-gray-600'>{t("menu.description")}</div>
+        <div className='font-medium text-gray-900'>Install Fala</div>
+        <div className='text-sm text-gray-600'>Install Fala on your device for a better experience.</div>
       </div>
 
       <Download className='h-4 w-4 text-gray-400' />

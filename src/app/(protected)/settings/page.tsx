@@ -1,6 +1,5 @@
 "use client";
 
-import { useTranslations } from "next-intl";
 import {
   Card,
   CardContent,
@@ -9,7 +8,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { LanguageToggle } from "@/components/ui/language-toggle";
 import { PWASettingsOption } from "@/components/user/pwa/pwa-settings-option";
 import {
   Settings as SettingsIcon,
@@ -22,7 +20,6 @@ import {
 } from "lucide-react";
 
 export default function SettingsPage() {
-  const t = useTranslations("settings");
 
   return (
     <>
@@ -33,9 +30,9 @@ export default function SettingsPage() {
         </div>
         <div className='min-w-0 flex-1'>
           <h1 className='text-xl font-bold text-gray-900 truncate'>
-            {t("title")}
+            Settings
           </h1>
-          <p className='text-sm text-gray-600 truncate'>{t("description")}</p>
+          <p className='text-sm text-gray-600 truncate'>Manage your application settings</p>
         </div>
       </div>
 
@@ -46,8 +43,8 @@ export default function SettingsPage() {
             <SettingsIcon className='h-6 w-6 text-gray-600' />
           </div>
           <div>
-            <h1 className='text-xl font-bold text-gray-900'>{t("title")}</h1>
-            <p className='text-sm text-gray-600'>{t("description")}</p>
+            <h1 className='text-xl font-bold text-gray-900'>Settings</h1>
+            <p className='text-sm text-gray-600'>Manage your application settings</p>
           </div>
         </div>
       </div>
@@ -59,7 +56,7 @@ export default function SettingsPage() {
           <div className='flex items-center gap-2'>
             <Smartphone className='h-5 w-5 text-gray-600' />
             <h2 className='text-lg font-semibold text-gray-900'>
-              {t("sections.app.title")}
+              App Installation
             </h2>
           </div>
           <PWASettingsOption />
@@ -70,28 +67,10 @@ export default function SettingsPage() {
           <div className='flex items-center gap-2'>
             <Globe className='h-5 w-5 text-gray-600' />
             <h2 className='text-lg font-semibold text-gray-900'>
-              {t("sections.language.title")}
+              Language & Region
             </h2>
           </div>
 
-          <Card>
-            <CardHeader className='pb-3'>
-              <CardTitle className='text-base'>
-                {t("sections.language.subtitle")}
-              </CardTitle>
-              <CardDescription>
-                {t("sections.language.description")}
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className='flex items-center justify-between'>
-                <span className='text-sm font-medium'>
-                  {t("sections.language.current")}
-                </span>
-                <LanguageToggle />
-              </div>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Notifications Section */}
@@ -99,54 +78,54 @@ export default function SettingsPage() {
           <div className='flex items-center gap-2'>
             <Bell className='h-5 w-5 text-gray-600' />
             <h2 className='text-lg font-semibold text-gray-900'>
-              {t("sections.notifications.title")}
+              Notifications
             </h2>
           </div>
 
           <Card>
             <CardHeader className='pb-3'>
               <CardTitle className='text-base'>
-                {t("sections.notifications.subtitle")}
+                Notification Preferences
               </CardTitle>
               <CardDescription>
-                {t("sections.notifications.description")}
+                Manage which notifications you want to receive
               </CardDescription>
             </CardHeader>
             <CardContent className='space-y-3'>
               <div className='flex items-center justify-between py-2'>
                 <div>
                   <p className='font-medium text-sm'>
-                    {t("sections.notifications.orders")}
+                    New Orders
                   </p>
                   <p className='text-xs text-gray-600'>
-                    {t("sections.notifications.ordersDesc")}
+                    Manage notifications for new orders
                   </p>
                 </div>
-                <Badge variant='secondary'>{t("common.enabled")}</Badge>
+                <Badge variant='secondary'>Enabled</Badge>
               </div>
 
               <div className='flex items-center justify-between py-2'>
                 <div>
                   <p className='font-medium text-sm'>
-                    {t("sections.notifications.tasks")}
+                    Tasks
                   </p>
                   <p className='text-xs text-gray-600'>
-                    {t("sections.notifications.tasksDesc")}
+                    Manage notifications for tasks
                   </p>
                 </div>
-                <Badge variant='secondary'>{t("common.enabled")}</Badge>
+                <Badge variant='secondary'>Enabled</Badge>
               </div>
 
               <div className='flex items-center justify-between py-2'>
                 <div>
                   <p className='font-medium text-sm'>
-                    {t("sections.notifications.earnings")}
+                    Earnings
                   </p>
                   <p className='text-xs text-gray-600'>
-                    {t("sections.notifications.earningsDesc")}
+                    Manage notifications for earnings
                   </p>
                 </div>
-                <Badge variant='secondary'>{t("common.enabled")}</Badge>
+                <Badge variant='secondary'>Enabled</Badge>
               </div>
             </CardContent>
           </Card>
@@ -157,7 +136,7 @@ export default function SettingsPage() {
           <div className='flex items-center gap-2'>
             <Shield className='h-5 w-5 text-gray-600' />
             <h2 className='text-lg font-semibold text-gray-900'>
-              {t("sections.privacy.title")}
+              Account & Privacy
             </h2>
           </div>
 
@@ -167,20 +146,20 @@ export default function SettingsPage() {
                 <div className='flex items-center gap-3'>
                   <User className='h-4 w-4 text-gray-600' />
                   <span className='font-medium text-sm'>
-                    {t("sections.privacy.profile")}
+                    Profile
                   </span>
                 </div>
-                <Badge variant='outline'>{t("common.private")}</Badge>
+                <Badge variant='outline'>Private</Badge>
               </div>
 
               <div className='flex items-center justify-between py-2'>
                 <div className='flex items-center gap-3'>
                   <Shield className='h-4 w-4 text-gray-600' />
                   <span className='font-medium text-sm'>
-                    {t("sections.privacy.data")}
+                    Data & Security
                   </span>
                 </div>
-                <Badge variant='outline'>{t("common.secure")}</Badge>
+                <Badge variant='outline'>Secure</Badge>
               </div>
             </CardContent>
           </Card>
@@ -191,7 +170,7 @@ export default function SettingsPage() {
           <div className='flex items-center gap-2'>
             <HelpCircle className='h-5 w-5 text-gray-600' />
             <h2 className='text-lg font-semibold text-gray-900'>
-              {t("sections.help.title")}
+              Help & Support
             </h2>
           </div>
 
@@ -199,23 +178,23 @@ export default function SettingsPage() {
             <CardContent className='pt-6 space-y-3'>
               <button className='w-full flex items-center justify-between py-2 text-left hover:bg-gray-50 rounded'>
                 <span className='font-medium text-sm'>
-                  {t("sections.help.faq")}
+                  FAQ
                 </span>
-                <Badge variant='secondary'>{t("common.available")}</Badge>
+                <Badge variant='secondary'>Available</Badge>
               </button>
 
               <button className='w-full flex items-center justify-between py-2 text-left hover:bg-gray-50 rounded'>
                 <span className='font-medium text-sm'>
-                  {t("sections.help.contact")}
+                  Contact
                 </span>
-                <Badge variant='secondary'>{t("common.available")}</Badge>
+                <Badge variant='secondary'>Available</Badge>
               </button>
 
               <button className='w-full flex items-center justify-between py-2 text-left hover:bg-gray-50 rounded'>
                 <span className='font-medium text-sm'>
-                  {t("sections.help.feedback")}
+                  Feedback
                 </span>
-                <Badge variant='secondary'>{t("common.available")}</Badge>
+                <Badge variant='secondary'>Available</Badge>
               </button>
             </CardContent>
           </Card>
@@ -226,9 +205,9 @@ export default function SettingsPage() {
           <CardContent className='pt-6'>
             <div className='text-center space-y-2'>
               <p className='text-sm font-medium text-gray-900'>
-                {t("app.name")} v1.0.0
+                Fala v1.0.0
               </p>
-              <p className='text-xs text-gray-600'>{t("app.description")}</p>
+              <p className='text-xs text-gray-600'>Fala is a productivity app that helps you manage your tasks efficiently.</p>
             </div>
           </CardContent>
         </Card>

@@ -13,7 +13,6 @@ import {
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTranslations } from "next-intl";
 
 const navItems = [
   { icon: Home, labelKey: "Dashboard", href: "/dashboard" },

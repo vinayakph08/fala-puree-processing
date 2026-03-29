@@ -69,11 +69,11 @@ const deleteMutation = useMutation({
   mutationFn: apiDeleteFeature,
   onSuccess: () => {
     queryClient.invalidateQueries({ queryKey: FEATURE_KEYS.all });
-    toast.success(t("messages.deleteSuccess"));
+    toast.success("Deleted successfully");
   },
   onError: (error) => {
     console.error("[deleteFeature mutation]", error);
-    toast.error(t("errors.deleteFailed"));
+    toast.error("Failed to delete");
   },
 });
 
@@ -108,14 +108,12 @@ const { invalidateEarnings } = useCacheInvalidation();
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useTranslations } from "next-intl";
 
 import { apiGetFeatureList, apiDeleteFeature } from "../utils/query-functions";
 import { FEATURE_KEYS } from "../utils/query-keys";
 
 export const useFeature = () => {
   const queryClient = useQueryClient();
-  const t = useTranslations("feature");
 
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: FEATURE_KEYS.all,
@@ -129,11 +127,11 @@ export const useFeature = () => {
     mutationFn: apiDeleteFeature,  // imported from utils/query-functions
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: FEATURE_KEYS.all });
-      toast.success(t("messages.deleteSuccess"));
+      toast.success("Deleted successfully");
     },
     onError: (error) => {
       console.error("[deleteFeature mutation]", error);
-      toast.error(t("errors.deleteFailed"));
+      toast.error("Failed to delete");
     },
   });
 

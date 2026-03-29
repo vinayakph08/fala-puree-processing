@@ -1,10 +1,8 @@
 "use client";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useTranslations } from "next-intl";
 
 export default function PuréeProcessingPage() {
-  const t = useTranslations("orders");
 
   return (
     <div className='space-y-6'>

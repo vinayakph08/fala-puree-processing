@@ -1,5 +1,5 @@
 ---
-description: "Use when creating or editing React component (.tsx) files. Covers exports, use client directive, async states, touch targets, i18n with useTranslations, Shadcn usage."
+description: "Use when creating or editing React component (.tsx) files. Covers exports, use client directive, async states, touch targets, Shadcn usage."
 applyTo: "**/*.tsx"
 ---
 
@@ -24,19 +24,10 @@ Every component consuming async data must handle all three states:
 
 ```tsx
 if (isLoading) return <FeatureSkeleton />;
-if (error) return <div>{t("errors.loadFailed")}</div>;
-if (!data?.length) return <div>{t("page.empty")}</div>;
+if (error) return <div>Loading Failed...</div>;
+if (!data?.length) return <div>No items found</div>;
 return <FeatureList data={data} />;
 ```
-
-## Internationalization
-
-- Import: `import { useTranslations } from "next-intl"`
-- Usage: `const t = useTranslations("featureName")`
-- **Never hardcode** user-facing strings — always use `t("key")`
-- Multiple namespaces: `const tCommon = useTranslations("common")`
-- Use **English numerals** even in Kannada context (1, 2, 3 — not ೧, ೨, ೩)
-- Currency: `new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(amount)`
 
 ## Touch Targets
 
@@ -67,7 +58,6 @@ All interactive elements must have minimum 44px × 44px:
 ```tsx
 "use client";
 
-import { useTranslations } from "next-intl";
 import { FC } from "react";
 import { Button } from "@/components/ui/button";
 import { IFeatureItem } from "@/types/feature";
@@ -78,8 +68,6 @@ interface FeatureCardProps {
 }
 
 export const FeatureCard: FC<FeatureCardProps> = ({ item, onDelete }) => {
-  const t = useTranslations("feature");
-  const tCommon = useTranslations("common");
 
   return (
     <div className="rounded-lg border p-4 space-y-2">
@@ -89,7 +77,7 @@ export const FeatureCard: FC<FeatureCardProps> = ({ item, onDelete }) => {
         onClick={() => onDelete(item.id)}
         className="min-h-[44px] min-w-[44px]"
       >
-        {tCommon("buttons.delete")}
+       Delete
       </Button>
     </div>
   );

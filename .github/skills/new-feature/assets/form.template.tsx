@@ -6,7 +6,6 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useTranslations } from "next-intl";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useState } from "react";
@@ -47,7 +46,6 @@ interface CreateFeatureFormProps {
 }
 
 export const CreateFeatureForm = ({ onSuccess }: CreateFeatureFormProps) => {
-  const t = useTranslations("feature");
   const queryClient = useQueryClient();
   const [open, setOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -76,17 +74,17 @@ export const CreateFeatureForm = ({ onSuccess }: CreateFeatureFormProps) => {
       const result = await createFeatureAction(formData);
 
       if (result.error) {
-        toast.error(t("form.toast.error"));
+        toast.error(result.error.message || "Failed to create");
         return;
       }
 
-      toast.success(t("form.toast.success"));
+      toast.success("Created successfully");
       queryClient.invalidateQueries({ queryKey: FEATURE_KEYS.all });
       form.reset();
       setOpen(false);
       onSuccess?.();
     } catch {
-      toast.error(t("form.toast.error"));
+      toast.error("Failed to create");
     } finally {
       setIsSubmitting(false);
     }
@@ -95,11 +93,11 @@ export const CreateFeatureForm = ({ onSuccess }: CreateFeatureFormProps) => {
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button className="min-h-[44px]">{t("form.addButton")}</Button>
+        <Button className="min-h-[44px]">Add</Button>
       </DialogTrigger>
       <DialogContent className="max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle>{t("form.createTitle")}</DialogTitle>
+          <DialogTitle>Create Feature</DialogTitle>
         </DialogHeader>
 
         <Form {...form}>
@@ -111,10 +109,10 @@ export const CreateFeatureForm = ({ onSuccess }: CreateFeatureFormProps) => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("form.fields.name")}</FormLabel>
+                  <FormLabel>Name</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder={t("form.fields.namePlaceholder")}
+                      placeholder="Enter name"
                       {...field}
                     />
                   </FormControl>
@@ -129,16 +127,16 @@ export const CreateFeatureForm = ({ onSuccess }: CreateFeatureFormProps) => {
               name="status"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("form.fields.status")}</FormLabel>
+                  <FormLabel>Status</FormLabel>
                   <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder={t("form.fields.statusPlaceholder")} />
+                        <SelectValue placeholder="Select status" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="active">{t("status.active")}</SelectItem>
-                      <SelectItem value="inactive">{t("status.inactive")}</SelectItem>
+                      <SelectItem value="active">Active</SelectItem>
+                      <SelectItem value="inactive">Inactive</SelectItem>
                     </SelectContent>
                   </Select>
                   <FormMessage />
@@ -153,7 +151,7 @@ export const CreateFeatureForm = ({ onSuccess }: CreateFeatureFormProps) => {
               name="quantity"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>{t("form.fields.quantity")}</FormLabel>
+                  <FormLabel>Quantity</FormLabel>
                   <FormControl>
                     <Input
                       type="number"
@@ -179,7 +177,7 @@ export const CreateFeatureForm = ({ onSuccess }: CreateFeatureFormProps) => {
               name="date"
               render={({ field }) => (
                 <FormItem className="flex flex-col">
-                  <FormLabel>{t("form.fields.date")}</FormLabel>
+                  <FormLabel>Date</FormLabel>
                   <Popover>
                     <PopoverTrigger asChild>
                       <FormControl>
@@ -190,7 +188,7 @@ export const CreateFeatureForm = ({ onSuccess }: CreateFeatureFormProps) => {
                             !field.value && "text-muted-foreground",
                           )}
                         >
-                          {field.value ? format(field.value, "PPP") : <span>{t("form.fields.datePlaceholder")}</span>}
+                          {field.value ? format(field.value, "PPP") : <span>Select date</span>}
                           <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
                         </Button>
                       </FormControl>
@@ -217,14 +215,14 @@ export const CreateFeatureForm = ({ onSuccess }: CreateFeatureFormProps) => {
                 className="flex-1 min-h-[44px]"
                 onClick={() => handleOpenChange(false)}
               >
-                {t("form.cancel")}
+                Cancel
               </Button>
               <Button
                 type="submit"
                 className="flex-1 min-h-[44px]"
                 disabled={isSubmitting}
               >
-                {isSubmitting ? t("form.saving") : t("form.save")}
+                {isSubmitting ? "Saving..." : "Save"}
               </Button>
             </div>
           </form>
@@ -249,7 +247,6 @@ interface EditFeatureFormProps {
 }
 
 export const EditFeatureForm = ({ item, onSuccess }: EditFeatureFormProps) => {
-  const t = useTranslations("feature");
   const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -273,14 +270,14 @@ export const EditFeatureForm = ({ item, onSuccess }: EditFeatureFormProps) => {
       formData.append("status", data.status);
 
       const result = await updateFeatureAction(item.id, formData);
-      if (result.error) { toast.error(t("form.toast.updateError")); return; }
+      if (result.error) { toast.error("Error updating feature"); return; }
 
-      toast.success(t("form.toast.updateSuccess"));
+      toast.success("Feature updated successfully");
       queryClient.invalidateQueries({ queryKey: FEATURE_KEYS.all });
       queryClient.invalidateQueries({ queryKey: FEATURE_KEYS.detail(item.id) });
       onSuccess?.();
     } catch {
-      toast.error(t("form.toast.updateError"));
+      toast.error("Error updating feature");
     } finally {
       setIsSubmitting(false);
     }
@@ -290,7 +287,7 @@ export const EditFeatureForm = ({ item, onSuccess }: EditFeatureFormProps) => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField ... />
-        <Button type="submit" disabled={isSubmitting}>{isSubmitting ? t("form.saving") : t("form.update")}</Button>
+        <Button type="submit" disabled={isSubmitting}>{isSubmitting ? "Saving..." : "Update"}</Button>
       </form>
     </Form>
   );

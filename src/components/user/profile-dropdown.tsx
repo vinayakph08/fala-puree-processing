@@ -15,11 +15,9 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { signOut } from "@/lib/auth";
 import { toast } from "sonner";
-import { useTranslations } from "next-intl";
 import { useLocaleContext } from "@/providers/locale-provider";
 
 export const ProfileDropdown: React.FC = () => {
-  const t = useTranslations();
   const { currentLocale } = useLocaleContext();
   const { getDisplayName, getInitials, farmer } = useFarmer();
   const router = useRouter();
@@ -34,7 +32,7 @@ export const ProfileDropdown: React.FC = () => {
 
       if (error) {
         console.error("Logout error:", error);
-        toast.error(t("profile.messages.logoutError"));
+        toast.error("Logout failed. Please try again.");
         return;
       }
 
@@ -44,14 +42,14 @@ export const ProfileDropdown: React.FC = () => {
       localStorage.removeItem("userPreferences");
 
       // Show success message
-      toast.success(t("profile.messages.logoutSuccess"));
+      toast.success("Logout successful.");
 
       // Add delay for better UX
 
       router.push("/login");
     } catch (error) {
       console.error("Logout failed:", error);
-      toast.error(t("profile.messages.logoutError"));
+      toast.error("Logout failed. Please try again.");
     } finally {
       setIsLoggingOut(false);
     }
@@ -80,17 +78,17 @@ export const ProfileDropdown: React.FC = () => {
         <div className='px-2 py-1.5'>
           <p className='text-sm font-medium'>{displayName}</p>
           <p className='text-xs text-muted-foreground'>
-            {t("profile.farmerAccount")}
+            Farmer Account
           </p>
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => router.push("/profile")}>
           <User className='mr-2 h-4 w-4' />
-          {t("common.navigation.profile")}
+          Profile
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => router.push("/settings")}>
           <Settings className='mr-2 h-4 w-4' />
-          {t("common.navigation.settings")}
+          Settings
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -100,8 +98,8 @@ export const ProfileDropdown: React.FC = () => {
         >
           <LogOut className='mr-2 h-4 w-4' />
           {isLoggingOut
-            ? t("profile.buttons.loggingOut")
-            : t("profile.buttons.logout")}
+            ? "Logging out..."
+            : "Logout"}
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -3,11 +3,9 @@
 import { LanguageToggle } from "@/components/ui/language-toggle";
 import { useFarmer } from "@/providers/farmer-provider";
 import { ProfileDropdown } from "@/components/user/profile-dropdown";
-import { useTranslations } from "next-intl";
 import { useLocaleContext } from "@/providers/locale-provider";
 
 export function MobileMainHeader() {
-  const t = useTranslations("common");
   const { currentLocale } = useLocaleContext();
   const { getDisplayName } = useFarmer();
 
@@ -24,7 +22,7 @@ export function MobileMainHeader() {
 
         <div>
           <p className='text-xs text-muted-foreground'>
-            {t("messages.welcome")}
+            Welcome back,
           </p>
           <h1 className='font-semibold'>{getDisplayName(currentLocale)}</h1>
         </div>

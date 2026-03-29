@@ -10,12 +10,10 @@ import {
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { useFarmer } from "@/providers/farmer-provider";
-import { useTranslations } from "next-intl";
 import { Skeleton } from "@/components/ui/skeleton";
 
 function FarmeInfo() {
   const { farmer, isLoading, error } = useFarmer();
-  const t = useTranslations("profile");
 
   if (isLoading) {
     return (
@@ -44,25 +42,11 @@ function FarmeInfo() {
     <div>
       <Card>
         <CardHeader>
-          <CardTitle>{t("farmInfo")}</CardTitle>
-          <CardDescription>{t("farmDescription")}</CardDescription>
+          <CardTitle>Personal Information</CardTitle>
+          <CardDescription>Your profile details</CardDescription>
         </CardHeader>
         <CardContent className='space-y-4'>
           {/* Add Farm ID and Farm Name  */}
-
-          <div>
-            <Label className='text-sm text-muted-foreground'>
-              {t("farm.farmId")}
-            </Label>
-            <p className='font-medium'>{farmer?.farm?.farm_id}</p>
-          </div>
-
-          <div>
-            <Label className='text-sm text-muted-foreground'>
-              {t("farm.farmName")}
-            </Label>
-            <p className='font-medium'>{farmer?.farm?.farmName}</p>
-          </div>
         </CardContent>
       </Card>
     </div>

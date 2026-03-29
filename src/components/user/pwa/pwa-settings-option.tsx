@@ -1,7 +1,6 @@
 "use client";
 
 import { Download, Smartphone, CheckCircle, Clock } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,7 +13,6 @@ import { Badge } from "@/components/ui/badge";
 import { usePWA } from "@/providers/pwa-provider";
 
 export function PWASettingsOption() {
-  const t = useTranslations("common.pwa");
   const { installStatus, isIOS, showInstallPrompt, resetDismissedStatus } =
     usePWA();
 
@@ -26,7 +24,7 @@ export function PWASettingsOption() {
 
     if (isIOS) {
       // Show iOS instructions
-      alert(t("ios.instructions"));
+      alert("iOS installation instructions");
     } else {
       await showInstallPrompt();
     }
@@ -38,34 +36,34 @@ export function PWASettingsOption() {
         return (
           <Badge variant='secondary' className='bg-green-100 text-primary'>
             <CheckCircle className='h-3 w-3 mr-1' />
-            {t("settings.status.installed")}
+            Installed
           </Badge>
         );
       case "available":
         return (
           <Badge variant='secondary' className='bg-blue-100 text-blue-700'>
             <Download className='h-3 w-3 mr-1' />
-            {t("settings.status.available")}
+            Available
           </Badge>
         );
       case "dismissed":
         return (
           <Badge variant='secondary' className='bg-orange-100 text-orange-700'>
             <Clock className='h-3 w-3 mr-1' />
-            {t("settings.status.dismissed")}
+            Dismissed
           </Badge>
         );
       case "installing":
         return (
           <Badge variant='secondary' className='bg-yellow-100 text-yellow-700'>
             <Download className='h-3 w-3 mr-1' />
-            {t("settings.status.installing")}
+            Installing...
           </Badge>
         );
       default:
         return (
           <Badge variant='secondary' className='bg-gray-100 text-gray-700'>
-            {t("settings.status.notAvailable")}
+            Not Available
           </Badge>
         );
     }
@@ -74,15 +72,15 @@ export function PWASettingsOption() {
   const getButtonText = () => {
     switch (installStatus) {
       case "installed":
-        return t("settings.button.installed");
+        return "Installed";
       case "installing":
-        return t("settings.button.installing");
+        return "Installing...";
       case "dismissed":
-        return t("settings.button.enableInstall");
+        return "Enable Install";
       case "available":
-        return t("settings.button.install");
+        return "Install";
       default:
-        return t("settings.button.notAvailable");
+        return "Not Available";
     }
   };
 
@@ -103,9 +101,9 @@ export function PWASettingsOption() {
               <Smartphone className='h-5 w-5 text-primary' />
             </div>
             <div>
-              <CardTitle className='text-base'>{t("settings.title")}</CardTitle>
+              <CardTitle className='text-base'>PWA Settings</CardTitle>
               <CardDescription className='text-sm'>
-                {t("settings.description")}
+                Manage your Progressive Web App installation settings.
               </CardDescription>
             </div>
           </div>
@@ -118,15 +116,15 @@ export function PWASettingsOption() {
         <div className='space-y-2'>
           <div className='flex items-center gap-3 text-sm text-gray-600'>
             <div className='w-2 h-2 bg-primary rounded-full flex-shrink-0'></div>
-            <span>{t("features.quickAccess")}</span>
+            <span>Quick Access</span>
           </div>
           <div className='flex items-center gap-3 text-sm text-gray-600'>
             <div className='w-2 h-2 bg-primary rounded-full flex-shrink-0'></div>
-            <span>{t("features.offline")}</span>
+            <span>Offline Support</span>
           </div>
           <div className='flex items-center gap-3 text-sm text-gray-600'>
             <div className='w-2 h-2 bg-primary rounded-full flex-shrink-0'></div>
-            <span>{t("features.notifications")}</span>
+            <span>Notifications</span>
           </div>
         </div>
 
@@ -147,7 +145,7 @@ export function PWASettingsOption() {
         {installStatus === "dismissed" && (
           <div className='bg-orange-50 border border-orange-200 rounded-lg p-3'>
             <p className='text-sm text-orange-800'>
-              {t("settings.help.dismissed")}
+              You previously dismissed the app installation. Click the button above to install now.
             </p>
           </div>
         )}
@@ -155,7 +153,7 @@ export function PWASettingsOption() {
         {/* iOS specific instructions */}
         {isIOS && installStatus !== "installed" && (
           <div className='bg-blue-50 border border-blue-200 rounded-lg p-3'>
-            <p className='text-sm text-blue-800'>{t("settings.help.ios")}</p>
+            <p className='text-sm text-blue-800'>On iOS: Open in Safari browser → Share → 'Add to Home Screen'</p>
           </div>
         )}
       </CardContent>

@@ -31,7 +31,6 @@ components/
 - `"use client"` on any component using hooks or event handlers
 - Must handle all 3 async states: loading → skeleton, error → error message, empty → empty state
 - All interactive elements: `min-h-[44px]` touch target
-- Never hardcode strings — always `useTranslations("featureName")`
 
 ## Form Pattern (React Hook Form + Zod + Shadcn + Server Action)
 

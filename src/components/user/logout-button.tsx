@@ -7,7 +7,6 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { signOut } from "@/lib/auth";
 import { toast } from "sonner";
-import { useTranslations } from "next-intl";
 
 interface LogoutButtonProps {
   variant?: "default" | "outline" | "destructive" | "ghost";
@@ -24,7 +23,6 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({
   className = "",
   fullWidth = false,
 }) => {
-  const t = useTranslations("profile");
   const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
@@ -37,7 +35,7 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({
 
       if (error) {
         console.error("Logout error:", error);
-        toast.error(t("messages.logoutError"));
+        toast.error("Logout failed. Please try again.");
         return;
       }
 
@@ -47,7 +45,7 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({
       localStorage.removeItem("userPreferences");
 
       // Show success message
-      toast.success(t("messages.logoutSuccess"));
+      toast.success("Logout successful.");
 
       // Add a small delay for better UX
 
@@ -55,7 +53,7 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({
       router.push("/login");
     } catch (error) {
       console.error("Logout failed:", error);
-      toast.error(t("messages.logoutError"));
+      toast.error("Logout failed. Please try again.");
     } finally {
       setIsLoggingOut(false);
     }
@@ -74,7 +72,7 @@ export const LogoutButton: React.FC<LogoutButtonProps> = ({
       )}
     >
       {showIcon && <LogOut className='h-4 w-4 mr-2' />}
-      {isLoggingOut ? t("buttons.loggingOut") : t("buttons.logout")}
+      {isLoggingOut ? "Logging out..." : "Logout"}
     </Button>
   );
 };

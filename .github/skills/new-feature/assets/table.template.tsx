@@ -20,7 +20,6 @@ import {
   type ColumnFiltersState,
 } from "@tanstack/react-table";
 import { useState } from "react";
-import { useTranslations } from "next-intl";
 
 import {
   Table,
@@ -38,25 +37,24 @@ import type { IFeatureItem } from "@/types/feature";
 // Define outside the component — stable reference, not re-created on every render.
 
 const getColumns = (
-  t: ReturnType<typeof useTranslations>,
   onDelete: (id: string) => void,
 ): ColumnDef<IFeatureItem>[] => [
   {
     accessorKey: "name",
-    header: () => t("table.columns.name"),
+    header: () => "Name",
     cell: ({ row }) => <span>{row.getValue("name")}</span>,
   },
   {
     accessorKey: "status",
-    header: () => t("table.columns.status"),
+    header: () => "Status",
     cell: ({ row }) => {
       const status = row.getValue<string>("status");
-      return <span>{t(`status.${status}`)}</span>;
+      return <span>{status}</span>;
     },
   },
   {
     accessorKey: "created_at",
-    header: () => t("table.columns.createdAt"),
+    header: () => "Created At",
     cell: ({ row }) => {
       const date = new Date(row.getValue<string>("created_at"));
       return <span>{date.toLocaleDateString("en-IN")}</span>;
@@ -64,7 +62,7 @@ const getColumns = (
   },
   {
     id: "actions",
-    header: () => t("table.columns.actions"),
+    header: () => "Actions",
     cell: ({ row }) => (
       <Button
         variant="destructive"
@@ -72,7 +70,7 @@ const getColumns = (
         className="min-h-[44px] min-w-[44px]"
         onClick={() => onDelete(row.original.id)}
       >
-        {t("table.actions.delete")}
+        Delete
       </Button>
     ),
     enableSorting: false,
@@ -87,12 +85,12 @@ interface FeatureTableProps {
 }
 
 export const FeatureTable = ({ data, onDelete }: FeatureTableProps) => {
-  const t = useTranslations("feature");
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [globalFilter, setGlobalFilter] = useState("");
 
-  const columns = getColumns(t, onDelete);
+  const columns = getColumns(onDelete);
+
 
   const table = useReactTable({
     data,
@@ -119,7 +117,7 @@ export const FeatureTable = ({ data, onDelete }: FeatureTableProps) => {
 
       {/* Search / Filter bar */}
       <Input
-        placeholder={t("table.searchPlaceholder")}
+        placeholder="Search..."
         value={globalFilter}
         onChange={(e) => setGlobalFilter(e.target.value)}
         className="max-w-sm"
@@ -160,7 +158,7 @@ export const FeatureTable = ({ data, onDelete }: FeatureTableProps) => {
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  {t("table.empty")}
+                  No data available
                 </TableCell>
               </TableRow>
             )}
@@ -171,10 +169,7 @@ export const FeatureTable = ({ data, onDelete }: FeatureTableProps) => {
       {/* Pagination — remove this block if getPaginationRowModel() is not used */}
       <div className="flex items-center justify-between gap-2">
         <span className="text-sm text-muted-foreground">
-          {t("table.pagination.page", {
-            current: table.getState().pagination.pageIndex + 1,
-            total: table.getPageCount(),
-          })}
+          Page {table.getState().pagination.pageIndex + 1} of {table.getPageCount()}
         </span>
         <div className="flex gap-2">
           <Button
@@ -184,7 +179,7 @@ export const FeatureTable = ({ data, onDelete }: FeatureTableProps) => {
             onClick={() => table.previousPage()}
             disabled={!table.getCanPreviousPage()}
           >
-            {t("table.pagination.prev")}
+            Prev
           </Button>
           <Button
             variant="outline"
@@ -193,7 +188,7 @@ export const FeatureTable = ({ data, onDelete }: FeatureTableProps) => {
             onClick={() => table.nextPage()}
             disabled={!table.getCanNextPage()}
           >
-            {t("table.pagination.next")}
+            Next
           </Button>
         </div>
       </div>

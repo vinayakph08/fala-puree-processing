@@ -16,7 +16,6 @@ import { useFarmer } from "@/providers/farmer-provider";
 import { use, useState } from "react";
 import { toast } from "sonner";
 import { UserIcon } from "lucide-react";
-import { useTranslations } from "next-intl";
 import { useLocaleContext } from "@/providers/locale-provider";
 
 export function FarmerProfileCard() {
@@ -30,8 +29,6 @@ export function FarmerProfileCard() {
     error,
     isUpdating,
   } = useFarmer();
-  const t = useTranslations("profile");
-  const tCommon = useTranslations("common");
   const { currentLocale } = useLocaleContext();
   const [isEditing, setIsEditing] = useState(false);
   const [tempFirstName, setTempFirstName] = useState("");
@@ -63,10 +60,10 @@ export function FarmerProfileCard() {
       await updateName(tempFirstName, tempLastName);
       await updateTitle(tempTitle);
       setIsEditing(false);
-      toast.success(tCommon("messages.profileUpdated"));
+      toast.success("Profile updated successfully");
     } catch (error) {
       console.error("Failed to update profile:", error);
-      toast.error(tCommon("errors.profileUpdateFailed"));
+      toast.error("Failed to update profile");
     }
   };
 
@@ -116,15 +113,15 @@ export function FarmerProfileCard() {
       <Card>
         <CardHeader>
           <CardTitle className='text-red-600'>
-            {tCommon("errors.loadProfileFailed")}
+            Failed to load profile
           </CardTitle>
         </CardHeader>
         <CardContent>
           <p className='text-sm text-muted-foreground'>
-            {tCommon("errors.tryAgainLater")}
+            Please try again later.
           </p>
           <Button className='mt-2' onClick={() => window.location.reload()}>
-            {tCommon("buttons.retry")}
+            Retry
           </Button>
         </CardContent>
       </Card>
@@ -140,15 +137,15 @@ export function FarmerProfileCard() {
               <UserIcon className='h-5 w-5 rounded-full' color={"#09ad8d"} />
             </div>
             <div className='flex flex-col justify-start gap-1'>
-              <div>{t("farmerInfo")}</div>
+              <div>User Info</div>
               <div className='font-light text-xs text-muted-foreground'>
-                {t("farmerDescription")}
+                User Description
               </div>
             </div>
           </div>
           {!isEditing && (
             <Button size='sm' onClick={handleEditStart}>
-              {tCommon("buttons.editProfile")}
+              Edit Profile
             </Button>
           )}
         </CardTitle>
@@ -158,14 +155,14 @@ export function FarmerProfileCard() {
           <>
             <div>
               <Label className='text-sm text-muted-foreground'>
-                {t("displayName")}
+                  Display Name
               </Label>
               <p className='font-medium'>{getDisplayName(currentLocale)}</p>
             </div>
 
             <div>
               <Label className='text-sm text-muted-foreground'>
-                {t("firstName")}
+                First Name
               </Label>
               <p className='font-medium'>
                 {currentLocale === "kn"
@@ -178,7 +175,7 @@ export function FarmerProfileCard() {
               farmer.lastName) && (
               <div>
                 <Label className='text-sm text-muted-foreground'>
-                  {t("lastName")}
+                  Last Name
                 </Label>
                 <p className='font-medium'>
                   {currentLocale === "kn"
@@ -189,7 +186,7 @@ export function FarmerProfileCard() {
             )}
             <div>
               <Label className='text-sm text-muted-foreground'>
-                {t("mobileNumber")}
+                Mobile Number
               </Label>
               <p className='font-medium'>{farmer?.mobileNumber}</p>
             </div>
@@ -197,7 +194,7 @@ export function FarmerProfileCard() {
         ) : (
           <>
             <div className='space-y-2'>
-              <Label htmlFor='title'>{t("titleField")}</Label>
+              <Label htmlFor='title'>Title</Label>
               <Select
                 value={tempTitle}
                 onValueChange={(value: "sri" | "srimati") =>
@@ -218,7 +215,7 @@ export function FarmerProfileCard() {
               </Select>
             </div>
             <div className='space-y-2'>
-              <Label htmlFor='firstName'>{t("firstName")}</Label>
+              <Label htmlFor='firstName'>First Name</Label>
               <Input
                 id='firstName'
                 value={tempFirstName}
@@ -233,7 +230,7 @@ export function FarmerProfileCard() {
               )}
             </div>
             <div className='space-y-2'>
-              <Label htmlFor='lastName'>{t("lastName")}</Label>
+              <Label htmlFor='lastName'>Last Name</Label>
               <Input
                 id='lastName'
                 value={tempLastName}
@@ -250,8 +247,8 @@ export function FarmerProfileCard() {
             <div className='flex gap-2'>
               <Button onClick={handleSave} size='sm' disabled={isUpdating}>
                 {isUpdating
-                  ? tCommon("messages.saving")
-                  : tCommon("buttons.save")}
+                  ? "Saving..."
+                  : "Save"}
               </Button>
               <Button
                 variant='outline'
@@ -259,7 +256,7 @@ export function FarmerProfileCard() {
                 size='sm'
                 disabled={isUpdating}
               >
-                {tCommon("buttons.cancel")}
+                Cancel
               </Button>
             </div>
           </>

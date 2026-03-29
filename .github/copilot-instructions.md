@@ -33,7 +33,6 @@ This is a **NextJS PWA** for farmers to manage their agricultural operations in 
 - **TanStack React Query** for data fetching
 - **Next.js Image** component for image optimization
 - **React Context** for global state management
-- **next-intl** + `useTranslations` hook for internationalization
 - **PWA** capabilities with offline support
 
 ## 4-Layer Architecture
@@ -131,17 +130,6 @@ src/
 - **kebab-case** for files/folders: `inventory-card/index.tsx`
 - **`api*` prefix** for client query-functions: `apiGetFeatureList`, `apiDeleteFeature`
 - **`db*` prefix** for server-functions: `dbGetFeatureList`, `dbGetFeatureById`
-
----
-
-## 🌐 Internationalization (Kannada/English)
-
-- **Default language**: Kannada (`kn`) — takes priority over English
-- **All user-facing text** must be in translation files — never hardcode strings in components
-- Translation files: `public/locales/{kn,en}/[feature].json`
-- Use `useTranslations("feature")` hook — Zod validation messages also use translation keys
-- Design for **20–40% longer text** in Kannada; use **English numerals** in Kannada context
-- Currency: `new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" })`
 
 ---
 

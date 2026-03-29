@@ -2,7 +2,6 @@
 
 import { ArrowLeft } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 
 interface MobileSubPageHeaderProps {
@@ -15,7 +14,6 @@ export function MobileSubPageHeader({
   actionButton,
 }: MobileSubPageHeaderProps) {
   const router = useRouter();
-  const t = useTranslations("common");
 
   return (
     <header className='flex items-center justify-between w-full p-4 border-b fixed md:hidden bg-background z-50'>
