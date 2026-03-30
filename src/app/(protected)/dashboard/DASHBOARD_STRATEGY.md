@@ -6,7 +6,7 @@
 
 1. **Performance**: Database aggregations are 10-100x faster than JavaScript calculations
 2. **Network Efficiency**: Transfer only calculated results, not raw data
-3. **Scalability**: Handles thousands of farmers and inventory records efficiently
+3. **Scalability**: Handles thousands of users and inventory records efficiently
 4. **Real-time**: Always shows current data with optimized queries
 5. **Memory Usage**: Doesn't load unnecessary data into application memory
 
@@ -30,16 +30,16 @@
 
 1. **`get_dashboard_metrics()`**
 
-   - Total Farmers count
+   - Total Users count
    - Total Land Sown (guntas)
    - Total Expected Inventory (kg)
    - Current Available Inventory (kg)
 
 2. **`get_farmer_growth_data()`**
 
-   - Monthly farmer registration growth
+   - Monthly user registration growth
    - Last 8 months trend
-   - Cumulative farmer counts
+   - Cumulative user counts
 
 3. **`get_inventory_usage_data()`**
 
@@ -139,10 +139,10 @@ Consider adding:
 
 ```tsx
 // DON'T DO THIS - Inefficient for dashboards
-const farmers = await getAllFarmers();
+const users = await getAllUsers();
 const inventory = await getAllInventory();
 
-const totalFarmers = farmers.length;
+const totalUsers = users.length;
 const totalInventory = inventory.reduce((sum, item) => sum + item.quantity, 0);
 ```
 

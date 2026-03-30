@@ -1,4 +1,4 @@
-# 🚜 Fala Farmer App - Copilot Instructions
+# 🚜 Fala User App - Copilot Instructions
 
 > Detailed coding patterns live in `.github/instructions/` (auto-loaded per file type) and `.github/skills/` (invoked on demand).
 > This file is the always-loaded mental model — architecture, decisions, context, and hard rules.
@@ -7,15 +7,15 @@
 
 ## 🎯 Project Context
 
-This is a **NextJS PWA** for farmers to manage their agricultural operations in Karnataka, India. The app helps farmers with:
+This is a **NextJS PWA** for users to manage their agricultural operations in Karnataka, India. The app helps users with:
 
 - **Inventory Management**: Update and track harvested crops and quantities
 - **Order Management**: View and fulfill customer orders
 - **Earnings Tracking**: Monitor income and weekly earnings in Number and Graph formats
 - **Task Management**: Complete agricultural tasks with validation by capturing photos
 
-**Target Users**: Farmers in Karnataka who primarily speak Kannada. Later we can add Hindi, Tamil, and Telugu.
-**Business Model**: Agritech supply chain connecting farmers directly with premium customers
+**Target Users**: Users in Karnataka who primarily speak Kannada. Later we can add Hindi, Tamil, and Telugu.
+**Business Model**: Agritech supply chain connecting users directly with premium customers
 **Key Goal**: Quick MVP for validation, lean and minimal approach
 
 ---
@@ -79,7 +79,7 @@ queryFn: () => getInventory(filters)   // API Route at /api/inventory
 | DB Controller, API Route, Server Action | `createClient` from `@/utils/supabase/server` |
 | Client Components (browser only) | `createBrowserClient` from `@supabase/ssr` |
 
-**Service Role Key** → Admin app only. **Never** in the farmer-facing app.
+**Service Role Key** → Admin app only. **Never** in the user-facing app.
 **RLS is non-negotiable on every table. No exceptions.**
 
 ### 3. Data Shape Transformation Chain
@@ -162,7 +162,7 @@ src/
 
 ---
 
-## 👨‍🌾 Farmer UX Patterns
+## 👨‍🌾 User UX Patterns
 
 ### User Experience Principles
 
@@ -241,12 +241,12 @@ src/
 
 ### Business Flow Context
 
-- Farmers → FPOs → Fala → Premium Customers
+- Users → FPOs → Fala → Premium Customers
 - Focus on quality over quantity
 - Transparency in pricing and processes
-- Direct farmer empowerment model
+- Direct user empowerment model
 
-Remember: This app should feel natural to Karnataka farmers while being technically robust for scaling.
+Remember: This app should feel natural to Karnataka users while being technically robust for scaling.
 
 ### Code Response Rules.
 

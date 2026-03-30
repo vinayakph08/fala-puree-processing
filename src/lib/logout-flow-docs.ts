@@ -10,7 +10,7 @@ AUTHENTICATION FLOW:
    - After successful login, redirects to original URL
 4. If authenticated:
    - Allows access to protected pages
-   - Shows proper farmer interface
+   - Shows proper user interface
 
 LOGOUT FLOW:
 1. User clicks logout button (mobile or desktop)  
@@ -26,7 +26,7 @@ LOGOUT FLOW:
    - Log error for debugging
 
 PROTECTED ROUTES:
-- /dashboard, /profile, /inventory, /orders, /tasks, /earning, /farmer
+- /dashboard, /profile, /inventory, /orders, /tasks, /earning, /user
 - All use AuthGuard component for client-side protection
 - Middleware provides server-side protection
 - Automatic redirect to login if not authenticated
@@ -72,7 +72,7 @@ export const authFlowDocumentation = {
       "/orders",
       "/tasks",
       "/earning",
-      "/farmer",
+      "/user",
     ],
   },
   mobile: {

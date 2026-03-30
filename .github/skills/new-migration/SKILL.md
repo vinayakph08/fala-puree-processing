@@ -39,20 +39,20 @@ Use the pattern: `farmer_id = auth.uid()` for row ownership.
 ```sql
 ALTER TABLE public.[feature] ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "[feature]: farmer select own"
+CREATE POLICY "[feature]: user select own"
 ON public.[feature] FOR SELECT
 USING (farmer_id = auth.uid());
 
-CREATE POLICY "[feature]: farmer insert own"
+CREATE POLICY "[feature]: user insert own"
 ON public.[feature] FOR INSERT
 WITH CHECK (farmer_id = auth.uid());
 
-CREATE POLICY "[feature]: farmer update own"
+CREATE POLICY "[feature]: user update own"
 ON public.[feature] FOR UPDATE
 USING (farmer_id = auth.uid())
 WITH CHECK (farmer_id = auth.uid());
 
-CREATE POLICY "[feature]: farmer delete own"
+CREATE POLICY "[feature]: user delete own"
 ON public.[feature] FOR DELETE
 USING (farmer_id = auth.uid());
 ```

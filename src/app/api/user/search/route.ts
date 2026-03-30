@@ -33,7 +33,7 @@ function buildUserSearchQuery(supabase: any, params: URLSearchParams) {
     );
   }
 
-  // Only farmers by default
+  // Only users by default
   if (!params.get("role")) query = query.eq("role", "FARMER");
 
   return query;
@@ -77,7 +77,7 @@ export async function GET(req: NextRequest) {
     };
 
     return NextResponse.json(
-      { farmers: data, pagination: paginationInfo },
+      { users: data, pagination: paginationInfo },
       { status: 200 }
     );
   } catch (error: any) {

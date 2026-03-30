@@ -11,7 +11,7 @@ FEATURE_KEYS lives in its own `utils/query-keys/` folder — separate from utili
 ```typescript
 export const FEATURE_KEYS = {
   all: ["feature"],                                        // invalidate everything for this feature
-  byUser: (userId: string) => ["feature", userId],         // all items for a specific farmer
+  byUser: (userId: string) => ["feature", userId],         // all items for a specific user
   detail: (id: string) => ["feature", "detail", id],       // single item
   search: (filters: FeatureFilters) => ["feature", "search", filters], // filtered/searched results
 };

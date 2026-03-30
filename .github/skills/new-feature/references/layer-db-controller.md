@@ -26,7 +26,7 @@ import { createClient } from "@/utils/supabase/server";
 ## Common Query Patterns
 
 ```typescript
-// Select all for a farmer
+// Select all for a user
 await supabase.from("table").select("*").eq("farmer_id", farmer_id).eq("is_deleted", false)
 
 // Select with related data

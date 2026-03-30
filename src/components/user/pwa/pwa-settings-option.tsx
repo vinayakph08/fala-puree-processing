@@ -112,7 +112,7 @@ export function PWASettingsOption() {
       </CardHeader>
 
       <CardContent className='space-y-4'>
-        {/* Benefits list for farmers */}
+        {/* Benefits list for users */}
         <div className='space-y-2'>
           <div className='flex items-center gap-3 text-sm text-gray-600'>
             <div className='w-2 h-2 bg-primary rounded-full flex-shrink-0'></div>

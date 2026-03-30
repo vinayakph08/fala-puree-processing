@@ -16,12 +16,12 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { signInWithMobile } from "@/lib/auth";
-import { FarmerRegistrationForm } from "@/app/(auth)/register/farmer/farmer-registration-form";
 import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import Image from "next/image";
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { UserRegistrationForm } from "../register/user/user-registration-form";
 
 function AuthFormContent() {
   const [tab, setTab] = useState("signin");
@@ -212,7 +212,7 @@ function AuthFormContent() {
             </TabsContent>
             <TabsContent value='signup'>
               <CardContent className='space-y-4'>
-                <FarmerRegistrationForm
+                <UserRegistrationForm
                   onSuccess={handleRegistrationSuccess}
                   onError={handleRegistrationError}
                 />

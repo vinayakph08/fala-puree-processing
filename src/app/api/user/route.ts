@@ -1,4 +1,4 @@
-import { farmersController } from "@/app/(protected)/farmers/db-controller";
+import { usersController } from "@/app/(protected)/users/db-controller";
 import { createClient } from "@/utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -17,22 +17,22 @@ export async function GET() {
     }
 
     // Fetch user profile from database
-    const { farmers, error: farmersError } =
-      await farmersController.getAllFarmers();
+    const { users, error: usersError } =
+      await usersController.getAllUsers();
 
-    if (farmersError) {
-      console.error("Farmers fetch error:", farmersError);
+    if (usersError) {
+      console.error("Users fetch error:", usersError);
       return NextResponse.json(
-        { error: "Failed to fetch farmers" },
+        { error: "Failed to fetch users" },
         { status: 500 }
       );
     }
 
-    if (!farmers) {
+    if (!users) {
       return NextResponse.json({ error: "Profile not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ farmers }, { status: 200 });
+    return NextResponse.json({ users }, { status: 200 });
   } catch (error) {
     console.error("Unexpected error:", error);
     return NextResponse.json(

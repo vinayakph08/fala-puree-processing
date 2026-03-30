@@ -110,7 +110,7 @@ BEGIN
 EXCEPTION
     WHEN OTHERS THEN
         -- Log the error and re-raise to block the sign up
-        RAISE EXCEPTION 'Failed to create farmer profile: %', SQLERRM;
+        RAISE EXCEPTION 'Failed to create user profile: %', SQLERRM;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
@@ -125,6 +125,6 @@ CREATE TRIGGER on_auth_user_created
     EXECUTE FUNCTION public.handle_new_user();
 
 
--- -- Grant necessary permissions for farmer operations
+-- -- Grant necessary permissions for user operations
 -- GRANT USAGE ON SCHEMA public TO authenticated;
 -- GRANT ALL ON public.user_profile TO authenticated;

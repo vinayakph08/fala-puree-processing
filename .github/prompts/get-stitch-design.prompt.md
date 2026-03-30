@@ -13,7 +13,7 @@ Fetch the design for **one specific screen** — the **{{feature}}** screen — 
 
 ## Steps
 
-1. Use the available Stitch MCP tools to list projects and find the relevant project for the Fala farmer app.
+1. Use the available Stitch MCP tools to list projects and find the relevant project for the Fala user app.
 2. Find the **single screen** matching "{{feature}}" (or the closest match). If multiple screens match, list them and ask the user to pick one.
 3. Fetch the full details of that one screen only.
 4. Output a structured UI specification:

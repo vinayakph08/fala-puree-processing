@@ -20,17 +20,17 @@ export const fetchDashboardMetrics = async (
   return metrics;
 };
 
-export const fetchFarmerGrowthData = async (
+export const fetchUserGrowthData = async (
   cropFilter?: string
 ): Promise<any[]> => {
   const url = cropFilter
-    ? `${API_BASE}/farmer-growth?crop=${encodeURIComponent(cropFilter)}`
-    : `${API_BASE}/farmer-growth`;
+    ? `${API_BASE}/user-growth?crop=${encodeURIComponent(cropFilter)}`
+    : `${API_BASE}/user-growth`;
 
   const response = await fetch(url);
 
   if (!response.ok) {
-    throw new Error(`Failed to fetch farmer growth data: ${response.status}`);
+    throw new Error(`Failed to fetch user growth data: ${response.status}`);
   }
 
   const { data } = await response.json();
@@ -67,20 +67,20 @@ export const fetchInventoryGrowthData = async (
   return data || [];
 };
 
-export const fetchFarmerHarvestableInventory = async (
+export const fetchUserHarvestableInventory = async (
   cropFilter?: string
 ): Promise<any[]> => {
   const url = cropFilter
-    ? `${API_BASE}/farmer-harvestable-inventory?crop=${encodeURIComponent(
+    ? `${API_BASE}/user-harvestable-inventory?crop=${encodeURIComponent(
         cropFilter
       )}`
-    : `${API_BASE}/farmer-harvestable-inventory`;
+    : `${API_BASE}/user-harvestable-inventory`;
 
   const response = await fetch(url);
 
   if (!response.ok) {
     throw new Error(
-      `Failed to fetch farmer harvestable inventory: ${response.status}`
+      `Failed to fetch user harvestable inventory: ${response.status}`
     );
   }
 

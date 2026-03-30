@@ -10,7 +10,7 @@ import { FeatureFilters } from "@/types/feature";
 
 export const FEATURE_KEYS = {
   all: ["feature"],                                                          // invalidates entire feature cache
-  byUser: (userId: string) => ["feature", userId],                          // all items for a farmer
+  byUser: (userId: string) => ["feature", userId],                          // all items for a user
   detail: (id: string) => ["feature", "detail", id],                        // single item
   search: (filters: FeatureFilters) => ["feature", "search", filters],      // filtered/paginated results
 };

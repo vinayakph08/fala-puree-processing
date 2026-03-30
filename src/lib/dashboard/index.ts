@@ -13,15 +13,15 @@ export const getDashboardMetrics = async (cropFilter?: string) => {
   }
 };
 
-export const getFarmerGrowthData = async (cropFilter?: string) => {
+export const getUserGrowthData = async (cropFilter?: string) => {
   try {
-    const { data, error } = await dashboardController.getFarmerGrowthData(
+    const { data, error } = await dashboardController.getUserGrowthData(
       cropFilter
     );
     if (error) throw error;
     return data;
   } catch (error) {
-    console.error("Error fetching farmer growth data:", error);
+    console.error("Error fetching user growth data:", error);
     throw error;
   }
 };
@@ -61,16 +61,16 @@ export const getAvailableCrops = async () => {
   }
 };
 
-export const getFarmerWithHarvestableInventory = async (
+export const getUserWithHarvestableInventory = async (
   cropFilter?: string
 ) => {
   try {
     const { data, error } =
-      await dashboardController.getFarmerHarvestableInventory(cropFilter);
+      await dashboardController.getUserHarvestableInventory(cropFilter);
     if (error) throw error;
     return data;
   } catch (error) {
-    console.error("Error fetching farmers with harvestable inventory:", error);
+    console.error("Error fetching users with harvestable inventory:", error);
     throw error;
   }
 };

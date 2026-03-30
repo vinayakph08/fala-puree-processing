@@ -10,16 +10,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { User, Settings, LogOut } from "lucide-react";
-import { useFarmer } from "@/providers/farmer-provider";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { signOut } from "@/lib/auth";
 import { toast } from "sonner";
 import { useLocaleContext } from "@/providers/locale-provider";
+import { useUser } from "@/providers/user-provider";
 
 export const ProfileDropdown: React.FC = () => {
   const { currentLocale } = useLocaleContext();
-  const { getDisplayName, getInitials, farmer } = useFarmer();
+  const { getDisplayName, getInitials, user } = useUser();
   const router = useRouter();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
 
@@ -58,8 +58,8 @@ export const ProfileDropdown: React.FC = () => {
   const displayName = getDisplayName(currentLocale);
   const initials: string =
     getInitials({
-      firstName: farmer.firstName,
-      lastName: farmer.lastName,
+      firstName: user.firstName,
+      lastName: user.lastName,
     }) || " "; // Assuming lastName is optional
 
   return (
@@ -78,7 +78,7 @@ export const ProfileDropdown: React.FC = () => {
         <div className='px-2 py-1.5'>
           <p className='text-sm font-medium'>{displayName}</p>
           <p className='text-xs text-muted-foreground'>
-            Farmer Account
+            User Account
           </p>
         </div>
         <DropdownMenuSeparator />

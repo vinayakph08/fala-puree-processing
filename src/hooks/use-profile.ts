@@ -1,8 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { FarmerProfile } from "@/providers/farmer-provider";
+import { UserProfile } from "@/providers/user-provider";
 
 interface ProfileResponse {
-  profile: FarmerProfile;
+  profile: UserProfile;
 }
 
 interface ProfileUpdateData {
@@ -12,7 +12,7 @@ interface ProfileUpdateData {
 }
 
 // Fetch user profile from server
-const fetchProfile = async (): Promise<FarmerProfile> => {
+const fetchProfile = async (): Promise<UserProfile> => {
   const response = await fetch("/api/profile", {
     method: "GET",
     headers: {
@@ -31,7 +31,7 @@ const fetchProfile = async (): Promise<FarmerProfile> => {
 // Update user profile on server
 const updateProfile = async (
   updateData: ProfileUpdateData,
-): Promise<FarmerProfile> => {
+): Promise<UserProfile> => {
   const response = await fetch("/api/profile", {
     method: "PUT",
     headers: {

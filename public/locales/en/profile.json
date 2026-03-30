@@ -2,7 +2,7 @@
   "title": "Profile",
   "description": "Manage your account and preferences",
   "farmerInfo": "Personal Information",
-  "farmerDescription": "Your farmer profile details",
+  "farmerDescription": "Your user profile details",
   "displayName": "Full Name",
   "firstName": "First Name",
   "lastName": "Last Name",
@@ -11,7 +11,7 @@
   "contactInfo": "Contact Information",
   "farmInfo": "Farm Information",
   "farmDescription": "Your farm details",
-  "farmerAccount": "Farmer Account",
+  "farmerAccount": "User Account",
   "mobileNumber": "Mobile Number",
   "sections": {
     "account": "Account Settings",

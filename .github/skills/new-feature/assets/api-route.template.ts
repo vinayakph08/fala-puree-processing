@@ -6,7 +6,7 @@ import { getUserFromServerSide } from "@/lib/auth/get-user";
 import { featureController } from "@/app/(protected)/(main-pages)/[feature]/db-controller";
 import { NextRequest, NextResponse } from "next/server";
 
-// ─── GET — Fetch all items for the authenticated farmer ───────────────────────
+// ─── GET — Fetch all items for the authenticated user ───────────────────────
 
 export const GET = async (request: NextRequest) => {
   try {

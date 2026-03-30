@@ -1,7 +1,7 @@
-import { farmerInventoryController } from "@/app/(protected)/farmers/db-controller";
+import { farmerInventoryController } from "@/app/(protected)/users/db-controller";
 import { NextRequest, NextResponse } from "next/server";
 
-// get Farmer Inventory by farmerId
+// get User Inventory by farmerId
 export const GET = async (request: NextRequest) => {
   try {
     const { searchParams } = new URL(request.url);
@@ -15,7 +15,7 @@ export const GET = async (request: NextRequest) => {
     }
 
     const { inventory, error } =
-      await farmerInventoryController.getInventoryByFarmerId(farmerId);
+      await farmerInventoryController.getInventoryByUserId(farmerId);
 
     if (error) {
       return NextResponse.json({ error }, { status: 500 });

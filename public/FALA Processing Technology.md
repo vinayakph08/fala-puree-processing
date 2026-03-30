@@ -265,7 +265,7 @@ AI algorithms forecast puree consistency and suggest optimal blanch parameters b
 
 Each batch is encoded with origin, process data, and quality metrics — ensuring full transparency for hotels and buyers.
 
-### **d. Farmer Integration**
+### **d. User Integration**
 
 Farm data (leaf size, nutrient profile) connected to processing data to predict yield and quality before harvest.
 

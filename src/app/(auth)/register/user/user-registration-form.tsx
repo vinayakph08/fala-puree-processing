@@ -45,7 +45,7 @@ interface UserRegistrationFormProps {
   onError?: (error: string) => void;
 }
 
-export const FarmerRegistrationForm: React.FC<UserRegistrationFormProps> = ({
+export const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
   onSuccess,
   onError,
 }) => {

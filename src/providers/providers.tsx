@@ -3,15 +3,15 @@
 import { QueryProvider } from "./query-provider";
 import { ToastProvider } from "./toast-provider";
 import { PWAProvider } from "./pwa-provider";
-import { FarmerProvider } from "@/providers/farmer-provider";
+import { UserProvider } from "@/providers/user-provider";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <QueryProvider>
       <PWAProvider>
-        <FarmerProvider>
+        <UserProvider>
           <ToastProvider>{children}</ToastProvider>
-        </FarmerProvider>
+        </UserProvider>
       </PWAProvider>
     </QueryProvider>
   );

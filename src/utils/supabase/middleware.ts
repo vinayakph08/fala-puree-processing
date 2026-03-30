@@ -42,7 +42,7 @@ export async function updateSession(request: NextRequest) {
     "/orders",
     "/tasks",
     "/earning",
-    "/farmer",
+    "/user",
   ];
 
   // Define public routes that don't require authentication

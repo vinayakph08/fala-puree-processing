@@ -12,15 +12,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useFarmer } from "@/providers/farmer-provider";
 import { use, useState } from "react";
 import { toast } from "sonner";
 import { UserIcon } from "lucide-react";
 import { useLocaleContext } from "@/providers/locale-provider";
+import { useUser } from "@/providers/user-provider";
 
-export function FarmerProfileCard() {
+export function UserProfileCard() {
   const {
-    farmer,
+    user,
     updateName,
     updateTitle,
     getDisplayName,
@@ -28,12 +28,12 @@ export function FarmerProfileCard() {
     isLoading,
     error,
     isUpdating,
-  } = useFarmer();
+  } = useUser();
   const { currentLocale } = useLocaleContext();
   const [isEditing, setIsEditing] = useState(false);
   const [tempFirstName, setTempFirstName] = useState("");
   const [tempLastName, setTempLastName] = useState("");
-  const [tempTitle, setTempTitle] = useState<"sri" | "srimati">(farmer.title);
+  const [tempTitle, setTempTitle] = useState<"sri" | "srimati">(user.title);
 
   // Initialize temp values when editing starts
   const handleEditStart = () => {
@@ -41,17 +41,17 @@ export function FarmerProfileCard() {
     const currentName =
       currentLocale === "kn"
         ? {
-            first: farmer.firstNameKn || farmer.firstName,
-            last: farmer.lastNameKn || farmer.lastName,
+            first: user.firstNameKn || user.firstName,
+            last: user.lastNameKn || user.lastName,
           }
         : {
-            first: farmer.firstNameEn || farmer.firstName,
-            last: farmer.lastNameEn || farmer.lastName,
+            first: user.firstNameEn || user.firstName,
+            last: user.lastNameEn || user.lastName,
           };
 
     setTempFirstName(currentName.first);
     setTempLastName(currentName.last || "");
-    setTempTitle(farmer.title);
+    setTempTitle(user.title);
     setIsEditing(true);
   };
 
@@ -166,21 +166,21 @@ export function FarmerProfileCard() {
               </Label>
               <p className='font-medium'>
                 {currentLocale === "kn"
-                  ? farmer.firstNameKn || farmer.firstName
-                  : farmer.firstNameEn || farmer.firstName}
+                  ? user.firstNameKn || user.firstName
+                  : user.firstNameEn || user.firstName}
               </p>
             </div>
-            {((currentLocale === "kn" && farmer.lastNameKn) ||
-              (currentLocale === "en" && farmer.lastNameEn) ||
-              farmer.lastName) && (
+            {((currentLocale === "kn" && user.lastNameKn) ||
+              (currentLocale === "en" && user.lastNameEn) ||
+              user.lastName) && (
               <div>
                 <Label className='text-sm text-muted-foreground'>
                   Last Name
                 </Label>
                 <p className='font-medium'>
                   {currentLocale === "kn"
-                    ? farmer.lastNameKn || farmer.lastName
-                    : farmer.lastNameEn || farmer.lastName}
+                    ? user.lastNameKn || user.lastName
+                    : user.lastNameEn || user.lastName}
                 </p>
               </div>
             )}
@@ -188,7 +188,7 @@ export function FarmerProfileCard() {
               <Label className='text-sm text-muted-foreground'>
                 Mobile Number
               </Label>
-              <p className='font-medium'>{farmer?.mobileNumber}</p>
+              <p className='font-medium'>{user?.mobileNumber}</p>
             </div>
           </>
         ) : (

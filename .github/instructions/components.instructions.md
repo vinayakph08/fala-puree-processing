@@ -51,7 +51,7 @@ All interactive elements must have minimum 44px × 44px:
 | Server/async data | React Query — never copy into `useState` or Context |
 | Local UI only (open/close, tab) | `useState` |
 | Shared across siblings | Lift to parent |
-| App-wide farmer profile | `useFarmer()` from FarmerProvider |
+| App-wide user profile | `useUser()` from UserProvider |
 
 ## Named Component Template
 

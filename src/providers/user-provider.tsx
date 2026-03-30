@@ -14,7 +14,7 @@ import {
 } from "@/utils/language-utils";
 import { useProfile } from "@/hooks/use-profile";
 
-export interface FarmerProfile {
+export interface UserProfile {
   id: string;
   firstName: string; // Legacy field for backward compatibility
   lastName: string; // Legacy field for backward compatibility
@@ -34,19 +34,19 @@ export interface FarmerProfile {
   };
 }
 
-export interface IFarmerFistLastname {
+export interface IUserFistLastname {
   firstName: string;
   lastName?: string; // lastName is optional
 }
 
-interface FarmerContextType {
-  farmer: FarmerProfile;
-  setFarmer: (farmer: FarmerProfile) => void;
+interface UserContextType {
+  user: UserProfile;
+  setUser: (user: UserProfile) => void;
   updateName: (firstName: string, lastName: string) => Promise<void>;
   updateTitle: (title: "sri" | "srimati") => Promise<void>;
   getDisplayName: (language: string) => string;
   getWelcomeMessage: (language: string) => string;
-  getInitials: (farmer: IFarmerFistLastname) => string;
+  getInitials: (user: IUserFistLastname) => string;
   isKannadaText: (text: string) => boolean;
   isLoading: boolean;
   error: Error | null;
@@ -54,10 +54,10 @@ interface FarmerContextType {
   refetchProfile: () => void;
 }
 
-const FarmerContext = createContext<FarmerContextType | undefined>(undefined);
+const UserContext = createContext<UserContextType | undefined>(undefined);
 
-// Default farmer data (in production, this would come from API/database)
-const defaultFarmer: FarmerProfile = {
+// Default user data (in production, this would come from API/database)
+const defaultUser: UserProfile = {
   id: "1",
   firstName: "",
   lastName: "",
@@ -76,8 +76,8 @@ const defaultFarmer: FarmerProfile = {
   },
 };
 
-export function FarmerProvider({ children }: { children: ReactNode }) {
-  const [farmer, setFarmerState] = useState<FarmerProfile>(defaultFarmer);
+export function UserProvider({ children }: { children: ReactNode }) {
+  const [user, setUserState] = useState<UserProfile>(defaultUser);
 
   // Use server data hook
   const {
@@ -92,33 +92,33 @@ export function FarmerProvider({ children }: { children: ReactNode }) {
   // Sync server data with local state
   useEffect(() => {
     if (serverProfile) {
-      setFarmerState(serverProfile);
+      setUserState(serverProfile);
       // Also save to localStorage for offline access
       localStorage.setItem(
-        "fala-farmer-profile",
+        "fala-user-profile",
         JSON.stringify(serverProfile)
       );
     }
   }, [serverProfile]);
 
-  // Load farmer data from localStorage on mount (for offline access)
+  // Load user data from localStorage on mount (for offline access)
   useEffect(() => {
     if (!serverProfile && !isLoading) {
-      const savedFarmer = localStorage.getItem("fala-farmer-profile");
-      if (savedFarmer) {
+      const savedUser = localStorage.getItem("fala-user-profile");
+      if (savedUser) {
         try {
-          const parsed = JSON.parse(savedFarmer);
-          setFarmerState(parsed);
+          const parsed = JSON.parse(savedUser);
+          setUserState(parsed);
         } catch (error) {
-          console.error("Error parsing saved farmer profile:", error);
+          console.error("Error parsing saved user profile:", error);
         }
       }
     }
   }, [serverProfile, isLoading]);
 
-  const setFarmer = (newFarmer: FarmerProfile) => {
-    setFarmerState(newFarmer);
-    localStorage.setItem("fala-farmer-profile", JSON.stringify(newFarmer));
+  const setUser = (newUser: UserProfile) => {
+    setUserState(newUser);
+    localStorage.setItem("fala-user-profile", JSON.stringify(newUser));
   };
 
   // Smart name update function with server sync
@@ -143,17 +143,17 @@ export function FarmerProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error("Failed to update name on server:", error);
       // Fallback to local update if server fails
-      const updatedFarmer: FarmerProfile = {
-        ...farmer,
+      const updatedUser: UserProfile = {
+        ...user,
         firstName: nameUpdate.firstName,
         lastName: nameUpdate.lastName,
         primaryNameLanguage: nameUpdate.detectedLanguage,
-        firstNameKn: nameUpdate.firstNameKn || farmer.firstNameKn,
-        lastNameKn: nameUpdate.lastNameKn || farmer.lastNameKn,
-        firstNameEn: nameUpdate.firstNameEn || farmer.firstNameEn,
-        lastNameEn: nameUpdate.lastNameEn || farmer.lastNameEn,
+        firstNameKn: nameUpdate.firstNameKn || user.firstNameKn,
+        lastNameKn: nameUpdate.lastNameKn || user.lastNameKn,
+        firstNameEn: nameUpdate.firstNameEn || user.firstNameEn,
+        lastNameEn: nameUpdate.lastNameEn || user.lastNameEn,
       };
-      setFarmer(updatedFarmer);
+      setUser(updatedUser);
       throw error; // Re-throw to let UI handle error
     }
   };
@@ -169,13 +169,13 @@ export function FarmerProvider({ children }: { children: ReactNode }) {
   ): { firstName: string; lastName: string } => {
     if (language === "kn") {
       return {
-        firstName: farmer.firstNameKn || farmer.firstName,
-        lastName: farmer.lastNameKn || farmer.lastName || "",
+        firstName: user.firstNameKn || user.firstName,
+        lastName: user.lastNameKn || user.lastName || "",
       };
     } else {
       return {
-        firstName: farmer.firstNameEn || farmer.firstName,
-        lastName: farmer.lastNameEn || farmer.lastName || "",
+        firstName: user.firstNameEn || user.firstName,
+        lastName: user.lastNameEn || user.lastName || "",
       };
     }
   };
@@ -183,15 +183,15 @@ export function FarmerProvider({ children }: { children: ReactNode }) {
   const getDisplayName = (language: string): string => {
     return formatDisplayName(
       {
-        firstNameKn: farmer.firstNameKn,
-        lastNameKn: farmer.lastNameKn,
-        firstNameEn: farmer.firstNameEn,
-        lastNameEn: farmer.lastNameEn,
-        firstName: farmer.firstName,
-        lastName: farmer.lastName,
+        firstNameKn: user.firstNameKn,
+        lastNameKn: user.lastNameKn,
+        firstNameEn: user.firstNameEn,
+        lastNameEn: user.lastNameEn,
+        firstName: user.firstName,
+        lastName: user.lastName,
       },
       language,
-      farmer.title
+      user.title
     );
   };
 
@@ -202,17 +202,17 @@ export function FarmerProvider({ children }: { children: ReactNode }) {
     } catch (error) {
       console.error("Failed to update title on server:", error);
       // Fallback to local update if server fails
-      const updatedFarmer: FarmerProfile = {
-        ...farmer,
+      const updatedUser: UserProfile = {
+        ...user,
         title,
       };
-      setFarmer(updatedFarmer);
+      setUser(updatedUser);
       throw error; // Re-throw to let UI handle error
     }
   };
 
-  const getInitials = (farmer: IFarmerFistLastname): string => {
-    const { firstName, lastName } = farmer;
+  const getInitials = (user: IUserFistLastname): string => {
+    const { firstName, lastName } = user;
     const _firstname = isKannadaText(firstName)
       ? firstName.slice(0, 2)
       : firstName[0];
@@ -231,10 +231,10 @@ export function FarmerProvider({ children }: { children: ReactNode }) {
   };
 
   return (
-    <FarmerContext.Provider
+    <UserContext.Provider
       value={{
-        farmer,
-        setFarmer,
+        user,
+        setUser,
         updateName,
         updateTitle,
         getDisplayName,
@@ -248,14 +248,14 @@ export function FarmerProvider({ children }: { children: ReactNode }) {
       }}
     >
       {children}
-    </FarmerContext.Provider>
+    </UserContext.Provider>
   );
 }
 
-export function useFarmer() {
-  const context = useContext(FarmerContext);
+export function useUser() {
+  const context = useContext(UserContext);
   if (context === undefined) {
-    throw new Error("useFarmer must be used within a FarmerProvider");
+    throw new Error("useUser must be used within a UserProvider");
   }
   return context;
 }

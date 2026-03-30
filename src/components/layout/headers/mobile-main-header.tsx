@@ -1,13 +1,13 @@
 "use client";
 
 import { LanguageToggle } from "@/components/ui/language-toggle";
-import { useFarmer } from "@/providers/farmer-provider";
 import { ProfileDropdown } from "@/components/user/profile-dropdown";
 import { useLocaleContext } from "@/providers/locale-provider";
+import { useUser } from "@/providers/user-provider";
 
 export function MobileMainHeader() {
   const { currentLocale } = useLocaleContext();
-  const { getDisplayName } = useFarmer();
+  const { getDisplayName } = useUser();
 
   return (
     <header className='flex items-center justify-between gap-4 w-full p-4 border-b fixed md:hidden bg-background z-50'>

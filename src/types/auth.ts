@@ -1,4 +1,4 @@
-// Auth-related types for the Fala Farmer App
+// Auth-related types for the Fala User App
 
 import { User } from "@supabase/supabase-js";
 

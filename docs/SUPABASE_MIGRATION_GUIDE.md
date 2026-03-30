@@ -12,7 +12,7 @@ Based on your Fala app setup, here's a comprehensive guide to Supabase migration
 # Create a new migration file
 supabase migration new <migration_name>
 
-# Example for your farmer app
+# Example for your user app
 supabase migration new add_farmer_inventory_table
 supabase migration new update_user_profile_constraints
 supabase migration new add_crop_categories
@@ -22,7 +22,7 @@ supabase migration new add_crop_categories
 
 - Adding new tables (farmer_inventory, crop_categories)
 - Modifying existing schema (user_profile changes)
-- Adding new features to your farmer app
+- Adding new features to your user app
 
 **What it does:**
 
@@ -158,7 +158,7 @@ supabase db push --include-seed
 
 **When to use:**
 
-- Deploying your farmer app to production
+- Deploying your user app to production
 - Updating production database schema
 - After testing migrations locally
 
@@ -199,10 +199,10 @@ supabase db pull --schema public,auth
 
 ## 🔄 **Practical Workflow Examples for Fala App**
 
-### **Scenario 1: Adding Farmer Inventory Feature**
+### **Scenario 1: Adding User Inventory Feature**
 
 ```bash
-# 1. Create migration for new farmer inventory table
+# 1. Create migration for new user inventory table
 supabase migration new add_farmer_inventory_table
 
 # 2. Edit the generated migration file
@@ -227,8 +227,8 @@ CREATE TABLE farmer_inventory (
 -- Enable RLS
 ALTER TABLE farmer_inventory ENABLE ROW LEVEL SECURITY;
 
--- Policy for farmers to manage their own inventory
-CREATE POLICY "Farmers can manage own inventory" ON farmer_inventory
+-- Policy for users to manage their own inventory
+CREATE POLICY "Users can manage own inventory" ON farmer_inventory
   FOR ALL USING (
     farmer_id = auth.uid() OR
     EXISTS (SELECT 1 FROM user_profile WHERE id = auth.uid() AND role = 'ADMIN')
@@ -443,13 +443,13 @@ supabase db snapshot diff --from snapshot1 --to snapshot2
 
 ```bash
 # Run custom seed scripts
-supabase db seed --file seeds/farmer-test-data.sql
+supabase db seed --file seeds/user-test-data.sql
 
 # Seed with environment-specific data
 supabase db seed --env development
 
 # Import CSV data
-supabase db import --table user_profile --file farmers.csv
+supabase db import --table user_profile --file users.csv
 
 # Export table data to CSV
 supabase db export --table farmer_inventory --format csv > inventory.csv
@@ -543,7 +543,7 @@ ALTER TABLE user_profile ADD COLUMN old_column_deprecated BOOLEAN DEFAULT TRUE;
 # Always test migration sequence
 supabase db reset
 supabase migration up
-npm run dev  # Test your farmer app
+npm run dev  # Test your user app
 
 # Test with seed data
 supabase db reset --seed
@@ -599,7 +599,7 @@ supabase migration down --remote --target safe_migration
 
 ---
 
-_This guide is specifically tailored for the Fala farmer app development workflow. Keep it updated as new Supabase CLI features are released._
+_This guide is specifically tailored for the Fala user app development workflow. Keep it updated as new Supabase CLI features are released._
 
 ## ** Terminal Setup **
 

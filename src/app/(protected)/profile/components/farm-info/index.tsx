@@ -9,11 +9,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { useFarmer } from "@/providers/farmer-provider";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useUser } from "@/providers/user-provider";
 
 function FarmeInfo() {
-  const { farmer, isLoading, error } = useFarmer();
+  const { user, isLoading, error } = useUser();
 
   if (isLoading) {
     return (

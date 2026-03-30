@@ -1,13 +1,13 @@
 export interface DashboardMetrics {
-  totalFarmers: number;
+  totalUsers: number;
   totalLandSown: number; // in Guntas
   totalInventory: number; // in kg
   currentInventory: number; // in kg
 }
 
-export interface FarmerGrowthData {
+export interface UserGrowthData {
   month: string;
-  farmers: number;
+  users: number;
 }
 
 export interface InventoryUsageData {
@@ -26,7 +26,7 @@ export interface CropOption {
   total_quantity: number;
 }
 
-export interface FarmerHarvestableInventoryData {
+export interface UserHarvestableInventoryData {
   farmer_id: string;
   farm_id: string;
   farmer_name: string;
@@ -36,7 +36,7 @@ export interface FarmerHarvestableInventoryData {
 
 export interface DashboardData {
   metrics: DashboardMetrics;
-  farmerGrowth: FarmerGrowthData[];
+  farmerGrowth: UserGrowthData[];
   inventoryUsage: InventoryUsageData[];
   inventoryGrowth: InventoryGrowthData[];
 }
