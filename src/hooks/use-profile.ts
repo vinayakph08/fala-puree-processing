@@ -1,5 +1,5 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { UserProfile } from "@/providers/user-provider";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface ProfileResponse {
   profile: UserProfile;

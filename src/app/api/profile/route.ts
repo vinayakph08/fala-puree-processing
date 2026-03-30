@@ -63,12 +63,6 @@ export async function PUT(request: NextRequest) {
       title,
       firstName,
       lastName,
-      firstNameKn,
-      lastNameKn,
-      firstNameEn,
-      lastNameEn,
-      primaryNameLanguage,
-      languagePreference,
     } = body;
 
     // Update user profile in database
@@ -78,12 +72,6 @@ export async function PUT(request: NextRequest) {
         title,
         first_name: firstName,
         last_name: lastName,
-        first_name_kn: firstNameKn,
-        last_name_kn: lastNameKn,
-        first_name_en: firstNameEn,
-        last_name_en: lastNameEn,
-        primary_name_language: primaryNameLanguage,
-        language_preference: languagePreference,
         updated_at: new Date().toISOString(),
       })
       .eq("id", user.id)
@@ -103,13 +91,6 @@ export async function PUT(request: NextRequest) {
       id: updatedProfile.id,
       firstName: updatedProfile.first_name || "",
       lastName: updatedProfile.last_name || "",
-      firstNameKn: updatedProfile.first_name_kn || undefined,
-      lastNameKn: updatedProfile.last_name_kn || undefined,
-      firstNameEn: updatedProfile.first_name_en || undefined,
-      lastNameEn: updatedProfile.last_name_en || undefined,
-      primaryNameLanguage: updatedProfile.primary_name_language || "kn",
-      title: updatedProfile.title || "sri",
-      language: updatedProfile.language_preference || "kn",
     };
 
     return NextResponse.json({ profile: farmerProfile });

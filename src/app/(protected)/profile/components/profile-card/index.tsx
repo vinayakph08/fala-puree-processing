@@ -5,14 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { use, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { UserIcon } from "lucide-react";
 import { useLocaleContext } from "@/providers/locale-provider";
@@ -33,25 +26,18 @@ export function UserProfileCard() {
   const [isEditing, setIsEditing] = useState(false);
   const [tempFirstName, setTempFirstName] = useState("");
   const [tempLastName, setTempLastName] = useState("");
-  const [tempTitle, setTempTitle] = useState<"sri" | "srimati">(user.title);
+  const [tempTitle, setTempTitle] = useState();
 
   // Initialize temp values when editing starts
   const handleEditStart = () => {
     // Get current name in the UI language
-    const currentName =
-      currentLocale === "kn"
-        ? {
-            first: user.firstNameKn || user.firstName,
-            last: user.lastNameKn || user.lastName,
-          }
-        : {
-            first: user.firstNameEn || user.firstName,
-            last: user.lastNameEn || user.lastName,
-          };
+    const currentName = {
+      first: user.firstName,
+      last: user.lastName,
+    };
 
     setTempFirstName(currentName.first);
     setTempLastName(currentName.last || "");
-    setTempTitle(user.title);
     setIsEditing(true);
   };
 
@@ -84,23 +70,23 @@ export function UserProfileCard() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className='flex items-center justify-between'>
-            <Skeleton className='h-6 w-32' />
-            <Skeleton className='h-8 w-16' />
+          <CardTitle className="flex items-center justify-between">
+            <Skeleton className="h-6 w-32" />
+            <Skeleton className="h-8 w-16" />
           </CardTitle>
         </CardHeader>
-        <CardContent className='space-y-4'>
+        <CardContent className="space-y-4">
           <div>
-            <Skeleton className='h-4 w-24 mb-2' />
-            <Skeleton className='h-6 w-48' />
+            <Skeleton className="h-4 w-24 mb-2" />
+            <Skeleton className="h-6 w-48" />
           </div>
           <div>
-            <Skeleton className='h-4 w-20 mb-2' />
-            <Skeleton className='h-5 w-32' />
+            <Skeleton className="h-4 w-20 mb-2" />
+            <Skeleton className="h-5 w-32" />
           </div>
           <div>
-            <Skeleton className='h-4 w-20 mb-2' />
-            <Skeleton className='h-5 w-28' />
+            <Skeleton className="h-4 w-20 mb-2" />
+            <Skeleton className="h-5 w-28" />
           </div>
         </CardContent>
       </Card>
@@ -112,15 +98,13 @@ export function UserProfileCard() {
     return (
       <Card>
         <CardHeader>
-          <CardTitle className='text-red-600'>
-            Failed to load profile
-          </CardTitle>
+          <CardTitle className="text-red-600">Failed to load profile</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className='text-sm text-muted-foreground'>
+          <p className="text-sm text-muted-foreground">
             Please try again later.
           </p>
-          <Button className='mt-2' onClick={() => window.location.reload()}>
+          <Button className="mt-2" onClick={() => window.location.reload()}>
             Retry
           </Button>
         </CardContent>
@@ -131,129 +115,92 @@ export function UserProfileCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className='flex items-center justify-between'>
-          <div className='flex justify-start items-center gap-1'>
-            <div className='p-3 bg-primary/20 rounded-full'>
-              <UserIcon className='h-5 w-5 rounded-full' color={"#09ad8d"} />
+        <CardTitle className="flex items-center justify-between">
+          <div className="flex justify-start items-center gap-1">
+            <div className="p-3 bg-primary/20 rounded-full">
+              <UserIcon className="h-5 w-5 rounded-full" color={"#09ad8d"} />
             </div>
-            <div className='flex flex-col justify-start gap-1'>
+            <div className="flex flex-col justify-start gap-1">
               <div>User Info</div>
-              <div className='font-light text-xs text-muted-foreground'>
+              <div className="font-light text-xs text-muted-foreground">
                 User Description
               </div>
             </div>
           </div>
           {!isEditing && (
-            <Button size='sm' onClick={handleEditStart}>
+            <Button size="sm" onClick={handleEditStart}>
               Edit Profile
             </Button>
           )}
         </CardTitle>
       </CardHeader>
-      <CardContent className='space-y-4'>
+      <CardContent className="space-y-4">
         {!isEditing ? (
           <>
             <div>
-              <Label className='text-sm text-muted-foreground'>
-                  Display Name
+              <Label className="text-sm text-muted-foreground">
+                Display Name
               </Label>
-              <p className='font-medium'>{getDisplayName(currentLocale)}</p>
+              <p className="font-medium">{getDisplayName(currentLocale)}</p>
             </div>
 
             <div>
-              <Label className='text-sm text-muted-foreground'>
+              <Label className="text-sm text-muted-foreground">
                 First Name
               </Label>
-              <p className='font-medium'>
-                {currentLocale === "kn"
-                  ? user.firstNameKn || user.firstName
-                  : user.firstNameEn || user.firstName}
-              </p>
+              <p className="font-medium">{user.firstName}</p>
             </div>
-            {((currentLocale === "kn" && user.lastNameKn) ||
-              (currentLocale === "en" && user.lastNameEn) ||
-              user.lastName) && (
-              <div>
-                <Label className='text-sm text-muted-foreground'>
-                  Last Name
-                </Label>
-                <p className='font-medium'>
-                  {currentLocale === "kn"
-                    ? user.lastNameKn || user.lastName
-                    : user.lastNameEn || user.lastName}
-                </p>
-              </div>
-            )}
             <div>
-              <Label className='text-sm text-muted-foreground'>
+              <Label className="text-sm text-muted-foreground">Last Name</Label>
+              <p className="font-medium">{user.lastName}</p>
+            </div>
+            <div>
+              <Label className="text-sm text-muted-foreground">
                 Mobile Number
               </Label>
-              <p className='font-medium'>{user?.mobileNumber}</p>
+              <p className="font-medium">{user?.mobileNumber}</p>
             </div>
           </>
         ) : (
           <>
-            <div className='space-y-2'>
-              <Label htmlFor='title'>Title</Label>
-              <Select
-                value={tempTitle}
-                onValueChange={(value: "sri" | "srimati") =>
-                  setTempTitle(value)
-                }
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value='sri'>
-                    {currentLocale === "kn" ? "ಶ್ರೀ" : "Mr."}
-                  </SelectItem>
-                  <SelectItem value='srimati'>
-                    {currentLocale === "kn" ? "ಶ್ರೀಮತಿ" : "Mrs."}
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className='space-y-2'>
-              <Label htmlFor='firstName'>First Name</Label>
+            <div className="space-y-2">
+              <Label htmlFor="firstName">First Name</Label>
               <Input
-                id='firstName'
+                id="firstName"
                 value={tempFirstName}
                 onChange={(e) => setTempFirstName(e.target.value)}
                 placeholder={getPlaceholder("firstName")}
               />
               {tempFirstName && (
-                <p className='text-xs text-muted-foreground'>
+                <p className="text-xs text-muted-foreground">
                   {isKannadaText(tempFirstName) ? "ಕನ್ನಡ" : "English"} script
                   detected
                 </p>
               )}
             </div>
-            <div className='space-y-2'>
-              <Label htmlFor='lastName'>Last Name</Label>
+            <div className="space-y-2">
+              <Label htmlFor="lastName">Last Name</Label>
               <Input
-                id='lastName'
+                id="lastName"
                 value={tempLastName}
                 onChange={(e) => setTempLastName(e.target.value)}
                 placeholder={getPlaceholder("lastName")}
               />
               {tempLastName && (
-                <p className='text-xs text-muted-foreground'>
+                <p className="text-xs text-muted-foreground">
                   {isKannadaText(tempLastName) ? "ಕನ್ನಡ" : "English"} script
                   detected
                 </p>
               )}
             </div>
-            <div className='flex gap-2'>
-              <Button onClick={handleSave} size='sm' disabled={isUpdating}>
-                {isUpdating
-                  ? "Saving..."
-                  : "Save"}
+            <div className="flex gap-2">
+              <Button onClick={handleSave} size="sm" disabled={isUpdating}>
+                {isUpdating ? "Saving..." : "Save"}
               </Button>
               <Button
-                variant='outline'
+                variant="outline"
                 onClick={handleCancel}
-                size='sm'
+                size="sm"
                 disabled={isUpdating}
               >
                 Cancel

@@ -18,14 +18,7 @@ export interface UserProfile {
   id: string;
   firstName: string; // Legacy field for backward compatibility
   lastName: string; // Legacy field for backward compatibility
-  firstNameKn?: string;
-  lastNameKn?: string;
-  firstNameEn?: string;
-  lastNameEn?: string;
   mobileNumber?: string;
-  primaryNameLanguage: "kn" | "en";
-  title: "sri" | "srimati"; // ಶ್ರೀ or ಶ್ರೀಮತಿ
-  language: "kn" | "en";
   farm: {
     farm_id: string;
     farmName: string;
@@ -61,13 +54,6 @@ const defaultUser: UserProfile = {
   id: "1",
   firstName: "",
   lastName: "",
-  firstNameKn: "",
-  lastNameKn: "",
-  firstNameEn: undefined,
-  lastNameEn: undefined,
-  primaryNameLanguage: "kn",
-  title: "sri",
-  language: "kn",
   farm: {
     farm_id: "",
     farmName: "",
@@ -131,11 +117,6 @@ export function UserProvider({ children }: { children: ReactNode }) {
     const updateData = {
       firstName: nameUpdate.firstName,
       lastName: nameUpdate.lastName,
-      firstNameKn: nameUpdate.firstNameKn,
-      lastNameKn: nameUpdate.lastNameKn,
-      firstNameEn: nameUpdate.firstNameEn,
-      lastNameEn: nameUpdate.lastNameEn,
-      primaryNameLanguage: nameUpdate.detectedLanguage,
     };
 
     try {
@@ -147,11 +128,6 @@ export function UserProvider({ children }: { children: ReactNode }) {
         ...user,
         firstName: nameUpdate.firstName,
         lastName: nameUpdate.lastName,
-        primaryNameLanguage: nameUpdate.detectedLanguage,
-        firstNameKn: nameUpdate.firstNameKn || user.firstNameKn,
-        lastNameKn: nameUpdate.lastNameKn || user.lastNameKn,
-        firstNameEn: nameUpdate.firstNameEn || user.firstNameEn,
-        lastNameEn: nameUpdate.lastNameEn || user.lastNameEn,
       };
       setUser(updatedUser);
       throw error; // Re-throw to let UI handle error
@@ -169,13 +145,13 @@ export function UserProvider({ children }: { children: ReactNode }) {
   ): { firstName: string; lastName: string } => {
     if (language === "kn") {
       return {
-        firstName: user.firstNameKn || user.firstName,
-        lastName: user.lastNameKn || user.lastName || "",
+        firstName: user.firstName,
+        lastName: user.lastName || "",
       };
     } else {
       return {
-        firstName: user.firstNameEn || user.firstName,
-        lastName: user.lastNameEn || user.lastName || "",
+        firstName: user.firstName,
+        lastName: user.lastName || "",
       };
     }
   };
@@ -183,28 +159,22 @@ export function UserProvider({ children }: { children: ReactNode }) {
   const getDisplayName = (language: string): string => {
     return formatDisplayName(
       {
-        firstNameKn: user.firstNameKn,
-        lastNameKn: user.lastNameKn,
-        firstNameEn: user.firstNameEn,
-        lastNameEn: user.lastNameEn,
         firstName: user.firstName,
         lastName: user.lastName,
       },
       language,
-      user.title
     );
   };
 
   // Update title function with server sync
-  const updateTitle = async (title: "sri" | "srimati"): Promise<void> => {
+  const updateTitle = async (): Promise<void> => {
     try {
-      await updateProfile({ title });
+      await updateProfile({});
     } catch (error) {
       console.error("Failed to update title on server:", error);
       // Fallback to local update if server fails
       const updatedUser: UserProfile = {
         ...user,
-        title,
       };
       setUser(updatedUser);
       throw error; // Re-throw to let UI handle error
