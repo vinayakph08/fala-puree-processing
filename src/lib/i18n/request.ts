@@ -35,8 +35,8 @@ export default getRequestConfig(async () => {
           .default,
         settings: (
           await import(`../../../public/locales/${locale}/settings.json`)
-        ).default,
-      },
+        ).default
+      }
     };
   } catch (error) {
     console.error(`Failed to load messages for locale: ${locale}`, error);
