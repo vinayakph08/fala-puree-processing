@@ -32,24 +32,22 @@ src/app/(protected)/
 
 ## layout.tsx Pattern
 
-Always a **client component** — needed for `useTranslations` and to receive the `backHref` string.
+Always a **client component** — needed for to receive the `backHref` string.
 
 ```tsx
 "use client";
 
 import { SubPageLayout } from "@/components/layout/subpage-layout";
-import { useTranslations } from "next-intl";
 
 export default function FeatureDetailLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const t = useTranslations("feature");
 
   return (
     <SubPageLayout
-      title={t("details.title")}
+      title="Title"
       backHref="/feature"           // ← always the parent page's route
       actionButton={<EditButton />} // ← optional
     >
@@ -63,7 +61,6 @@ export default function FeatureDetailLayout({
 - `backHref` is **required** — always set it to the parent page's route (e.g. `"/inventory"`)
 - Never omit `backHref` or use `router.back()` — it breaks on direct URL access and PWA deep links
 - `actionButton` is optional — only pass it if the design shows an action in the header (e.g. Edit, Delete)
-- `title` comes from `useTranslations` — never hardcode English text
 
 ## page.tsx Pattern
 
