@@ -7,8 +7,7 @@ argument-hint: 'Describe the migration: purpose, function type(s), table(s) invo
 # Create Migration
 
 Generates a correct, standards-compliant Supabase SQL migration for the Fala App database.
-All patterns follow [copilot-instructions.md](../../copilot-instructions.md) as the source of truth.
-Quick-reference rules are in [references/patterns.md](./references/patterns.md).
+Full rule reference and SQL patterns: [references/patterns.md](./references/patterns.md).
 
 ## When to Use
 

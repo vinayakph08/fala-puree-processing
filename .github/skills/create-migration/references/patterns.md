@@ -1,6 +1,6 @@
-# Migration Patterns — Quick Reference
+# Migration Patterns — Full Rule Reference
 
-This is a cheat sheet. Source of truth: [copilot-instructions.md](../../../.github/copilot-instructions.md).
+This is the authoritative rule reference for all Fala App SQL migrations.
 
 ---
 
@@ -207,3 +207,28 @@ CREATE OR REPLACE FUNCTION public.{function_name}({new_params}) ...
 ```
 
 Stale overloads persist silently and can be called unintentionally by the frontend.
+
+---
+
+## Function Naming Rules
+
+| Layer / type | Pattern | Examples |
+|---|---|---|
+| **Layer 1 scalar helper** | `get_{what_it_computes}` — describes the data, no role context | `get_delivered_orders_sum`, `get_total_orders_count` |
+| **Layer 2 RPC — read** | `get_{context}_{what_it_returns}` — caller-perspective, domain first | `get_total_orders_earning`, `get_weekly_orders_history` |
+| **Layer 2 RPC — dashboard** | `get_{domain}_dashboard_metrics_data` | `get_reward_dashboard_metrics_data` |
+| **Layer 2 RPC — write** | `{verb}_{entity}` — verb prefix: `add_`, `update_`, `delete_` | `add_inventory_reward`, `delete_multiple_images` |
+
+- All functions use `public.` prefix — the schema is not part of the name itself.
+- Never encode role in function name (`admin_get_...` ❌, `farmer_get_...` ❌) — role behaviour is enforced inside the function body.
+- `snake_case` throughout. No camelCase, no hyphens.
+
+---
+
+## Domain Gotchas
+
+- **Rewards week**: Wednesday → Tuesday cycle. Use existing `get_current_week_boundaries()`.
+- **Orders week**: Saturday 18:00 IST start — orders after Saturday 18:00 IST belong to the **next** week. Use existing `get_order_week_boundaries()`. Timezone: `Asia/Kolkata` (UTC+5:30, no DST).
+- **Timestamps**: Always `TIMEZONE('utc'::text, NOW())` — never bare `NOW()`.
+- **UUID foreign keys**: Always use proper FK constraints with `ON DELETE CASCADE`.
+- **Role validation**: Check both `user_profile.role` and `user_profile.is_active` in policies.

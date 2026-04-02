@@ -1,6 +1,6 @@
 # Database - AI Coding Instructions
 
-This is a **Supabase-based PostgreSQL database** for a farmer rewards and inventory management system, with role-based access patterns.
+This is a **Supabase-based PostgreSQL database** for a farmer crop inventory management system, with role-based access patterns.
 
 **Critical**: All database functions are consumed as **RPC calls from NextJS frontend** via Supabase client. Design functions with this consumption pattern in mind.
 

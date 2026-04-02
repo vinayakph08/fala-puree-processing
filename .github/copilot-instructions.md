@@ -2,20 +2,21 @@
 
 > Detailed coding patterns live in `.github/instructions/` (auto-loaded per file type) and `.github/skills/` (invoked on demand).
 > This file is the always-loaded mental model — architecture, decisions, context, and hard rules.
+> **Database migrations**: always invoke the `/create-migration` skill — it owns all SQL templates, naming rules, RLS patterns, and the post-generation checklist.
 
 ---
 
 ## 🎯 Project Context
 
-This is a **NextJS PWA** for users to manage their agricultural operations in Karnataka, India. The app helps users with:
+This is a **NextJS PWA** for operators to manage spinach processing and quality control operations.
+The app covers two core modules:
 
-- **Inventory Management**: Update and track harvested crops and quantities
-- **Order Management**: View and fulfill customer orders
-- **Earnings Tracking**: Monitor income and weekly earnings in Number and Graph formats
-- **Task Management**: Complete agricultural tasks with validation by capturing photos
+- **Processing**: Track spinach batches through each production stage and record stage-level measurements
+- **Quality Testing**: Perform and record quality tests on batches, producing pass/fail, grade, score, and per-parameter results
 
-**Target Users**: Users in Karnataka who primarily speak Kannada. Later we can add Hindi, Tamil, and Telugu.
-**Business Model**: Agritech supply chain connecting users directly with premium customers
+**Target Users**: Processing workers, quality inspectors, and supervisors in a food processing facility.
+**Business Model**: Spinach beauty processing — raw spinach in → packaged frozen spinach puree out.
+**Language**: English only. No translations required.
 **Key Goal**: Quick MVP for validation, lean and minimal approach
 
 ---
@@ -174,19 +175,18 @@ src/
 
 ### Data Input Patterns
 
-- **Image uploads** for crop photos and task validation
 - **Dropdown selections** over free text input
-- **Date pickers** for harvest dates and schedules
-- **Quantity inputs** with clear units (kg, tons, etc.)
-- **Touch-friendly** form controls
+- **Quantity inputs** with clear units (kg, g)
+- **Stage-by-stage forms** for recording measurements at each processing step
+- **Touch-friendly** form controls sized for factory floor use
 
 ### Information Display
 
-- **Visual indicators** for order status, task completion
-- **Clear earnings summaries** with rupee formatting
-- **Simple charts** for earnings tracking
-- **Photo galleries** for crop documentation
-- **Step-by-step** task instructions
+- **Batch status indicators** — which stage a batch is currently at
+- **Per-stage measurement history** — color, texture, viscosity readings
+- **Quality score cards** — per-parameter scores + overall grade
+- **Pass / Fail badges** with grade (A/B/C) clearly visible
+- **Simple charts** for batch throughput and quality trends
 
 ---
 
@@ -194,7 +194,6 @@ src/
 
 ### ❌ Don't Do This
 
-- Hardcode English text in components
 - Use small touch targets (< 44px)
 - Skip loading states on async operations
 - Store sensitive data in localStorage without encryption
@@ -203,7 +202,6 @@ src/
 - Create components without proper error boundaries
 - Skip image optimization
 - Use complex forms without proper validation
-- Forget to test with real Kannada text
 - Return `{ success: boolean, data, error }` from DB Controller — use `DbResult<T>` = `{ data, error }` only
 - Return `{ data: T }` from a `queryFn` — React Query wraps it again, component reads `data.data`
 - Call `controller.method()` directly as `queryFn` in client hooks — use `api*` query-functions
@@ -212,7 +210,6 @@ src/
 
 ### ✅ Always Do This
 
-- Extract all text to translation files
 - Use large, touch-friendly buttons
 - Show loading and error states (all three: loading / error / empty)
 - Implement proper error handling
@@ -221,7 +218,6 @@ src/
 - Add proper error boundaries
 - Optimize images for mobile
 - Use React Hook Form with Zod validation
-- Test with actual Kannada agricultural terminology
 - Annotate DB Controller methods with `Promise<DbResult<T>>`
 - Import `api*` functions from `utils/query-functions/` into hooks
 - Use `db*` functions from `utils/server-functions/` in `page.tsx` prefetch
@@ -230,25 +226,83 @@ src/
 
 ---
 
-## 🌱 Agricultural Context
+## � Spinach Processing Domain
 
-### Common Terminology
+### Processing Pipeline (in order)
 
-- **Crops**: Spinach (ಪಾಲಕ್), Coriander (ಕೊತ್ತಂಬರಿ), Mint (ಪುದೀನ)
-- **Units**: Kilograms (ಕಿಲೋಗ್ರಾಂ), Tons (ಟನ್), Bundles (ಕಟ್ಟುಗಳು)
-- **Seasons**: Kharif, Rabi, Summer (refer to local seasonal patterns)
-- **Quality Terms**: Fresh (ತಾಜಾ), Premium (ಪ್ರೀಮಿಯಂ), Grade A (ಗ್ರೇಡ್ ಎ)
+Every batch moves through these 7 stages in sequence:
+
+| # | Stage | What's tracked |
+|---|-------|----------------|
+| 1 | Sorting & Cleaning | Input weight, waste removed |
+| 2 | Blanching | Temperature, duration |
+| 3 | Quenching | Temperature, duration |
+| 4 | Cutting | Output weight |
+| 5 | Grinding | Color, texture, viscosity measurements |
+| 6 | Packaging | Output weight, grade assigned |
+| 7 | Freezing | Final output weight, timestamp |
+
+### Batch Data Model
+
+Each batch tracks:
+- `batch_id` — unique identifier
+- `input_weight` — raw spinach in (kg)
+- `output_weight` — puree produced (kg)
+- `waste` — weight lost (kg)
+- `grade` — A / B / C
+- `timestamp` — when the batch was created/completed
+- `color`, `texture`, `viscosity` — recorded at each relevant stage
+
+**End product**: Spinach Puree (frozen, packaged)
+
+### Quality Tests
+
+The quality check module has **two test types** per batch. Each parameter produces:
+- A **numeric score**
+- A **Pass / Fail** result
+- A **grade** (A / B / C)
+
+#### 1. Standard Quality Check
+
+| Parameter | What it measures |
+|-----------|------------------|
+| Color | Visual color grading of the puree |
+| Texture | Consistency and smoothness |
+| Viscosity | Flow and thickness |
+| Taste & Flavour | Sensory evaluation |
+
+#### 2. Cooking Stress Test
+
+Simulates the puree under cooking conditions to validate stability:
+
+| Parameter | What it measures |
+|-----------|------------------|
+| Color | Color retention after cooking |
+| Taste | Flavour retention after cooking |
+
+#### Data Capture
+
+- **Camera image capture** is required for quality tests — inspectors photograph the sample as evidence
+- Images are captured directly from the device camera (not gallery upload)
+- Each test result is stored with its associated image(s)
+
+**Overall batch quality result** = combination of all parameters across both test types → single Pass/Fail + Grade (A/B/C)
+
+### User Roles
+
+| Role | Responsibilities |
+|------|------------------|
+| Processing Worker | Logs and updates each processing stage for a batch |
+| Quality Inspector | Performs quality tests and records results |
+| Supervisor | Oversees both modules; can approve/reject batches |
 
 ### Business Flow Context
 
-- Users → FPOs → Fala → Premium Customers
-- Focus on quality over quantity
-- Transparency in pricing and processes
-- Direct user empowerment model
+- Raw spinach → Processing stages → Spinach Puree → Quality Testing → Packaged frozen product
+- Every batch stage and quality result must be linked to the `batch_id` for full traceability
+- Supervisors can view batch history and quality test outcomes across all batches
 
-Remember: This app should feel natural to Karnataka users while being technically robust for scaling.
+### Code Response Rules
 
-### Code Response Rules.
-
-1. Generated code and explaination should be Consice and Straight Forward without verbose this. Just give me what I asked for.
-2. Don't generate kannada text in code snippets, only use English for code. Generate kannada text only in translation files.
+1. Generated code and explanation should be concise and straight forward. Just give me what I asked for.
+2. English only — no Kannada text anywhere in the codebase.
