@@ -227,8 +227,9 @@ Stale overloads persist silently and can be called unintentionally by the fronte
 
 ## Domain Gotchas
 
-- **Rewards week**: Wednesday → Tuesday cycle. Use existing `get_current_week_boundaries()`.
-- **Orders week**: Saturday 18:00 IST start — orders after Saturday 18:00 IST belong to the **next** week. Use existing `get_order_week_boundaries()`. Timezone: `Asia/Kolkata` (UTC+5:30, no DST).
-- **Timestamps**: Always `TIMEZONE('utc'::text, NOW())` — never bare `NOW()`.
-- **UUID foreign keys**: Always use proper FK constraints with `ON DELETE CASCADE`.
-- **Role validation**: Check both `user_profile.role` and `user_profile.is_active` in policies.
+- **Batch stage ordering**: Stages are fixed in sequence (Sorting & Cleaning → Blanching → Quenching → Cutting → Grinding → Packaging → Freezing). Store a `stage` enum or integer and never allow out-of-order inserts.
+- **Quality test types**: Two test types exist — `standard` (Color, Texture, Viscosity, Taste & Flavour) and `cooking_stress` (Color, Taste). Store with a `test_type` discriminator column; enforce with a CHECK constraint.
+- **Quality test images**: Every quality test result must be linked to at least one image. Enforce a NOT NULL FK at the DB level — do not rely on application logic alone.
+- **Grade values**: `grade` is always one of `'A'`, `'B'`, `'C'`. Enforce with a `CHECK (grade IN ('A', 'B', 'C'))` constraint — never free text.
+- **Batch traceability**: Every stage record and quality test result must include `batch_id` as a FK. Never allow orphaned records.
+- **Role validation**: Check both `user_profile.role` and `user_profile.is_active` in policies. Roles are `PROCESSING_WORKER`, `QUALITY_INSPECTOR`, `SUPERVISOR`.
