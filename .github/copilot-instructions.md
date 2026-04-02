@@ -15,7 +15,7 @@ The app covers two core modules:
 - **Quality Testing**: Perform and record quality tests on batches, producing pass/fail, grade, score, and per-parameter results
 
 **Target Users**: Processing workers, quality inspectors, and supervisors in a food processing facility.
-**Business Model**: Spinach beauty processing — raw spinach in → packaged frozen spinach puree out.
+**Business Model**: Spinach Puree processing — raw spinach in → packaged frozen spinach puree out.
 **Language**: English only. No translations required.
 **Key Goal**: Quick MVP for validation, lean and minimal approach
 
