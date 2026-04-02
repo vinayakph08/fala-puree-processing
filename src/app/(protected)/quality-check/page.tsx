@@ -2,28 +2,36 @@ import { getUserFromServerSide } from "@/lib/auth/get-user";
 import { getQueryClient } from "@/lib/query-client";
 import { HydrationBoundary, dehydrate } from "@tanstack/react-query";
 import { redirect } from "next/navigation";
-import { QC_KEYS } from "./utils/query-keys";
-import { dbGetQualityTests } from "./utils/server-functions";
-import { QualityCheckDashboard } from "./components/quality-check-dashboard";
 
 export default async function QualityCheckPage() {
   const queryClient = getQueryClient();
-  const { user, error: userError } = await getUserFromServerSide();
+  // const { user, error: userError } = await getUserFromServerSide();
 
-  if (userError || !user) {
-    redirect("/");
-  }
+  // if (userError || !user) {
+  //   redirect("/");
+  // }
 
-  await Promise.allSettled([
-    queryClient.prefetchQuery({
-      queryKey: QC_KEYS.byUser(user.id),
-      queryFn: () => dbGetQualityTests({ user_id: user.id }),
-    }),
-  ]);
+  // await Promise.allSettled([
+  //   queryClient.prefetchQuery({
+  //     queryKey: QC_KEYS.byUser(user.id),
+  //     queryFn: () => dbGetQualityTests({ user_id: user.id }),
+  //   }),
+  // ]);
 
   return (
     <HydrationBoundary state={dehydrate(queryClient)}>
-      <QualityCheckDashboard />
+      <div className='space-y-6'>
+        <div>
+          <h1 className='text-2xl font-bold'>Quality Check</h1>
+          <p className='text-muted-foreground'>
+            Manage your Quality Check tasks
+          </p>
+        </div>
+
+        <div>
+          <p>This is the Quality Check page. More content coming soon...</p>
+        </div>
+      </div>
     </HydrationBoundary>
   );
 }

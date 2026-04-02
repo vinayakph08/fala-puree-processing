@@ -1,7 +1,7 @@
 ---
 name: new-feature
-description: "Use when building a new feature, page, module, or section end-to-end. Covers all 4 layers: types, db-controller, api-route, server-action, react-query hook, components, page, and translations. Invoke when user says create feature, build page, add module, implement screen."
-argument-hint: "Feature name (e.g. tasks, orders, notifications)"
+description: "Use when building a new feature, page, module, or section end-to-end. Covers all 4 layers: types, db-controller, api-route, server-action, react-query hook, components, and page. Also handles standalone sub-pages (detail/drill-down screens) for existing features. Invoke when user says create feature, build page, add module, implement screen, add sub-page, create detail page, add drill-down."
+argument-hint: "Feature name (e.g. tasks, orders, notifications) or sub-page target (e.g. inventory detail, order detail)"
 ---
 
 # New Feature — End-to-End Build
@@ -9,7 +9,7 @@ argument-hint: "Feature name (e.g. tasks, orders, notifications)"
 ## When to Use
 
 Invoke when building any new feature from scratch that needs all layers:
-DB → API → Hook → UI → Translations.
+DB → API → Hook → UI.
 
 ## Before Starting
 
@@ -42,6 +42,15 @@ src/
 │   │   └── components/
 │   │       ├── client-component/index.tsx              ← Step 7
 │   │       └── [other-components]/index.tsx            ← Step 7
+│   ├── (protected)/(sub-pages)/[feature]/[id]/         ← Step 7 (conditional — only if design has detail/drill-down screen)
+│   │   ├── layout.tsx                                  ← Step 7 ("use client", SubPageLayout, required backHref)
+│   │   ├── page.tsx                                    ← Step 7 (Server Component, HydrationBoundary)
+│   │   ├── hooks/
+│   │   │   └── use-[feature]-detail.tsx                ← Step 7 (imports FEATURE_KEYS + api* from parent utils/)
+│   │   ├── server-actions/
+│   │   │   └── index.ts                                ← Step 7 (conditional — only if sub-page has unique forms)
+│   │   └── components/
+│   │       └── [detail-client]/index.tsx               ← Step 7
 │   └── api/
 │       └── [feature]/
 │           ├── route.ts                                ← Step 6
@@ -105,9 +114,15 @@ See [api-route reference](./references/layer-api-route.md) | [template](./assets
 
 See [component reference](./references/layer-component.md) | [form reference](./references/layer-form.md) | [table reference](./references/layer-table.md) | [page template](./assets/page.template.tsx) | [form template](./assets/form.template.tsx) | [table template](./assets/table.template.tsx)
 
-### Step 8 — Translations
-Create both `public/locales/en/[feature].json` and `public/locales/kn/[feature].json`.
-See [translation template](./assets/translations.template.json)
+**Does the design include a detail/drill-down sub-page (e.g. tapping a list item opens a detail screen)?**
+- **Yes** → create `(sub-pages)/[feature]/[id]/` with `layout.tsx`, `page.tsx`, `hooks/`, and `components/`. See [sub-page reference](./references/layer-subpage.md)
+- **No** → skip
+
+**Sub-page decision checklist (if yes above):**
+- Sub-page `hooks/` imports `FEATURE_KEYS` from the **parent's** `utils/query-keys/` — never defines its own
+- Sub-page `hooks/` imports `api*` from the **parent's** `utils/query-functions/` — never duplicates them
+- Sub-page `server-actions/` only created if the sub-page has forms **not covered** by the parent's server actions
+- Sub-page never has its own `utils/`, `query-keys/`, `query-functions/`, or `db-controller/`
 
 ## Checklist Before Finishing
 
@@ -124,9 +139,13 @@ See [translation template](./assets/translations.template.json)
 - [ ] Page wraps children in `HydrationBoundary`
 - [ ] Components handle all 3 async states (loading skeleton / error / empty)
 - [ ] All interactive elements have `min-h-[44px]` touch targets
-- [ ] Both `en` and `kn` translation files created
 - [ ] Forms use `useForm` + `zodResolver` + Shadcn `<Form>` components — no raw `<input>` + manual errors
 - [ ] Edit forms use `useEffect` to `form.reset(data)` — never pass `undefined` as `defaultValues`
 - [ ] Dialogs call `form.reset()` in `handleOpenChange` on close — no stale field state
 - [ ] Table column definitions defined outside the component (stable reference)
 - [ ] `@tanstack/react-table` installed before using table template (`npm install @tanstack/react-table`)
+- [ ] Sub-page `layout.tsx` is `"use client"`, uses `SubPageLayout` with `backHref` set to the parent route string (e.g. `"/inventory"`) — never uses `router.back()`
+- [ ] Sub-page `layout.tsx` passes `actionButton` only if the design shows a header action
+- [ ] Sub-page hook imports `FEATURE_KEYS` from **parent's** `utils/query-keys/` — no new keys defined in sub-page
+- [ ] Sub-page `server-actions/` only created if sub-page has forms not covered by the parent's server actions
+- [ ] Sub-page has no `utils/`, `query-keys/`, `query-functions/`, or `db-controller/` folder
