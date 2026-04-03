@@ -15,6 +15,14 @@ DB → API → Hook → UI.
 
 Check if a Google Stitch screen design was provided in context. If yes, use it as the UI specification. If not, ask the user to describe the screen layout before proceeding.
 
+## DB Gate — Do This First
+
+Before writing any app-layer code, ask:
+
+**Does this feature require new DB tables or RPC functions that don't exist yet?**
+- **Yes** → stop here. Run `/create-migration` first, apply the migration locally (`npm run db:reset`), confirm it works, then return to Step 1.
+- **No** → proceed directly to Step 1.
+
 ## Directory Structure to Create
 
 ```
