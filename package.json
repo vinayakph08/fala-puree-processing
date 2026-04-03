@@ -9,9 +9,14 @@
     "start": "next start",
     "lint": "next lint",
     "dev:supabase": "supabase start",
-    "stop": "supabase stop",
     "status": "supabase status",
-    "reset": "supabase db reset"
+    "db:start": "supabase start",
+    "stop": "supabase stop",
+    "reset": "supabase db reset",
+    "list": "supabase migration list",
+    "up": "supabase migration up",
+    "push": "supabase db push",
+    "migration": "supabase migration new"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

@@ -193,15 +193,15 @@ EXCEPTION
 
 ```bash
 npm run db:start       # Start local Supabase (port 54321 API, 54322 DB)
-npm run db:reset       # Reset with fresh migrations + seed data
-npm run db:migration   # Create new migration file
-npm run db:push        # Apply migrations to remote
-npm run db:up          # Apply pending migrations locally
+npm run reset       # Reset with fresh migrations + seed data
+npm run migration   # Create new migration file
+npm run push        # Apply migrations to remote
+npm run up          # Apply pending migrations locally
 ```
 
 ### Migration Best Practices
 
-- **Always test locally** with `db:reset` before pushing
+- **Always test locally** with `reset` before pushing
 - **Drop before recreating**: Use `DROP FUNCTION IF EXISTS` when changing a function's parameter signature, before `CREATE OR REPLACE`
 - **Update function comments** using `COMMENT ON FUNCTION` syntax
 - **Grant permissions** explicitly to `authenticated` role at migration end

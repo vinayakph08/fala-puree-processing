@@ -1,6 +1,6 @@
 # Migration Patterns — Full Rule Reference
 
-This is the authoritative rule reference for all Fala App SQL migrations.
+This is the authoritative rule reference for all Fala Processing SQL migrations.
 
 ---
 

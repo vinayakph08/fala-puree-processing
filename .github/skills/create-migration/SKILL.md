@@ -1,12 +1,12 @@
 ---
 name: create-migration
-description: 'Create Supabase PostgreSQL migration files for the Fala App database. Use for: writing new SQL migrations, creating RPC functions (aggregate with scalar helpers, composed dashboard, search + filter + pagination + sort, chart time-series, batch write over UUID arrays), adding tables, indexes, RLS policies, or triggers. Enforces SECURITY DEFINER, plpgsql, data/error envelope, soft-delete filtering, farmer self-lock, p_limit clamping, and grant patterns.'
-argument-hint: 'Describe the migration: purpose, function type(s), table(s) involved, and which roles need access (FARMER / ADMIN / both)'
+description: 'Create Supabase PostgreSQL migration files for the Fala Processing database. Use for: writing new SQL migrations, creating RPC functions (aggregate with scalar helpers, composed dashboard, search + filter + pagination + sort, chart time-series, batch write over UUID arrays), adding tables, indexes, RLS policies, or triggers. Enforces SECURITY DEFINER, plpgsql, data/error envelope, soft-delete filtering, farmer self-lock, p_limit clamping, and grant patterns.'
+argument-hint: 'Describe the migration: purpose, function type(s), table(s) involved, and which roles need access (USER / ADMIN).'
 ---
 
 # Create Migration
 
-Generates a correct, standards-compliant Supabase SQL migration for the Fala App database.
+Generates a correct, standards-compliant Supabase SQL migration for the Fala Processing database.
 Full rule reference and SQL patterns: [references/patterns.md](./references/patterns.md).
 
 ## When to Use
@@ -28,7 +28,7 @@ Ask the user these questions before choosing a template:
    - Time-series rows for a chart
    - Batch write over an array of IDs
    - Pure internal scalar helper (no auth, called by other functions only)
-3. **Role access** — Who can call this? (FARMER only, ADMIN only, both)
+3. **Role access** — Who can call this? (USER only, ADMIN only, or multiple roles)
 4. **Data source** — Which table(s)? Does it join `user_profile`?
 5. **Write or read** — Does it modify data (INSERT, UPDATE, soft-delete) or only SELECT?
 6. **Composition** — Does it call other existing functions and combine their results?
@@ -54,7 +54,7 @@ Use [migration-header.sql](./assets/migration-header.sql) for the file-level boi
 1. Run the pre-generation interview to clarify requirements.
 2. Select the correct template(s) from the decision tree.
 3. Load the template file(s); consult [references/patterns.md](./references/patterns.md) for rule reminders.
-4. Run `npm run db:migration` to generate the timestamped filename, then write to:
+4. Run `npm run migration` to generate the timestamped filename, then write to:
    `supabase/migrations/YYYYMMDDHHMMSS_descriptive_name.sql`
 5. Substitute every `{PLACEHOLDER}` with real names, columns, and types.
 6. Ensure all table and function references use the `public.` prefix.
@@ -69,7 +69,7 @@ Use [migration-header.sql](./assets/migration-header.sql) for the file-level boi
 - [ ] All table and function references use `public.` prefix — no bare unqualified names
 - [ ] All functions use `LANGUAGE plpgsql SECURITY DEFINER` — never `LANGUAGE sql`
 - [ ] Every `SELECT` query includes `WHERE is_deleted = FALSE` — never rely on RLS for this
-- [ ] FARMER role always overrides to `auth.uid()` — never trusts the passed `p_farmer_id` parameter value
+- [ ] User role always overrides to `auth.uid()` — never trusts the passed `p_user_id` parameter value
 - [ ] Return envelope is `{data, error}` — no `success` field anywhere
 - [ ] `EXCEPTION WHEN OTHERS` returns the fixed string `'An unexpected error occurred'` — no `SQLERRM` in production-facing errors
 - [ ] `GRANT EXECUTE ON FUNCTION public.{name}(...) TO authenticated` block at the end

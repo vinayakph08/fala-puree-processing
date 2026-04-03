@@ -1,6 +1,6 @@
 # 🚜 Supabase CLI Migration Commands Guide
 
-Based on your Fala app setup, here's a comprehensive guide to Supabase migration commands for both local and remote environments.
+Based on your Fala Processing setup, here's a comprehensive guide to Supabase migration commands for both local and remote environments.
 
 ---
 
@@ -197,7 +197,7 @@ supabase db pull --schema public,auth
 
 ---
 
-## 🔄 **Practical Workflow Examples for Fala App**
+## 🔄 **Practical Workflow Examples for Fala Processing**
 
 ### **Scenario 1: Adding User Inventory Feature**
 
@@ -505,7 +505,7 @@ supabase migration down --env production --target 20250814123456
 
 ---
 
-## 🚨 **Best Practices for Fala App**
+## 🚨 **Best Practices for Fala Processing**
 
 ### **1. Migration Naming Convention**
 
@@ -595,7 +595,7 @@ supabase migration down --remote --target safe_migration
 
 - [Supabase Migration Documentation](https://supabase.com/docs/guides/database/migrations)
 - [PostgreSQL Migration Best Practices](https://www.postgresql.org/docs/current/ddl-alter.html)
-- [Fala App Database Schema](./DATABASE_SCHEMA.md)
+- [Fala Processing Database Schema](./DATABASE_SCHEMA.md)
 
 ---
 

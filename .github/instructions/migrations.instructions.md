@@ -17,10 +17,10 @@ Full rule reference and SQL templates: [skills/create-migration/references/patte
 
 ```bash
 npm run db:start       # Start local Supabase (port 54321 API, 54322 DB)
-npm run db:reset       # Reset with fresh migrations + seed data
-npm run db:migration   # Generate a new timestamped migration filename
-npm run db:up          # Apply pending migrations locally
-npm run db:push        # Apply migrations to remote
+npm run reset       # Reset with fresh migrations + seed data
+npm run migration   # Generate a new timestamped migration filename
+npm run up          # Apply pending migrations locally
+npm run push        # Apply migrations to remote
 ```
 
 ---

@@ -6,21 +6,29 @@ export interface QualityTest {
   batch_id: string;
   production_line: string | null;
   status: QualityTestStatus;
+
+  // Standard quality check
   color_l: number | null;
   color_a: number | null;
   color_b: number | null;
   color_image_url: string | null;
   texture_brix: number | null;
   viscosity_cp: number | null;
-  boil_time_s: number | null;
-  maillard_index: number | null;
+  taste_flavour_score: number | null;
+
+  // Cooking stress test
+  cooking_color_score: number | null;
+  cooking_color_image_url: string | null;
+  cooking_taste_score: number | null;
+  cooking_taste_image_url: string | null;
+
+  // Cooking performance
   cooking_notes: string | null;
-  pre_cooking_delta_e: number | null;
-  post_cooking_delta_e: number | null;
-  texture_initial_peak_n: number | null;
-  texture_final_peak_n: number | null;
+
+  // Audit
   test_date: string;
   submitted_at: string | null;
+  is_deleted: boolean;
   created_at: string;
   updated_at: string;
 }
