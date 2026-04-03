@@ -59,6 +59,29 @@ class QualityCheckController {
       return { data: null, error: (error as Error).message };
     }
   }
+
+  async createPureeImageRecord({ 
+    data,
+  }: {
+    data: {
+      batch_id: string;
+      image_url: string;
+      original_filename: string;
+      image_size_bytes: number;
+    };
+  }): Promise<DbResult<null>> {
+    try {
+      const supabase = await createClient();
+      const { error } = await supabase
+        .from("quality_test_images")
+        .insert(data);
+
+      if (error) throw new Error(error.message);
+      return { data: null, error: null };
+    } catch (error: unknown) {
+      return { data: null, error: (error as Error).message };
+    }
+}
 }
 
 export const qualityCheckController = new QualityCheckController();
