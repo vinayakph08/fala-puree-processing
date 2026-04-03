@@ -109,18 +109,30 @@ See `.github/skills/new-feature/references/data-shapes.md` for the full pattern 
 
 ```
 src/
-├── types/[feature].ts                              ← domain types + DbResult<T> in src/types/index.ts
-└── app/(protected)/(main-pages)/[feature]/
-    ├── page.tsx                                    ← Server Component, Promise.allSettled prefetch
-    ├── db-controller/index.ts                      ← pure DB ops, singleton export
-    ├── utils/
-    │   ├── index.ts                                ← Zod schemas only
-    │   ├── query-keys/index.ts                     ← FEATURE_KEYS constants
-    │   ├── query-functions/index.ts                ← api* — client callers for hooks
-    │   └── server-functions/index.ts               ← db* — DB controller wrappers for page.tsx
-    ├── server-actions/index.ts                     ← form submissions only
-    ├── hooks/use-[feature].tsx                     ← React Query hook
-    └── components/                                 ← feature UI
+├── types/[feature].ts                                   ← domain types + DbResult<T> in src/types/index.ts
+└── app/(protected)/
+    ├── (main-pages)/[feature]/                          ← main page
+    │   ├── page.tsx                                     ← Server Component, Promise.allSettled prefetch
+    │   ├── db-controller/index.ts                       ← pure DB ops, singleton export; sub-page imports from here
+    │   ├── utils/
+    │   │   ├── index.ts                                 ← Zod schemas only
+    │   │   ├── query-keys/index.ts                      ← FEATURE_KEYS; sub-page hook MUST import from here
+    │   │   ├── query-functions/index.ts                 ← api* — client callers; sub-page hook imports from here
+    │   │   └── server-functions/index.ts                ← db* — DB controller wrappers for page.tsx
+    │   ├── server-actions/index.ts                      ← form submissions; reuse in sub-page if possible
+    │   ├── hooks/use-[feature].tsx                      ← React Query hook
+    │   └── components/                                  ← feature UI
+    │
+    └── (sub-pages)/[feature]/[id]/                      ← sub-page (sibling to main-pages, not nested inside)
+        ├── layout.tsx                                   ← "use client", SubPageLayout, required backHref
+        ├── page.tsx                                     ← Server Component, HydrationBoundary, parent DB controller
+        ├── hooks/
+        │   └── use-[feature]-detail.tsx                 ← imports FEATURE_KEYS + api* from parent utils/
+        ├── server-actions/                              ← CONDITIONAL: only if sub-page has unique forms
+        │   └── index.ts
+        └── components/
+            └── [detail-client]/
+                └── index.tsx
 ```
 
 ### 5. Naming Conventions

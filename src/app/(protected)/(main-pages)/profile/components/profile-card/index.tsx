@@ -118,7 +118,7 @@ export function UserProfileCard() {
         <CardTitle className="flex items-center justify-between">
           <div className="flex justify-start items-center gap-1">
             <div className="p-3 bg-primary/20 rounded-full">
-              <UserIcon className="h-5 w-5 rounded-full" color={"#09ad8d"} />
+              <UserIcon className="h-5 w-5 rounded-full" color={"#4a7c59"} />
             </div>
             <div className="flex flex-col justify-start gap-1">
               <div>User Info</div>

@@ -1,4 +1,4 @@
-import { profileController } from "@/app/(protected)/profile/db-controller";
+import { profileController } from "@/app/(protected)/(main-pages)/profile/db-controller";
 
 export const getProfileData = async ({ userId }: { userId: string }) => {
   try {

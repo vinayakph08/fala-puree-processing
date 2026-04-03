@@ -1,4 +1,4 @@
-import { qualityCheckController } from "@/app/(protected)/quality-check/db-controller";
+import { qualityCheckController } from "@/app/(protected)/(main-pages)/quality-check/db-controller";
 import { getUserFromServerSide } from "@/lib/auth/get-user";
 import { NextResponse } from "next/server";
 

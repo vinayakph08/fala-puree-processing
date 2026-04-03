@@ -1,4 +1,4 @@
-import { profileController } from "@/app/(protected)/profile/db-controller";
+import { profileController } from "@/app/(protected)/(main-pages)/profile/db-controller";
 import { createClient } from "@/utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
