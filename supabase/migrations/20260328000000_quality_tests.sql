@@ -28,7 +28,6 @@ CREATE TABLE IF NOT EXISTS public.quality_tests (
   cooking_color_score     NUMERIC(10, 4),
   cooking_color_image_url TEXT,
   cooking_taste_score     NUMERIC(10, 4),
-  cooking_taste_image_url TEXT,
 
   -- Cooking performance notes
   cooking_notes           TEXT,
@@ -61,6 +60,11 @@ CREATE POLICY "Users can create own tests"
 CREATE POLICY "Users can update own tests"
   ON public.quality_tests FOR UPDATE
   USING (auth.uid() = user_id);
+
+-- Only admins (Supervisors) can delete tests
+CREATE POLICY "Admins can delete tests"
+  ON public.quality_tests FOR DELETE
+  USING (public.is_admin());
 
 -- updated_at trigger
 CREATE OR REPLACE FUNCTION public.update_quality_tests_updated_at()
