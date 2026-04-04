@@ -5,7 +5,7 @@ import { createClient } from "@/utils/supabase/client";
  */
 export const uploadImageToStorage = async (
   file: File,
-  farmerId: string,
+  testId: string,
   batchId: string,
   onProgress?: (progress: number) => void,
 ): Promise<{ publicUrl: string; error: string | null }> => {
@@ -13,13 +13,13 @@ export const uploadImageToStorage = async (
     const supabase = createClient();
 
     const timestamp = Date.now();
-    const path = `puree-${batchId}/image-${timestamp}.webp`;
+    const path = `sp-${batchId}/qc-${testId}/image-${timestamp}.webp`;
 
     onProgress?.(10);
 
     // Upload file to storage
     const { data, error } = await supabase.storage
-      .from("puree-images")
+      .from("puree-qc-images")
       .upload(path, file, {
         cacheControl: "3600",
         upsert: true, // Allow overwriting
@@ -33,7 +33,7 @@ export const uploadImageToStorage = async (
 
     // Get public URL
     const { data: urlData } = supabase.storage
-      .from("puree-images")
+      .from("puree-qc-images")
       .getPublicUrl(data.path);
 
     onProgress?.(100);

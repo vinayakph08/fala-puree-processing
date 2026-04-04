@@ -3,15 +3,15 @@ import { toast } from "sonner";
 // import { useCacheInvalidation } from "../../earnings/hooks/use-cache-invalidation";
 
 // Separate image upload function
-export const uploadPureeImage = async ({
+export const uploadPureeQCImage = async ({
   file,
   batchId,
-  userId,
+  testId,
   onProgress,
 }: {
   file: File;
   batchId: string;
-  userId: string;
+  testId: string;
   onProgress?: (progress: {
     status: string;
     progress: number;
@@ -44,7 +44,7 @@ export const uploadPureeImage = async ({
     // Upload to storage
     const uploadResult = await uploadImageToStorage(
       webpFile,
-      userId,
+      testId,
       batchId,
       (progress) => {
         onProgress?.({
@@ -86,20 +86,20 @@ export const uploadPureeImage = async ({
 };
 
 // Separate image delete function
-export const deletePureeImage = async (imageId: string) => {
-  try {
-    const response = await fetch(`/api/puree/images/${imageId}`, {
-      method: "DELETE",
-    });
-    if (!response.ok) {
-      throw new Error("Failed to delete image");
-    }
-    return response.json();
-  } catch (error) {
-    console.error("Error deleting puree image:", error);
-    throw error;
-  }
-};
+// export const deletePureeImage = async (imageId: string) => {
+//   try {
+//     const response = await fetch(`/api/quality-check/images/${imageId}`, {
+//       method: "DELETE",
+//     });
+//     if (!response.ok) {
+//       throw new Error("Failed to delete image");
+//     }
+//     return response.json();
+//   } catch (error) {
+//     console.error("Error deleting puree image:", error);
+//     throw error;
+//   }
+// };
 
 // Hook for uploading and deleting puree images
 export const usePureeImageUpload = () => {
@@ -108,7 +108,7 @@ export const usePureeImageUpload = () => {
   //   useCacheInvalidation();
 
   const uploadImageMutation = useMutation({
-    mutationFn: uploadPureeImage,
+    mutationFn: uploadPureeQCImage,
     onSuccess: (data, variables) => {
       // Invalidate all related queries
       queryClient.invalidateQueries({
@@ -127,44 +127,44 @@ export const usePureeImageUpload = () => {
     },
   });
 
-  const deleteImageMutation = useMutation({
-    mutationFn: deletePureeImage,
-    onSuccess: () => {
-      // invalidatePuree();
-      // invalidateEarnings();
-      // invalidateRewards();
-      queryClient.invalidateQueries({
-        queryKey: ["puree-images-infinite"],
-        exact: false,
-      });
-      queryClient.invalidateQueries({
-        queryKey: ["puree-item"],
-        exact: false,
-      });
-      toast.success("Image deleted successfully");
-    },
-    onError: (error) => {
-      console.error("Error deleting image:", error);
-      toast.error("Failed to delete image");
-    },
-  });
+  // const deleteImageMutation = useMutation({
+  //   mutationFn: deletePureeImage,
+  //   onSuccess: () => {
+  //     // invalidatePuree();
+  //     // invalidateEarnings();
+  //     // invalidateRewards();
+  //     queryClient.invalidateQueries({
+  //       queryKey: ["puree-images-infinite"],
+  //       exact: false,
+  //     });
+  //     queryClient.invalidateQueries({
+  //       queryKey: ["puree-item"],
+  //       exact: false,
+  //     });
+  //     toast.success("Image deleted successfully");
+  //   },
+  //   onError: (error) => {
+  //     console.error("Error deleting image:", error);
+  //     toast.error("Failed to delete image");
+  //   },
+  // });
 
-  const uploadImage = (params: Parameters<typeof uploadPureeImage>[0]) => {
+  const uploadImage = (params: Parameters<typeof uploadPureeQCImage>[0]) => {
     return uploadImageMutation.mutateAsync(params);
   };
 
-  const deleteImage = (imageId: string) => {
-    return deleteImageMutation.mutateAsync(imageId);
-  };
+  // const deleteImage = (imageId: string) => {
+  //   return deleteImageMutation.mutateAsync(imageId);
+  // };
 
   return {
     uploadImage,
-    deleteImage,
+    // deleteImage,
     isUploading: uploadImageMutation.isPending,
-    isDeleting: deleteImageMutation.isPending,
+    // isDeleting: deleteImageMutation.isPending,
     uploadError: uploadImageMutation.error,
-    deleteError: deleteImageMutation.error,
+    // deleteError: deleteImageMutation.error,
     uploadImageMutation,
-    deleteImageMutation,
+    // deleteImageMutation,
   };
 };
