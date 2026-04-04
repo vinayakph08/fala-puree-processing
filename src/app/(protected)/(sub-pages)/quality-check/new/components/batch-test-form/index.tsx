@@ -14,7 +14,10 @@ import {
   Flame,
   QrCode,
   UtensilsCrossed,
+  Camera as CameraIcon,
 } from "lucide-react";
+import { Camera } from "@/components/camera";
+import type { LabValues } from "@/components/camera/capture-confirmation";
 import {
   Form,
   FormControl,
@@ -27,7 +30,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CreateQualityTestFormValues, createQualityTestSchema } from "@/app/(protected)/(main-pages)/quality-check/utils";
 import { createQualityTestAction } from "../../server-actions";
-
+import { generateBatchId } from "../../utils";
 
 // ── Status chip ──────────────────────────────────────────────────────────────
 
@@ -119,11 +122,17 @@ export function BatchTestForm() {
   const [cookingExpanded, setCookingExpanded] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
+
+  // useState lazy initializer runs exactly once — safe in React Strict Mode.
+  // Never generate the ID inside useEffect; effects run twice in dev (Strict Mode)
+  // which would increment the localStorage counter by 2.
+  const [initialBatchId] = useState(() => generateBatchId());
 
   const form = useForm<CreateQualityTestFormValues>({
     resolver: zodResolver(createQualityTestSchema),
     defaultValues: {
-      batch_id: "",
+      batch_id: initialBatchId,
       production_line: "",
       color_l: undefined,
       color_a: undefined,
@@ -173,8 +182,27 @@ export function BatchTestForm() {
     }
   }
 
+  function handleCameraCapture(_file: File, labValues?: LabValues, textureScore?: number | null) {
+    if (labValues) {
+      form.setValue("color_l", labValues.l, { shouldValidate: true });
+      form.setValue("color_a", labValues.a, { shouldValidate: true });
+      form.setValue("color_b", labValues.b, { shouldValidate: true });
+    }
+    if (textureScore != null) {
+      form.setValue("texture_brix", textureScore, { shouldValidate: true });
+    }
+    toast.success("Color & Texture values captured");
+    setIsCameraOpen(false);
+  }
+
   return (
-    <Form {...form}>
+    <>
+      <Camera
+        isOpen={isCameraOpen}
+        onCapture={handleCameraCapture}
+        onCancel={() => setIsCameraOpen(false)}
+      />
+      <Form {...form}>
       <div className="space-y-4 pb-40">
         {/* Batch Identity */}
         <div className="bg-white border border-gray-200 rounded-2xl p-4 space-y-3">
@@ -233,6 +261,18 @@ export function BatchTestForm() {
             status={colorStatus}
             capturedLabel={colorLabel}
           >
+            {/* Camera capture button */}
+            <button
+              type="button"
+              onClick={() => setIsCameraOpen(true)}
+              className="w-full flex items-center justify-center gap-2 min-h-[44px] rounded-xl border border-primary/30 bg-primary/5 text-primary text-sm font-semibold hover:bg-primary/10 transition-colors"
+            >
+              <CameraIcon className="h-4 w-4" />
+              Capture with Camera
+            </button>
+            <p className="text-[11px] text-muted-foreground text-center -mt-1">
+              or enter values manually
+            </p>
             <div className="grid grid-cols-3 gap-2">
               {(["color_l", "color_a", "color_b"] as const).map((key, i) => (
                 <FormField
@@ -278,6 +318,8 @@ export function BatchTestForm() {
               watchTexture != null ? `${watchTexture} °Bx` : undefined
             }
           >
+            {/* Camera capture removed — texture score is filled automatically when
+                the Color Analysis capture button is used (single capture fills both). */}
             <FormField
               control={form.control}
               name="texture_brix"
@@ -549,5 +591,6 @@ export function BatchTestForm() {
         </Button>
       </div>
     </Form>
+    </>
   );
 }

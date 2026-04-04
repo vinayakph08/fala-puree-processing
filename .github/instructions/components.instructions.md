@@ -53,6 +53,42 @@ All interactive elements must have minimum 44px × 44px:
 | Shared across siblings | Lift to parent |
 | App-wide user profile | `useUser()` from UserProvider |
 
+## Utility Functions — Must Not Live in Component Files
+
+Never define utility or helper functions inside a `.tsx` component file. Extract them to the nearest `utils/index.ts`:
+
+| Utility belongs to | Put it in |
+|---|---|
+| A shared UI component (e.g. `components/camera`) | `components/camera/utils/index.ts` |
+| A main-page feature | `app/(protected)/(main-pages)/[feature]/utils/index.ts` |
+| A sub-page feature | `app/(protected)/(sub-pages)/[feature]/[page]/utils/index.ts` |
+
+```typescript
+// ❌ Wrong — helper defined inside a component file
+export function MyComponent() {
+  function formatDate(d: Date) { ... } // should be in utils/
+  return <div>{formatDate(new Date())}</div>;
+}
+
+// ✅ Correct — import from utils/
+import { formatDate } from "../utils";
+export function MyComponent() {
+  return <div>{formatDate(new Date())}</div>;
+}
+```
+
+**One-call side-effectful initialisation (e.g. generating a unique ID) must use a `useState` lazy initializer, not `useEffect`.** React Strict Mode runs effects twice in development, which doubles side effects like localStorage counter increments. The `useState` initializer is guaranteed to run exactly once.
+
+```typescript
+// ❌ Wrong — useEffect runs twice in Strict Mode dev
+useEffect(() => {
+  form.setValue("batch_id", generateBatchId()); // counter increments by 2
+}, []);
+
+// ✅ Correct — useState lazy init runs exactly once
+const [initialBatchId] = useState(() => generateBatchId());
+```
+
 ## Named Component Template
 
 ```tsx

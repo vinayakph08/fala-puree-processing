@@ -38,6 +38,7 @@
   --color-popover: var(--popover);
   --color-card-foreground: var(--card-foreground);
   --color-card: var(--card);
+  --color-camera-bg: var(--camera-bg);
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
@@ -103,6 +104,9 @@
   --info-orange: #f97316;
   --info-yellow: #efb700;
   --info-rose: #e92556;
+
+  /* Camera UI */
+  --camera-bg: #eef1f5;
 }
 
 /* Dark mode (optional - for future consideration) */
