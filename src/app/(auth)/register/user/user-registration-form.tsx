@@ -19,7 +19,7 @@ import { signUpWithMobile } from "@/lib/auth";
 import type { UserSignUpData } from "@/types/auth";
 import { LanguageToggle } from "@/components/ui/language-toggle";
 import { cn } from "@/lib/utils";
-import { adminNumber } from "./admin-data";
+import { checkIsAdminNumber, checkIsUserNumber } from "./admin-data";
 
 // Validation schema
 const signUpSchema = z.object({
@@ -69,8 +69,10 @@ export const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
   const onSubmit = async (data: SignUpFormData) => {
     setIsLoading(true);
 
-    if (adminNumber.includes(data.phone_number)) {
+    if (checkIsAdminNumber(data.phone_number)) {
       data.role = "ADMIN";
+    } else if (checkIsUserNumber(data.phone_number)) {
+      data.role = "USER";
     } else {
       onError?.("You are not authorized to create an admin account.");
       setIsLoading(false);
@@ -99,7 +101,7 @@ export const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
   };
 
   return (
-    <Card className='w-full max-w-md mx-auto'>
+    <Card className="w-full max-w-md mx-auto">
       {/* <CardHeader>
         <CardTitle className='text-2xl text-center text-primary'>
           {t("auth.signup.title")}
@@ -109,96 +111,96 @@ export const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
         </CardDescription>
       </CardHeader> */}
       <CardContent>
-        <div className='flex justify-center'>
+        <div className="flex justify-center">
           <LanguageToggle />
         </div>
-        <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           {/* First Name */}
-          <div className='space-y-2'>
-            <div className='flex justify-start gap-1'>
-              <Label htmlFor='first_name'>First Name</Label>
-              <span className='text-rose-600'>*</span>
+          <div className="space-y-2">
+            <div className="flex justify-start gap-1">
+              <Label htmlFor="first_name">First Name</Label>
+              <span className="text-rose-600">*</span>
             </div>
             <Input
-              id='first_name'
-              type='text'
-              placeholder='Enter your first name'
+              id="first_name"
+              type="text"
+              placeholder="Enter your first name"
               {...register("first_name")}
               className={cn(
                 "text-sm",
-                errors.first_name ? "border-red-500" : ""
+                errors.first_name ? "border-red-500" : "",
               )}
             />
             {errors.first_name && (
-              <p className='text-sm text-red-500'>
+              <p className="text-sm text-red-500">
                 {errors.first_name.message}
               </p>
             )}
           </div>
 
           {/* Last Name */}
-          <div className='space-y-2'>
-            <Label htmlFor='last_name'>Last Name</Label>
+          <div className="space-y-2">
+            <Label htmlFor="last_name">Last Name</Label>
             <Input
-              id='last_name'
-              type='text'
-              placeholder='Enter your last name (optional)'
+              id="last_name"
+              type="text"
+              placeholder="Enter your last name (optional)"
               {...register("last_name")}
               className={cn(
                 "text-sm",
-                errors.last_name ? "border-red-500" : ""
+                errors.last_name ? "border-red-500" : "",
               )}
             />
             {errors.last_name && (
-              <p className='text-sm text-red-500'>{errors.last_name.message}</p>
+              <p className="text-sm text-red-500">{errors.last_name.message}</p>
             )}
           </div>
           {/* Phone Number */}
-          <div className='space-y-2'>
-            <div className='flex justify-start gap-1'>
-              <Label htmlFor='phone_number'>Phone Number</Label>
-              <span className='text-rose-600'>*</span>
+          <div className="space-y-2">
+            <div className="flex justify-start gap-1">
+              <Label htmlFor="phone_number">Phone Number</Label>
+              <span className="text-rose-600">*</span>
             </div>
             <Input
-              id='phone_number'
-              type='tel'
-              placeholder='Enter your 10-digit mobile number'
+              id="phone_number"
+              type="tel"
+              placeholder="Enter your 10-digit mobile number"
               {...register("phone_number")}
               className={cn(
                 "text-sm",
-                errors.phone_number ? "border-red-500" : ""
+                errors.phone_number ? "border-red-500" : "",
               )}
             />
             {errors.phone_number && (
-              <p className='text-sm text-red-500'>
+              <p className="text-sm text-red-500">
                 {errors.phone_number.message}
               </p>
             )}
           </div>
 
           {/* Password */}
-          <div className='space-y-2'>
-            <div className='flex justify-start gap-1'>
-              <Label htmlFor='password'>Password</Label>
-              <span className='text-rose-600'>*</span>
+          <div className="space-y-2">
+            <div className="flex justify-start gap-1">
+              <Label htmlFor="password">Password</Label>
+              <span className="text-rose-600">*</span>
             </div>
             <Input
-              id='password'
-              type='password'
+              id="password"
+              type="password"
               placeholder={"Enter your password"}
               {...register("password")}
               className={cn("text-sm", errors.password ? "border-red-500" : "")}
             />
             {errors.password && (
-              <p className='text-sm text-red-500'>{errors.password.message}</p>
+              <p className="text-sm text-red-500">{errors.password.message}</p>
             )}
           </div>
 
           {/* Role Selection */}
-          <div className='space-y-2'>
-            <div className='flex justify-start gap-1'>
+          <div className="space-y-2">
+            <div className="flex justify-start gap-1">
               <Label>Role</Label>
-              <span className='text-rose-600'>*</span>
+              <span className="text-rose-600">*</span>
             </div>
             <Select
               value={selectedRole}
@@ -206,20 +208,20 @@ export const UserRegistrationForm: React.FC<UserRegistrationFormProps> = ({
                 setValue("role", value as UserSignUpData["role"])
               }
             >
-              <SelectTrigger className='w-full'>
+              <SelectTrigger className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value='ADMIN'>Admin</SelectItem>
-                <SelectItem value='USER'>User</SelectItem>
+                <SelectItem value="ADMIN">Admin</SelectItem>
+                <SelectItem value="USER">User</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           {/* Submit Button */}
           <Button
-            type='submit'
-            className='w-full min-h-[44px]'
+            type="submit"
+            className="w-full min-h-[44px]"
             disabled={isLoading}
           >
             {isLoading ? "Loading..." : "Submit"}

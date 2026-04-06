@@ -2,7 +2,6 @@
 
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/utils/supabase/server";
-
 import type { QualityTest } from "@/types";
 import {
   createQualityTestSchema,
@@ -12,7 +11,8 @@ import { qualityCheckController } from "@/app/(protected)/(main-pages)/quality-c
 
 type ActionResult = { data: QualityTest | null; error: string | null };
 
-export async function createQualityTestAction(
+export async function updateQualityTestAction(
+  id: string,
   formData: unknown,
   status: "draft" | "pending",
 ): Promise<ActionResult> {
@@ -31,8 +31,7 @@ export async function createQualityTestAction(
   const resolvedStatus =
     status === "pending" ? computeTestStatus(validated.data) : "draft";
 
-  const { data, error } = await qualityCheckController.createQualityTest({
-    user_id: user.id,
+  const { data, error } = await qualityCheckController.updateQualityTest(id, {
     batch_id: validated.data.batch_id,
     production_line: validated.data.production_line ?? null,
     status: resolvedStatus,
@@ -49,8 +48,9 @@ export async function createQualityTestAction(
     cooking_notes: validated.data.cooking_notes ?? null,
   });
 
-  if (error) return { data: null, error: "Failed to save quality test." };
+  if (error) return { data: null, error: "Failed to update quality test." };
 
   revalidatePath("/quality-check");
+  revalidatePath(`/quality-check/${id}`);
   return { data, error: null };
 }

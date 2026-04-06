@@ -19,6 +19,7 @@ export interface UserProfile {
   firstName: string; // Legacy field for backward compatibility
   lastName: string; // Legacy field for backward compatibility
   mobileNumber?: string;
+  role?: "USER" | "ADMIN";
   farm: {
     farm_id: string;
     farmName: string;

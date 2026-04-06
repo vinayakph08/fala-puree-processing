@@ -74,8 +74,13 @@ export const VillagesByDistrict: Record<
   ],
 };
 
-export const adminNumber = ["8553912905", "9113230733", "9008004824"];
+export const adminNumber = ["8553912905", "6361374250", "9113230733"];
+export const userNumber = ["9008004824"];
 
 export const checkIsAdminNumber = (number: string) => {
   return adminNumber.includes(number);
-}
+};
+
+export const checkIsUserNumber = (number: string) => {
+  return userNumber.includes(number);
+};

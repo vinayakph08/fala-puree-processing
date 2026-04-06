@@ -1,5 +1,28 @@
 export type QualityTestStatus = "draft" | "pending" | "passed" | "failed";
 
+export interface QualityTestListItem {
+  id: string;
+  batch_id: string;
+  production_line: string | null;
+  status: QualityTestStatus;
+  test_date: string;
+  created_at: string;
+}
+
+export interface Pagination {
+  page: number;
+  per_page: number;
+  total_count: number;
+  total_pages: number;
+  has_previous_page: boolean;
+  has_next_page: boolean;
+}
+
+export interface PaginatedQualityTests {
+  tests: QualityTestListItem[];
+  pagination: Pagination;
+}
+
 export interface QualityTest {
   id: string;
   user_id: string;
@@ -20,7 +43,6 @@ export interface QualityTest {
   cooking_color_score: number | null;
   cooking_color_image_url: string | null;
   cooking_taste_score: number | null;
-  cooking_taste_image_url: string | null;
 
   // Cooking performance
   cooking_notes: string | null;

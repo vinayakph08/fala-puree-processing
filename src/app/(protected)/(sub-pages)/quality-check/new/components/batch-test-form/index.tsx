@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import {
   ChevronUp,
@@ -18,6 +19,7 @@ import {
 } from "lucide-react";
 import { Camera } from "@/components/camera";
 import type { LabValues } from "@/components/camera/capture-confirmation";
+import { uploadImageToStorage } from "@/components/camera/storage/supabase-upload";
 import {
   Form,
   FormControl,
@@ -29,6 +31,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { CreateQualityTestFormValues, createQualityTestSchema } from "@/app/(protected)/(main-pages)/quality-check/utils";
+import { QC_KEYS } from "@/app/(protected)/(main-pages)/quality-check/utils/query-keys";
 import { createQualityTestAction } from "../../server-actions";
 import { generateBatchId } from "../../utils";
 
@@ -119,10 +122,12 @@ function ParameterCard({
 
 export function BatchTestForm() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [cookingExpanded, setCookingExpanded] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
 
   // useState lazy initializer runs exactly once — safe in React Strict Mode.
   // Never generate the ID inside useEffect; effects run twice in dev (Strict Mode)
@@ -176,13 +181,14 @@ export function BatchTestForm() {
           ? "Batch report submitted."
           : "Saved as draft.",
       );
+      queryClient.invalidateQueries({ queryKey: QC_KEYS.all });
       router.push("/quality-check");
     } finally {
       setLoading(false);
     }
   }
 
-  function handleCameraCapture(_file: File, labValues?: LabValues, textureScore?: number | null) {
+  async function handleCameraCapture(file: File, labValues?: LabValues, textureScore?: number | null) {
     if (labValues) {
       form.setValue("color_l", labValues.l, { shouldValidate: true });
       form.setValue("color_a", labValues.a, { shouldValidate: true });
@@ -191,8 +197,22 @@ export function BatchTestForm() {
     if (textureScore != null) {
       form.setValue("texture_brix", textureScore, { shouldValidate: true });
     }
-    toast.success("Color & Texture values captured");
     setIsCameraOpen(false);
+
+    // Upload image to storage and store URL in form
+    setIsUploadingImage(true);
+    try {
+      const batchId = form.getValues("batch_id");
+      const { publicUrl, error } = await uploadImageToStorage(file, "pending", batchId);
+      if (error) {
+        toast.error("Image upload failed — values saved without image");
+      } else {
+        form.setValue("color_image_url", publicUrl, { shouldValidate: true });
+        toast.success("Color & Texture values captured");
+      }
+    } finally {
+      setIsUploadingImage(false);
+    }
   }
 
   return (
@@ -265,10 +285,11 @@ export function BatchTestForm() {
             <button
               type="button"
               onClick={() => setIsCameraOpen(true)}
-              className="w-full flex items-center justify-center gap-2 min-h-[44px] rounded-xl border border-primary/30 bg-primary/5 text-primary text-sm font-semibold hover:bg-primary/10 transition-colors"
+              className="w-full flex items-center justify-center gap-2 min-h-[44px] rounded-xl border border-primary/30 bg-primary/5 text-primary text-sm font-semibold hover:bg-primary/10 transition-colors disabled:opacity-50"
+              disabled={isUploadingImage}
             >
               <CameraIcon className="h-4 w-4" />
-              Capture with Camera
+              {isUploadingImage ? "Uploading..." : "Capture with Camera"}
             </button>
             <p className="text-[11px] text-muted-foreground text-center -mt-1">
               or enter values manually

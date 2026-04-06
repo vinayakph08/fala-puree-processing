@@ -19,7 +19,7 @@ export const uploadImageToStorage = async (
 
     // Upload file to storage
     const { data, error } = await supabase.storage
-      .from("puree-qc-images")
+      .from("quality-test-images")
       .upload(path, file, {
         cacheControl: "3600",
         upsert: true, // Allow overwriting
@@ -33,7 +33,7 @@ export const uploadImageToStorage = async (
 
     // Get public URL
     const { data: urlData } = supabase.storage
-      .from("puree-qc-images")
+      .from("quality-test-images")
       .getPublicUrl(data.path);
 
     onProgress?.(100);

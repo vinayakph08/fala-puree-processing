@@ -49,22 +49,21 @@ CREATE INDEX IF NOT EXISTS idx_quality_tests_status   ON public.quality_tests (s
 -- Row Level Security
 ALTER TABLE public.quality_tests ENABLE ROW LEVEL SECURITY;
 
-CREATE POLICY "Authenticated users can view all tests"
+-- Users see only their own non-deleted tests; admins see all
+CREATE POLICY "Users can view own tests, admins can view all"
   ON public.quality_tests FOR SELECT
-  USING (auth.uid() IS NOT NULL AND is_deleted = FALSE);
+  USING (is_deleted = FALSE AND (auth.uid() = user_id OR public.is_admin()));
 
 CREATE POLICY "Users can create own tests"
   ON public.quality_tests FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
-CREATE POLICY "Users can update own tests"
+-- Admins can update any test (required for soft-delete); users update their own
+CREATE POLICY "Users can update own tests, admins can update any"
   ON public.quality_tests FOR UPDATE
-  USING (auth.uid() = user_id);
+  USING (auth.uid() = user_id OR public.is_admin());
 
--- Only admins (Supervisors) can delete tests
-CREATE POLICY "Admins can delete tests"
-  ON public.quality_tests FOR DELETE
-  USING (public.is_admin());
+
 
 -- updated_at trigger
 CREATE OR REPLACE FUNCTION public.update_quality_tests_updated_at()
@@ -78,3 +77,44 @@ $$ LANGUAGE plpgsql;
 CREATE TRIGGER quality_tests_updated_at
   BEFORE UPDATE ON public.quality_tests
   FOR EACH ROW EXECUTE FUNCTION public.update_quality_tests_updated_at();
+
+-- ============================================================================
+-- RPC: delete_quality_test — soft-delete with server-side admin/owner check
+-- Returns: { data: null, error: string | null }
+-- ============================================================================
+
+CREATE OR REPLACE FUNCTION public.delete_quality_test(p_id UUID)
+RETURNS JSONB AS $$
+DECLARE
+  v_test public.quality_tests%ROWTYPE;
+BEGIN
+  -- Fetch the test (ignore is_deleted so we can give a clear error)
+  SELECT * INTO v_test
+  FROM public.quality_tests
+  WHERE id = p_id;
+
+  IF NOT FOUND THEN
+    RETURN jsonb_build_object('data', NULL, 'error', 'Test not found');
+  END IF;
+
+  IF v_test.is_deleted THEN
+    RETURN jsonb_build_object('data', NULL, 'error', 'Test already deleted');
+  END IF;
+
+  -- Server-side authorization check
+  IF v_test.user_id <> auth.uid() AND NOT public.is_admin() THEN
+    RETURN jsonb_build_object('data', NULL, 'error', 'Not authorized to delete this test');
+  END IF;
+
+  UPDATE public.quality_tests
+  SET
+    is_deleted = TRUE,
+    deleted_at = now(),
+    updated_at = now()
+  WHERE id = p_id;
+
+  RETURN jsonb_build_object('data', NULL, 'error', NULL);
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+GRANT EXECUTE ON FUNCTION public.delete_quality_test(UUID) TO authenticated;
