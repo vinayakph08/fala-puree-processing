@@ -6,11 +6,13 @@ import { Button } from "@/components/ui/button";
 
 interface MobileSubPageHeaderProps {
   title: string;
+  backHref?: string;
   actionButton?: React.ReactNode;
 }
 
 export function MobileSubPageHeader({
   title,
+  backHref,
   actionButton,
 }: MobileSubPageHeaderProps) {
   const router = useRouter();
@@ -21,7 +23,7 @@ export function MobileSubPageHeader({
         <Button
           variant='outline'
           size='sm'
-          onClick={() => router.back()}
+          onClick={() => backHref ? router.push(backHref) : router.back()}
           className='flex items-center gap-2 border text-slate-600 hover:text-slate-900 min-h-[44px] min-w-[44px]'
         >
           <ArrowLeft className='h-5 w-5' />

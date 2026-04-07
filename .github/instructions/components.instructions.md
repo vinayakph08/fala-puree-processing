@@ -79,6 +79,31 @@ export function MyComponent() {
 
 **One-call side-effectful initialisation (e.g. generating a unique ID) must use a `useState` lazy initializer, not `useEffect`.** React Strict Mode runs effects twice in development, which doubles side effects like localStorage counter increments. The `useState` initializer is guaranteed to run exactly once.
 
+## Sub-Component Co-location
+
+Small, purely presentational React components (no hooks, no data fetching, no state beyond basic `useState`) that are **only used within a single parent file** may be defined in the same file as that parent. This is idiomatic React — extracting them is over-engineering.
+
+**Extract a sub-component to its own file when:**
+- It is used in **2 or more** parent files, OR
+- It grows its own hooks, data fetching, or non-trivial lifecycle logic
+
+```tsx
+// ✅ Allowed — private presentational component, only used in this file
+function StatusBadge({ status }: { status: string }) {
+  return <span className="...">{status}</span>;
+}
+
+export function FeatureList() {
+  return <StatusBadge status="passed" />;
+}
+
+// ❌ Wrong — reused across multiple files but not extracted
+// StatusBadge appears in both FeatureList and SomeOtherComponent
+// → extract to components/ui/status-badge.tsx
+```
+
+**Never extract to a sub-file just to reduce line count.** Co-located private components are not a code smell.
+
 ```typescript
 // ❌ Wrong — useEffect runs twice in Strict Mode dev
 useEffect(() => {
