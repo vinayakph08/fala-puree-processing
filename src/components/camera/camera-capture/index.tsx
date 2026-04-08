@@ -5,7 +5,14 @@ import { Button } from "@/components/ui/button";
 import { X, SlidersHorizontal, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
-import { rgbToLab } from "../utils";
+import {
+  rgbToLab,
+  queryCameraCapabilities,
+  applyCameraSettings,
+  defaultCameraSettings,
+} from "../utils";
+import { CameraSettingsPanel } from "../camera-settings";
+import type { CameraSettings, ExtendedCapabilities } from "@/types/media-track";
 
 export interface RgbValues {
   r: number;
@@ -14,7 +21,11 @@ export interface RgbValues {
 }
 
 interface CameraCaptureProps {
-  onCapture: (file: File, rgbValues: RgbValues, textureScore: number | null) => void;
+  onCapture: (
+    file: File,
+    rgbValues: RgbValues,
+    textureScore: number | null,
+  ) => void;
   onCancel: () => void;
   lastCaptureSrc?: string;
   facingMode?: "user" | "environment";
@@ -36,6 +47,13 @@ export const CameraCapture = ({
   const [rgbValues, setRgbValues] = useState<RgbValues>({ r: 0, g: 0, b: 0 });
   const [textureScore, setTextureScore] = useState<number | null>(null);
   const [consistency, setConsistency] = useState<number | null>(null);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [capabilities, setCapabilities] = useState<ExtendedCapabilities | null>(
+    null,
+  );
+  const [cameraSettings, setCameraSettings] = useState<CameraSettings>(() =>
+    defaultCameraSettings(null),
+  );
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -54,10 +72,22 @@ export const CameraCapture = ({
     canvas.height = sampleH;
     const vw = video.videoWidth || 320;
     const vh = video.videoHeight || 240;
-    ctx.drawImage(video, (vw - sampleW) / 2, (vh - sampleH) / 2, sampleW, sampleH, 0, 0, sampleW, sampleH);
+    ctx.drawImage(
+      video,
+      (vw - sampleW) / 2,
+      (vh - sampleH) / 2,
+      sampleW,
+      sampleH,
+      0,
+      0,
+      sampleW,
+      sampleH,
+    );
     const data = ctx.getImageData(0, 0, sampleW, sampleH).data;
 
-    let totalR = 0, totalG = 0, totalB = 0;
+    let totalR = 0,
+      totalG = 0,
+      totalB = 0;
     const pixelCount = sampleW * sampleH;
     const lums: number[] = [];
 
@@ -74,11 +104,16 @@ export const CameraCapture = ({
     setRgbValues({ r: avgR, g: avgG, b: avgB });
 
     const avgLum = (avgR + avgG + avgB) / 3;
-    const variance = lums.reduce((acc, v) => acc + Math.pow(v - avgLum, 2), 0) / pixelCount;
+    const variance =
+      lums.reduce((acc, v) => acc + Math.pow(v - avgLum, 2), 0) / pixelCount;
     const stdDev = Math.sqrt(variance);
-    setTextureScore(Math.round(Math.max(0, Math.min(10, 10 - stdDev / 12)) * 10) / 10);
+    setTextureScore(
+      Math.round(Math.max(0, Math.min(10, 10 - stdDev / 12)) * 10) / 10,
+    );
 
-    const inRange = lums.filter((v) => Math.abs(v - avgLum) < 2 * stdDev).length;
+    const inRange = lums.filter(
+      (v) => Math.abs(v - avgLum) < 2 * stdDev,
+    ).length;
     setConsistency(Math.round((inRange / pixelCount) * 1000) / 10);
   }, []);
 
@@ -115,7 +150,19 @@ export const CameraCapture = ({
           const handleCanPlay = () => {
             video
               .play()
-              .then(() => setIsLoading(false))
+              .then(() => {
+                setIsLoading(false);
+                const track = mediaStream.getVideoTracks()[0];
+                if (track) {
+                  const caps = queryCameraCapabilities(track);
+                  setCapabilities(caps);
+                  const defaults = defaultCameraSettings(caps);
+                  setCameraSettings(defaults);
+                  if (caps) {
+                    applyCameraSettings(track, defaults, caps).catch(() => {});
+                  }
+                }
+              })
               .catch(() => setIsLoading(false));
           };
           video.addEventListener("canplay", handleCanPlay, { once: true });
@@ -173,7 +220,11 @@ export const CameraCapture = ({
     return (
       <div className="flex flex-col items-center justify-center h-full bg-camera-bg p-6 gap-4">
         <p className="text-destructive text-center font-medium">{error}</p>
-        <Button onClick={handleCancel} variant="outline" className="min-h-[44px]">
+        <Button
+          onClick={handleCancel}
+          variant="outline"
+          className="min-h-[44px]"
+        >
           Close
         </Button>
       </div>
@@ -196,11 +247,14 @@ export const CameraCapture = ({
           <p className="text-[10px] font-bold tracking-widest text-primary uppercase">
             Analysis Mode
           </p>
-          <h2 className="text-xl font-bold text-foreground">Puree Parameters</h2>
+          <h2 className="text-xl font-bold text-foreground">
+            Puree Parameters
+          </h2>
         </div>
         <Button
           variant="ghost"
           size="icon"
+          onClick={() => setIsSettingsOpen(true)}
           className="min-h-[44px] min-w-[44px] text-foreground"
         >
           <SlidersHorizontal className="h-5 w-5" />
@@ -215,12 +269,17 @@ export const CameraCapture = ({
             autoPlay
             playsInline
             muted
-            className={cn("w-full h-full object-cover", isLoading && "opacity-0")}
+            className={cn(
+              "w-full h-full object-cover",
+              isLoading && "opacity-0",
+            )}
           />
 
           {isLoading && (
             <div className="absolute inset-0 flex items-center justify-center">
-              <p className="text-white/70 animate-pulse text-sm">Starting camera...</p>
+              <p className="text-white/70 animate-pulse text-sm">
+                Starting camera...
+              </p>
             </div>
           )}
 
@@ -332,6 +391,23 @@ export const CameraCapture = ({
       {/* Hidden canvases */}
       <canvas ref={canvasRef} className="hidden" />
       <canvas ref={analysisCanvasRef} className="hidden" />
+
+      {/* Camera settings sheet */}
+      <CameraSettingsPanel
+        open={isSettingsOpen}
+        onClose={() => setIsSettingsOpen(false)}
+        settings={cameraSettings}
+        capabilities={capabilities}
+        onApply={(newSettings) => {
+          setCameraSettings(newSettings);
+          const track = stream?.getVideoTracks()[0];
+          if (track && capabilities) {
+            applyCameraSettings(track, newSettings, capabilities).catch(() =>
+              toast.error("Failed to apply camera settings"),
+            );
+          }
+        }}
+      />
     </div>
   );
 };
