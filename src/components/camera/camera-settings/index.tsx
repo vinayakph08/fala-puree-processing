@@ -1,6 +1,6 @@
 "use client";
 
-import { FC, useState, useEffect } from "react";
+import { FC, useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
@@ -58,7 +58,11 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
 }) => {
   const [draft, setDraft] = useState<CameraSettings>(settings);
 
-  // Sync draft when settings change externally (e.g. reset from parent)
+  // Always-current ref so event handlers don't close over stale state
+  const draftRef = useRef<CameraSettings>(draft);
+  draftRef.current = draft;
+
+  // Sync draft when settings change externally (e.g. defaults applied on stream start)
   useEffect(() => {
     setDraft(settings);
   }, [settings]);
@@ -66,17 +70,19 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
   const caps = capabilities;
   const unsupported = caps === null;
 
-  const handleApply = () => {
-    onApply(draft);
-    onClose();
-  };
+  // Fires on slider mouseup/touchend — avoids spamming applyConstraints during drag
+  const applyLatest = useCallback(() => {
+    onApply(draftRef.current);
+  }, [onApply]);
 
   const handleResetToAuto = () => {
-    setDraft((prev) => ({
-      ...prev,
+    const reset: CameraSettings = {
+      ...draftRef.current,
       whiteBalanceMode: "auto",
       exposureMode: "auto",
-    }));
+    };
+    setDraft(reset);
+    onApply(reset);
   };
 
   // White Balance
@@ -120,29 +126,29 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
     <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
       <SheetContent
         side="bottom"
-        className="rounded-t-2xl max-h-[85dvh] overflow-y-auto pb-safe"
+        className="rounded-t-2xl max-h-[85dvh] flex flex-col p-0"
       >
-        <SheetHeader className="mb-4">
+        {/* Sticky header */}
+        <SheetHeader className="flex-none px-4 pt-5 pb-3 border-b border-border">
           <SheetTitle className="text-lg font-bold">Camera Settings</SheetTitle>
-          <p className="text-xs text-muted-foreground -mt-1">
+          <p className="text-xs text-muted-foreground">
             Manual controls for standardized QC captures
           </p>
         </SheetHeader>
 
-        {/* Unsupported device banner */}
-        {unsupported && (
-          <div className="mb-5 rounded-xl bg-amber-50 border border-amber-200 px-4 py-3 mx-4">
-            <p className="text-sm font-medium text-amber-800">
-              Manual camera controls are not supported on this device.
-            </p>
-            <p className="text-xs text-amber-700 mt-0.5">
-              Results may vary due to automatic exposure and white balance
-              adjustments.
-            </p>
-          </div>
-        )}
-
-        <div className="space-y-6 mx-4">
+        {/* Scrollable body */}
+        <div className="flex-1 overflow-y-auto px-4 py-4 space-y-6">
+          {unsupported && (
+            <div className="rounded-xl bg-amber-50 border border-amber-200 px-4 py-3">
+              <p className="text-sm font-medium text-amber-800">
+                Manual camera controls are not supported on this device.
+              </p>
+              <p className="text-xs text-amber-700 mt-0.5">
+                Results may vary due to automatic exposure and white balance
+                adjustments.
+              </p>
+            </div>
+          )}
           {/* White Balance */}
           <SettingRow
             label="White Balance"
@@ -156,13 +162,14 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
                 id="wb-mode"
                 disabled={!wbSupported}
                 checked={wbManual}
-                onCheckedChange={(checked) =>
-                  setDraft((d) => ({
-                    ...d,
+                onCheckedChange={(checked) => {
+                  const next: CameraSettings = {
+                    ...draftRef.current,
                     whiteBalanceMode: checked ? "manual" : "auto",
-                  }))
-                }
-                className="min-h-[44px]"
+                  };
+                  setDraft(next);
+                  onApply(next);
+                }}
               />
               <Label htmlFor="wb-mode" className="text-sm">
                 {wbManual ? "Manual" : "Auto"}
@@ -185,6 +192,8 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
                       colorTemperature: Number(e.target.value),
                     }))
                   }
+                  onMouseUp={applyLatest}
+                  onTouchEnd={applyLatest}
                   className="w-full h-2 accent-primary disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
                 />
                 <div className="flex justify-between text-[10px] text-muted-foreground px-0.5">
@@ -211,13 +220,14 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
                 id="exp-mode"
                 disabled={!expSupported}
                 checked={expManual}
-                onCheckedChange={(checked) =>
-                  setDraft((d) => ({
-                    ...d,
+                onCheckedChange={(checked) => {
+                  const next: CameraSettings = {
+                    ...draftRef.current,
                     exposureMode: checked ? "manual" : "auto",
-                  }))
-                }
-                className="min-h-[44px]"
+                  };
+                  setDraft(next);
+                  onApply(next);
+                }}
               />
               <Label htmlFor="exp-mode" className="text-sm">
                 {expManual ? "Manual" : "Auto"}
@@ -239,6 +249,8 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
                       exposureTime: Number(e.target.value),
                     }))
                   }
+                  onMouseUp={applyLatest}
+                  onTouchEnd={applyLatest}
                   className="w-full h-2 accent-primary disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
                 />
                 <div className="flex justify-between text-[10px] text-muted-foreground px-0.5">
@@ -270,6 +282,8 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
               onChange={(e) =>
                 setDraft((d) => ({ ...d, iso: Number(e.target.value) }))
               }
+              onMouseUp={applyLatest}
+              onTouchEnd={applyLatest}
               className="w-full h-2 accent-primary disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
             />
             {isoSupported && (
@@ -301,6 +315,8 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
               onChange={(e) =>
                 setDraft((d) => ({ ...d, sharpness: Number(e.target.value) }))
               }
+              onMouseUp={applyLatest}
+              onTouchEnd={applyLatest}
               className="w-full h-2 accent-primary disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
             />
             {sharpSupported && (
@@ -315,8 +331,8 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
           </SettingRow>
         </div>
 
-        {/* Footer actions */}
-        <div className="flex gap-3 mt-8 pb-2 mx-4">
+        {/* Sticky footer */}
+        <div className="flex-none flex gap-3 px-4 py-4 border-t border-border">
           <Button
             variant="ghost"
             className="flex-1 min-h-[44px]"
@@ -326,11 +342,11 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
             Reset to Auto
           </Button>
           <Button
+            variant="outline"
             className="flex-1 min-h-[44px]"
-            onClick={handleApply}
-            disabled={unsupported}
+            onClick={onClose}
           >
-            Apply
+            Done
           </Button>
         </div>
       </SheetContent>
