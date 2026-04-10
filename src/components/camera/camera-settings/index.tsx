@@ -2,6 +2,7 @@
 
 import { FC, useState, useEffect, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
+import { Slider } from "@/components/ui/slider";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import {
@@ -98,16 +99,21 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
       : 0;
 
   // Exposure
+  // Cap slider max at 330 units (33ms = 1/30s) so the live viewfinder stays
+  // at ≥30fps. The physical sensor cannot expose faster than exposureTime per
+  // frame — dragging to the camera's raw max (often 10 000+) freezes the feed.
+  const VIEWFINDER_SAFE_MAX_EXPOSURE = 330;
   const expSupported = !unsupported && (caps.exposureMode?.length ?? 0) > 0;
   const expManual = draft.exposureMode === "manual";
   const etSupported = expSupported && !!caps?.exposureTime;
   const etMin = caps?.exposureTime?.min ?? 100;
-  const etMax = caps?.exposureTime?.max ?? 1000;
+  const etMax = Math.min(caps?.exposureTime?.max ?? VIEWFINDER_SAFE_MAX_EXPOSURE, VIEWFINDER_SAFE_MAX_EXPOSURE);
   const etStep = caps?.exposureTime?.step ?? 10;
   const etMs = Math.round(draft.exposureTime * 0.1);
+  const etFps = draft.exposureTime > 0 ? Math.min(60, Math.round(10000 / draft.exposureTime)) : 0;
   const etShutter =
     draft.exposureTime > 0
-      ? `≈ 1/${Math.round(10000 / draft.exposureTime)}s`
+      ? `≈ 1/${Math.round(10000 / draft.exposureTime)}s  ·  ${etFps}fps`
       : "";
 
   // ISO
@@ -179,22 +185,17 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
             {/* Colour Temperature slider */}
             {wbSupported && (
               <div className="space-y-1.5">
-                <input
-                  type="range"
+                <Slider
                   min={ctMin}
                   max={ctMax}
                   step={ctStep}
-                  value={draft.colorTemperature}
+                  value={[draft.colorTemperature]}
                   disabled={!wbManual || !ctSupported}
-                  onChange={(e) =>
-                    setDraft((d) => ({
-                      ...d,
-                      colorTemperature: Number(e.target.value),
-                    }))
+                  onValueChange={([v]) =>
+                    setDraft((d) => ({ ...d, colorTemperature: v }))
                   }
-                  onMouseUp={applyLatest}
-                  onTouchEnd={applyLatest}
-                  className="w-full h-2 accent-primary disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+                  onValueCommit={applyLatest}
+                  className="w-full"
                 />
                 <div className="flex justify-between text-[10px] text-muted-foreground px-0.5">
                   <span>Warm {ctMin}K</span>
@@ -236,22 +237,17 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
 
             {expSupported && (
               <div className="space-y-1.5">
-                <input
-                  type="range"
+                <Slider
                   min={etMin}
                   max={etMax}
                   step={etStep}
-                  value={draft.exposureTime}
+                  value={[draft.exposureTime]}
                   disabled={!expManual || !etSupported}
-                  onChange={(e) =>
-                    setDraft((d) => ({
-                      ...d,
-                      exposureTime: Number(e.target.value),
-                    }))
+                  onValueChange={([v]) =>
+                    setDraft((d) => ({ ...d, exposureTime: v }))
                   }
-                  onMouseUp={applyLatest}
-                  onTouchEnd={applyLatest}
-                  className="w-full h-2 accent-primary disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+                  onValueCommit={applyLatest}
+                  className="w-full"
                 />
                 <div className="flex justify-between text-[10px] text-muted-foreground px-0.5">
                   <span>{Math.round(etMin * 0.1)}ms</span>
@@ -260,6 +256,9 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
                   </span>
                   <span>{Math.round(etMax * 0.1)}ms</span>
                 </div>
+                <p className="text-[10px] text-amber-600 mt-1">
+                  Higher exposure = slower frame rate. Max capped at 1/30s to keep preview smooth.
+                </p>
               </div>
             )}
           </SettingRow>
@@ -272,19 +271,15 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
             supported={isoSupported}
             hint={isoSupported ? `ISO ${draft.iso}` : undefined}
           >
-            <input
-              type="range"
+            <Slider
               min={isoMin}
               max={isoMax}
               step={isoStep}
-              value={draft.iso}
+              value={[draft.iso]}
               disabled={!isoSupported}
-              onChange={(e) =>
-                setDraft((d) => ({ ...d, iso: Number(e.target.value) }))
-              }
-              onMouseUp={applyLatest}
-              onTouchEnd={applyLatest}
-              className="w-full h-2 accent-primary disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+              onValueChange={([v]) => setDraft((d) => ({ ...d, iso: v }))}
+              onValueCommit={applyLatest}
+              className="w-full"
             />
             {isoSupported && (
               <div className="flex justify-between text-[10px] text-muted-foreground px-0.5">
@@ -305,19 +300,15 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
             supported={sharpSupported}
             hint={sharpSupported ? `${draft.sharpness}` : undefined}
           >
-            <input
-              type="range"
+            <Slider
               min={sharpMin}
               max={sharpMax}
               step={sharpStep}
-              value={draft.sharpness}
+              value={[draft.sharpness]}
               disabled={!sharpSupported}
-              onChange={(e) =>
-                setDraft((d) => ({ ...d, sharpness: Number(e.target.value) }))
-              }
-              onMouseUp={applyLatest}
-              onTouchEnd={applyLatest}
-              className="w-full h-2 accent-primary disabled:opacity-40 cursor-pointer disabled:cursor-not-allowed"
+              onValueChange={([v]) => setDraft((d) => ({ ...d, sharpness: v }))}
+              onValueCommit={applyLatest}
+              className="w-full"
             />
             {sharpSupported && (
               <div className="flex justify-between text-[10px] text-muted-foreground px-0.5">
