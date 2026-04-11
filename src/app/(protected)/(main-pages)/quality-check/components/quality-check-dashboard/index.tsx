@@ -2,7 +2,15 @@
 
 import { useState, useMemo, useEffect } from "react";
 import debounce from "lodash/debounce";
-import { Plus, Search, MoreVertical, Pencil, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  Plus,
+  Search,
+  MoreVertical,
+  Pencil,
+  Trash2,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useQualityCheck } from "../../hooks/use-quality-check";
 import { useProfile } from "@/hooks/use-profile";
@@ -38,7 +46,8 @@ function StatusBadge({ status }: { status: QualityTestStatus }) {
     <span
       className={cn(
         "px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider border",
-        status === "passed" && "bg-emerald-50 text-emerald-600 border-emerald-100",
+        status === "passed" &&
+          "bg-emerald-50 text-emerald-600 border-emerald-100",
         status === "pending" && "bg-amber-50 text-amber-600 border-amber-100",
         status === "failed" && "bg-red-50 text-red-600 border-red-100",
         status === "draft" && "bg-gray-50 text-gray-500 border-gray-200",
@@ -90,7 +99,9 @@ function BatchCard({
         onClick={() => router.push(`/quality-check/${test.id}`)}
       >
         <div className="flex flex-col space-y-1">
-          <span className="text-sm font-semibold text-primary">#{test.batch_id}</span>
+          <span className="text-sm font-semibold text-primary">
+            #{test.batch_id}
+          </span>
           <span className="text-[11px] text-muted-foreground">
             {formatted} • {time}
           </span>
@@ -110,7 +121,9 @@ function BatchCard({
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem onClick={() => router.push(`/quality-check/${test.id}`)}>
+          <DropdownMenuItem
+            onClick={() => router.push(`/quality-check/${test.id}`)}
+          >
             <Pencil className="h-4 w-4 mr-2" />
             Edit
           </DropdownMenuItem>
@@ -149,7 +162,12 @@ export function QualityCheckDashboard() {
   } = useQualityCheck();
 
   const debouncedSearch = useMemo(
-    () => debounce((value: string) => setSearchParams((p) => ({ ...p, search: value, page: 0 })), 350),
+    () =>
+      debounce(
+        (value: string) =>
+          setSearchParams((p) => ({ ...p, search: value, page: 0 })),
+        350,
+      ),
     [setSearchParams],
   );
 
@@ -169,11 +187,15 @@ export function QualityCheckDashboard() {
   }
 
   return (
-    <div className="space-y-6 pt-4">
+    <div className="flex flex-col h-full gap-4 pt-4">
       {/* Header */}
       <header className="flex flex-col space-y-1">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground">Puree Quality</h1>
-        <p className="text-sm text-muted-foreground">Monitor batch traceability and standards.</p>
+        <h1 className="text-2xl font-bold tracking-tight text-foreground">
+          Puree Quality
+        </h1>
+        <p className="text-sm text-muted-foreground">
+          Monitor batch traceability and standards.
+        </p>
       </header>
 
       {/* Primary CTA */}
@@ -214,7 +236,7 @@ export function QualityCheckDashboard() {
       </div>
 
       {/* List */}
-      <section className="flex flex-col space-y-3">
+      <section className="flex flex-col flex-1 min-h-0 space-y-3">
         <div className="flex items-center justify-between">
           <h2 className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
             Tests
@@ -233,7 +255,7 @@ export function QualityCheckDashboard() {
         ) : !tests.length ? (
           <p className="text-sm text-muted-foreground">No tests found.</p>
         ) : (
-          <div className="space-y-3">
+          <div className="flex-1 min-h-0 overflow-y-auto space-y-3 pr-1">
             {tests.map((test) => (
               <BatchCard
                 key={test.id}
@@ -255,7 +277,9 @@ export function QualityCheckDashboard() {
             size="sm"
             className="min-h-[44px] min-w-[44px]"
             disabled={!pagination.has_previous_page}
-            onClick={() => setSearchParams((p) => ({ ...p, page: (p.page ?? 0) - 1 }))}
+            onClick={() =>
+              setSearchParams((p) => ({ ...p, page: (p.page ?? 0) - 1 }))
+            }
           >
             <ChevronLeft className="h-4 w-4" />
           </Button>
@@ -267,7 +291,9 @@ export function QualityCheckDashboard() {
             size="sm"
             className="min-h-[44px] min-w-[44px]"
             disabled={!pagination.has_next_page}
-            onClick={() => setSearchParams((p) => ({ ...p, page: (p.page ?? 0) + 1 }))}
+            onClick={() =>
+              setSearchParams((p) => ({ ...p, page: (p.page ?? 0) + 1 }))
+            }
           >
             <ChevronRight className="h-4 w-4" />
           </Button>
@@ -275,12 +301,16 @@ export function QualityCheckDashboard() {
       )}
 
       {/* Delete confirm dialog */}
-      <Dialog open={!!confirmDeleteId} onOpenChange={() => setConfirmDeleteId(null)}>
+      <Dialog
+        open={!!confirmDeleteId}
+        onOpenChange={() => setConfirmDeleteId(null)}
+      >
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Delete Quality Test?</DialogTitle>
             <DialogDescription>
-              This test will be permanently removed. This action cannot be undone.
+              This test will be permanently removed. This action cannot be
+              undone.
             </DialogDescription>
           </DialogHeader>
           <div className="flex gap-3 mt-2">

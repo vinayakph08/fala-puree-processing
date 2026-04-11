@@ -5,30 +5,28 @@ import { PWAInstallBanner } from "../user/pwa/pwa-install-banner";
 interface SubPageLayoutProps {
   children: React.ReactNode;
   title: string;
-  backHref?: string;
   actionButton?: React.ReactNode;
 }
 
 export function SubPageLayout({
   children,
   title,
-  backHref,
   actionButton,
 }: SubPageLayoutProps) {
   return (
-    <div className='min-h-screen bg-background'>
+    <div className="h-screen overflow-hidden bg-background">
       {/* Desktop Layout */}
-      <div className='hidden md:flex h-screen bg-white'>
+      <div className="hidden md:flex h-full bg-white">
         <DesktopSidebar />
-        <main className='flex-1 overflow-y-auto p-6'>{children}</main>
+        <main className="flex-1 overflow-y-auto p-6">{children}</main>
       </div>
 
       {/* Mobile Layout */}
-      <div className='md:hidden h-screen flex flex-col'>
-        <MobileSubPageHeader title={title} backHref={backHref} actionButton={actionButton} />
-        <main className='flex-1 overflow-y-auto mt-20'>
+      <div className="md:hidden h-full flex flex-col">
+        <MobileSubPageHeader title={title} actionButton={actionButton} />
+        <main className="flex-1 mt-14 overflow-hidden flex flex-col">
           <PWAInstallBanner />
-          <div className='p-4'>{children}</div>
+          <div className="flex-1 min-h-0 overflow-hidden p-4">{children}</div>
         </main>
       </div>
     </div>

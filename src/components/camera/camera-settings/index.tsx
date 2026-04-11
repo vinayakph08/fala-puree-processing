@@ -122,12 +122,6 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
   const isoMax = caps?.iso?.max ?? 3200;
   const isoStep = caps?.iso?.step ?? 50;
 
-  // Sharpness
-  const sharpSupported = !unsupported && !!caps?.sharpness;
-  const sharpMin = caps?.sharpness?.min ?? 0;
-  const sharpMax = caps?.sharpness?.max ?? 10;
-  const sharpStep = caps?.sharpness?.step ?? 1;
-
   return (
     <Sheet open={open} onOpenChange={(v) => !v && onClose()}>
       <SheetContent
@@ -198,12 +192,15 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
                   className="w-full"
                 />
                 <div className="flex justify-between text-[10px] text-muted-foreground px-0.5">
-                  <span>Warm {ctMin}K</span>
+                  <span>Tungsten {ctMin}K</span>
                   <span className="font-semibold text-foreground">
                     {ctPercent}% — {draft.colorTemperature}K
                   </span>
-                  <span>Cool {ctMax}K</span>
+                  <span>Daylight {ctMax}K</span>
                 </div>
+                <p className="text-[10px] text-muted-foreground mt-1">
+                  Match your light box&apos;s rated temperature for neutral whites.
+                </p>
               </div>
             )}
           </SettingRow>
@@ -292,34 +289,6 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
             )}
           </SettingRow>
 
-          <div className="h-px bg-border" />
-
-          {/* Sharpness */}
-          <SettingRow
-            label="Sharpness"
-            supported={sharpSupported}
-            hint={sharpSupported ? `${draft.sharpness}` : undefined}
-          >
-            <Slider
-              min={sharpMin}
-              max={sharpMax}
-              step={sharpStep}
-              value={[draft.sharpness]}
-              disabled={!sharpSupported}
-              onValueChange={([v]) => setDraft((d) => ({ ...d, sharpness: v }))}
-              onValueCommit={applyLatest}
-              className="w-full"
-            />
-            {sharpSupported && (
-              <div className="flex justify-between text-[10px] text-muted-foreground px-0.5">
-                <span>Low {sharpMin}</span>
-                <span className="font-semibold text-foreground">
-                  {draft.sharpness}
-                </span>
-                <span>High {sharpMax}</span>
-              </div>
-            )}
-          </SettingRow>
         </div>
 
         {/* Sticky footer */}

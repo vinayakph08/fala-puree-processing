@@ -2,13 +2,16 @@
 
 import { createPortal } from "react-dom";
 import { useEffect, useState } from "react";
-import { CameraCapture, RgbValues } from "./camera-capture";
+import { CameraCapture } from "./camera-capture";
 import { CaptureConfirmation, LabValues } from "./capture-confirmation";
-import { rgbToLab } from "./utils";
 
 export interface CameraProps {
   isOpen: boolean;
-  onCapture: (file: File, labValues?: LabValues, textureScore?: number | null) => void;
+  onCapture: (
+    file: File,
+    labValues?: LabValues,
+    textureScore?: number | null,
+  ) => void;
   onCancel: () => void;
   facingMode?: "user" | "environment";
 }
@@ -38,8 +41,11 @@ export function Camera({
 
   const [textureScore, setTextureScore] = useState<number | null>(null);
 
-  const handleRawCapture = (file: File, rgb: RgbValues, score: number | null) => {
-    const lab = rgbToLab(rgb.r, rgb.g, rgb.b);
+  const handleRawCapture = (
+    file: File,
+    lab: LabValues,
+    score: number | null,
+  ) => {
     const previewUrl = URL.createObjectURL(file);
     setCapturedFile(file);
     setCapturedPreview(previewUrl);

@@ -6,11 +6,15 @@ import { X, SlidersHorizontal, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import {
-  rgbToLab,
+  analyzeImageColor,
+  analyzeTexture,
+  textureVarianceToScore,
+  analyzeConsistency,
   queryCameraCapabilities,
   applyCameraSettings,
   defaultCameraSettings,
 } from "../utils";
+import type { LabValues } from "../capture-confirmation";
 import { CameraSettingsPanel } from "../camera-settings";
 import type { CameraSettings, ExtendedCapabilities } from "@/types/media-track";
 
@@ -23,7 +27,7 @@ export interface RgbValues {
 interface CameraCaptureProps {
   onCapture: (
     file: File,
-    rgbValues: RgbValues,
+    labValues: LabValues,
     textureScore: number | null,
   ) => void;
   onCancel: () => void;
@@ -45,6 +49,7 @@ export const CameraCapture = ({
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [rgbValues, setRgbValues] = useState<RgbValues>({ r: 0, g: 0, b: 0 });
+  const [labValues, setLabValues] = useState<LabValues>({ l: 0, a: 0, b: 0 });
   const [textureScore, setTextureScore] = useState<number | null>(null);
   const [consistency, setConsistency] = useState<number | null>(null);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -85,36 +90,32 @@ export const CameraCapture = ({
     );
     const data = ctx.getImageData(0, 0, sampleW, sampleH).data;
 
+    // Live RGB display (informational)
     let totalR = 0,
       totalG = 0,
       totalB = 0;
     const pixelCount = sampleW * sampleH;
-    const lums: number[] = [];
-
     for (let i = 0; i < data.length; i += 4) {
       totalR += data[i];
       totalG += data[i + 1];
       totalB += data[i + 2];
-      lums.push((data[i] + data[i + 1] + data[i + 2]) / 3);
     }
+    setRgbValues({
+      r: Math.round(totalR / pixelCount),
+      g: Math.round(totalG / pixelCount),
+      b: Math.round(totalB / pixelCount),
+    });
 
-    const avgR = Math.round(totalR / pixelCount);
-    const avgG = Math.round(totalG / pixelCount);
-    const avgB = Math.round(totalB / pixelCount);
-    setRgbValues({ r: avgR, g: avgG, b: avgB });
+    // Correct color: linearise per-pixel → accumulate → average → convert once
+    setLabValues(analyzeImageColor(data, sampleW, sampleH));
 
-    const avgLum = (avgR + avgG + avgB) / 3;
-    const variance =
-      lums.reduce((acc, v) => acc + Math.pow(v - avgLum, 2), 0) / pixelCount;
-    const stdDev = Math.sqrt(variance);
+    // Correct texture: Laplacian variance on green channel
     setTextureScore(
-      Math.round(Math.max(0, Math.min(10, 10 - stdDev / 12)) * 10) / 10,
+      textureVarianceToScore(analyzeTexture(data, sampleW, sampleH)),
     );
 
-    const inRange = lums.filter(
-      (v) => Math.abs(v - avgLum) < 2 * stdDev,
-    ).length;
-    setConsistency(Math.round((inRange / pixelCount) * 1000) / 10);
+    // Correct consistency: 5×5 block-wise a* stddev (lower = more uniform)
+    setConsistency(analyzeConsistency(data, sampleW, sampleH));
   }, []);
 
   useEffect(() => {
@@ -204,7 +205,7 @@ export const CameraCapture = ({
           type: "image/jpeg",
         });
         stream?.getTracks().forEach((t) => t.stop());
-        onCapture(file, rgbValues, textureScore);
+        onCapture(file, labValues, textureScore);
       },
       "image/jpeg",
       quality,
@@ -307,22 +308,17 @@ export const CameraCapture = ({
               </div>
 
               {/* Lab Color Values — top right */}
-              {(() => {
-                const lab = rgbToLab(rgbValues.r, rgbValues.g, rgbValues.b);
-                return (
-                  <div className="absolute top-10 right-10 bg-white/90 rounded-lg px-3 py-2 shadow-sm text-right">
-                    <p className="text-[9px] font-bold tracking-wider text-muted-foreground uppercase">
-                      Lab Color
-                    </p>
-                    <p className="text-sm font-bold text-foreground mt-0.5 leading-snug">
-                      L: {lab.l}
-                    </p>
-                    <p className="text-sm font-bold text-foreground leading-snug">
-                      a: {lab.a} b: {lab.b}
-                    </p>
-                  </div>
-                );
-              })()}
+              <div className="absolute top-10 right-10 bg-white/90 rounded-lg px-3 py-2 shadow-sm text-right">
+                <p className="text-[9px] font-bold tracking-wider text-muted-foreground uppercase">
+                  Lab Color
+                </p>
+                <p className="text-sm font-bold text-foreground mt-0.5 leading-snug">
+                  L: {labValues.l}
+                </p>
+                <p className="text-sm font-bold text-foreground leading-snug">
+                  a: {labValues.a} b: {labValues.b}
+                </p>
+              </div>
 
               {/* Consistency — bottom left */}
               <div className="absolute bottom-10 left-10 bg-white/90 rounded-lg px-3 py-2 shadow-sm">
@@ -330,7 +326,7 @@ export const CameraCapture = ({
                   Consistency
                 </p>
                 <p className="text-sm font-bold text-foreground mt-0.5">
-                  {consistency !== null ? `${consistency}%` : "—"} Stability
+                  {consistency !== null ? `±${consistency} a*` : "—"}
                 </p>
               </div>
 
