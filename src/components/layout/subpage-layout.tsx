@@ -6,12 +6,14 @@ interface SubPageLayoutProps {
   children: React.ReactNode;
   title: string;
   actionButton?: React.ReactNode;
+  backHref?: string;
 }
 
 export function SubPageLayout({
   children,
   title,
   actionButton,
+  backHref,
 }: SubPageLayoutProps) {
   return (
     <div className="h-screen overflow-hidden bg-background">
@@ -23,7 +25,11 @@ export function SubPageLayout({
 
       {/* Mobile Layout */}
       <div className="md:hidden h-full flex flex-col">
-        <MobileSubPageHeader title={title} actionButton={actionButton} />
+        <MobileSubPageHeader
+          title={title}
+          actionButton={actionButton}
+          backHref={backHref}
+        />
         <main className="flex-1 mt-14 overflow-hidden flex flex-col">
           <PWAInstallBanner />
           <div className="flex-1 min-h-0 overflow-hidden p-4">{children}</div>
