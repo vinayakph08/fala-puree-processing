@@ -253,14 +253,34 @@ export function queryCameraCapabilities(
 }
 
 /**
- * Build and apply only the constraints the device actually supports.
- * Silently skips properties absent from capabilities to avoid constraint errors.
+ * Apply camera constraints using a two-phase approach.
+ *
+ * Applying manual WB + colorTemperature in a single applyConstraints() call
+ * can produce incorrect frames because the driver may process whiteBalanceMode
+ * and colorTemperature sequentially rather than atomically — leaving a few
+ * frames in "manual mode with unknown default temperature".
+ *
+ * Phase 1: reset WB and exposure to "auto" so the pipeline is at a known baseline.
+ * Wait:    300ms (~9 frames at 30fps) for the reset to propagate through the pipeline.
+ * Phase 2: apply all manual settings atomically on the clean baseline.
  */
 export async function applyCameraSettings(
   track: MediaStreamTrack,
   settings: CameraSettings,
   caps: ExtendedCapabilities,
 ): Promise<void> {
+  // Phase 1: reset to auto baseline
+  const reset: MediaTrackConstraintSet = {};
+  if (caps.whiteBalanceMode?.includes("auto")) reset.whiteBalanceMode = "auto";
+  if (caps.exposureMode?.includes("auto")) reset.exposureMode = "auto";
+  if (Object.keys(reset).length > 0) {
+    await track.applyConstraints({ advanced: [reset] });
+  }
+
+  // Wait for the pipeline to drain
+  await new Promise<void>((resolve) => setTimeout(resolve, 300));
+
+  // Phase 2: apply the requested settings
   const advanced: MediaTrackConstraintSet = {};
 
   if (caps.whiteBalanceMode?.includes(settings.whiteBalanceMode)) {

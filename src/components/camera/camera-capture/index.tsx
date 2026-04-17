@@ -124,6 +124,32 @@ export const CameraCapture = ({
     };
   }, [stream]);
 
+  // Re-apply settings when returning from background (screen lock/unlock).
+  // On some Android browsers the track stays "live" but constraints are cleared;
+  // on others the track is "ended" and the stream needs a full restart.
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState !== "visible") return;
+      const track = stream?.getVideoTracks()[0];
+      if (!track) return;
+      if (track.readyState === "ended") {
+        // Track was killed by the OS — trigger a full stream restart by
+        // stopping all tracks. The existing getUserMedia effect will NOT
+        // auto-restart (it runs only once), so we reload the page which
+        // is the safest cross-browser approach for a killed camera session.
+        stream?.getTracks().forEach((t) => t.stop());
+        window.location.reload();
+        return;
+      }
+      if (capabilities) {
+        applyCameraSettings(track, cameraSettings, capabilities).catch(() => {});
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () =>
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+  }, [stream, capabilities, cameraSettings]);
+
   useEffect(() => {
     let interval: ReturnType<typeof setInterval>;
     if (!isLoading && stream) {

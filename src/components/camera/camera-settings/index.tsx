@@ -90,8 +90,8 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
   const wbSupported = !unsupported && (caps.whiteBalanceMode?.length ?? 0) > 0;
   const wbManual = draft.whiteBalanceMode === "manual";
   const ctSupported = wbSupported && !!caps?.colorTemperature;
-  const ctMin = caps?.colorTemperature?.min ?? 2500;
-  const ctMax = caps?.colorTemperature?.max ?? 7500;
+  const ctMin = caps?.colorTemperature?.min ?? 500;
+  const ctMax = caps?.colorTemperature?.max ?? 8500;
   const ctStep = caps?.colorTemperature?.step ?? 100;
   const ctPercent =
     ctMax > ctMin
@@ -107,10 +107,16 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
   const expManual = draft.exposureMode === "manual";
   const etSupported = expSupported && !!caps?.exposureTime;
   const etMin = caps?.exposureTime?.min ?? 100;
-  const etMax = Math.min(caps?.exposureTime?.max ?? VIEWFINDER_SAFE_MAX_EXPOSURE, VIEWFINDER_SAFE_MAX_EXPOSURE);
+  const etMax = Math.min(
+    caps?.exposureTime?.max ?? VIEWFINDER_SAFE_MAX_EXPOSURE,
+    VIEWFINDER_SAFE_MAX_EXPOSURE,
+  );
   const etStep = caps?.exposureTime?.step ?? 10;
   const etMs = Math.round(draft.exposureTime * 0.1);
-  const etFps = draft.exposureTime > 0 ? Math.min(60, Math.round(10000 / draft.exposureTime)) : 0;
+  const etFps =
+    draft.exposureTime > 0
+      ? Math.min(60, Math.round(10000 / draft.exposureTime))
+      : 0;
   const etShutter =
     draft.exposureTime > 0
       ? `≈ 1/${Math.round(10000 / draft.exposureTime)}s  ·  ${etFps}fps`
@@ -192,15 +198,12 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
                   className="w-full"
                 />
                 <div className="flex justify-between text-[10px] text-muted-foreground px-0.5">
-                  <span>Tungsten {ctMin}K</span>
+                  <span>Warm {ctMin}K</span>
                   <span className="font-semibold text-foreground">
                     {ctPercent}% — {draft.colorTemperature}K
                   </span>
-                  <span>Daylight {ctMax}K</span>
+                  <span>Cool {ctMax}K</span>
                 </div>
-                <p className="text-[10px] text-muted-foreground mt-1">
-                  Match your light box&apos;s rated temperature for neutral whites.
-                </p>
               </div>
             )}
           </SettingRow>
@@ -254,7 +257,8 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
                   <span>{Math.round(etMax * 0.1)}ms</span>
                 </div>
                 <p className="text-[10px] text-amber-600 mt-1">
-                  Higher exposure = slower frame rate. Max capped at 1/30s to keep preview smooth.
+                  Higher exposure = slower frame rate. Max capped at 1/30s to
+                  keep preview smooth.
                 </p>
               </div>
             )}
@@ -288,7 +292,6 @@ export const CameraSettingsPanel: FC<CameraSettingsProps> = ({
               </div>
             )}
           </SettingRow>
-
         </div>
 
         {/* Sticky footer */}
