@@ -141,9 +141,10 @@ export const CameraCapture = ({
         window.location.reload();
         return;
       }
-      if (capabilities) {
-        applyCameraSettings(track, cameraSettings, capabilities).catch(() => {});
-      }
+      // TODO: re-enable once yellow-cast issue is resolved
+      // if (capabilities) {
+      //   applyCameraSettings(track, cameraSettings, capabilities).catch(() => {});
+      // }
     };
     document.addEventListener("visibilitychange", handleVisibilityChange);
     return () =>
@@ -185,9 +186,10 @@ export const CameraCapture = ({
                   setCapabilities(caps);
                   const defaults = defaultCameraSettings(caps);
                   setCameraSettings(defaults);
-                  if (caps) {
-                    applyCameraSettings(track, defaults, caps).catch(() => {});
-                  }
+                  // TODO: re-enable once yellow-cast issue is resolved
+                  // if (caps) {
+                  //   applyCameraSettings(track, defaults, caps).catch(() => {});
+                  // }
                 }
               })
               .catch(() => setIsLoading(false));
