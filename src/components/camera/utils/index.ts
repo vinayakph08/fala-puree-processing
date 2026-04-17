@@ -305,7 +305,10 @@ export async function applyCameraSettings(
   ) {
     advanced.exposureTime = settings.exposureTime;
   }
+  // ISO is only meaningful when exposure is fully manual.
+  // Forcing ISO 100 under auto-exposure starves the camera of light → warm cast.
   if (
+    settings.exposureMode === "manual" &&
     caps.iso &&
     settings.iso >= caps.iso.min &&
     settings.iso <= caps.iso.max
@@ -357,8 +360,10 @@ export function defaultCameraSettings(
       )
     : 6500;
 
-  const expMode: ExposureMode = caps?.exposureMode?.includes("manual")
-    ? "manual"
+  // Keep exposure on auto so the camera adjusts brightness for the environment.
+  // Only WB is locked (to match the 6500K LED light source).
+  const expMode: ExposureMode = caps?.exposureMode?.includes("continuous")
+    ? "continuous"
     : "auto";
 
   // ~1/50s expressed in 100μs units = 200
