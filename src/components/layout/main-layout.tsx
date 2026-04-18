@@ -5,9 +5,14 @@ import { PWAInstallBanner } from "../user/pwa/pwa-install-banner";
 
 interface MainLayoutProps {
   children: React.ReactNode;
+  /** Set to true when the child manages its own internal scroll region (e.g. fixed filters + scrolling list). */
+  hasInternalScroll?: boolean;
 }
 
-export function MainLayout({ children }: MainLayoutProps) {
+export function MainLayout({
+  children,
+  hasInternalScroll = false,
+}: MainLayoutProps) {
   return (
     <div className="h-screen overflow-hidden bg-background">
       {/* Desktop Layout */}
@@ -21,7 +26,9 @@ export function MainLayout({ children }: MainLayoutProps) {
         <MobileMainHeader />
         <main className="flex-1 mt-14 overflow-hidden flex flex-col">
           <PWAInstallBanner />
-          <div className="flex-1 min-h-0 overflow-hidden p-4 pb-20">
+          <div
+            className={`flex-1 min-h-0 p-4 pb-20 ${hasInternalScroll ? "overflow-hidden" : "overflow-y-auto"}`}
+          >
             {children}
           </div>
         </main>

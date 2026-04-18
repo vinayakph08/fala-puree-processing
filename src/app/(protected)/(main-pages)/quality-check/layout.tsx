@@ -5,5 +5,5 @@ export default function NotificationsLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <MainLayout>{children}</MainLayout>;
+  return <MainLayout hasInternalScroll>{children}</MainLayout>;
 }
